@@ -14,11 +14,23 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->bigIncrements('id');
+            $table->string('firstname')->nullable();
+            $table->string('lastname')->nullable();
+            $table->string('photo')->nullable();
+            $table->string('email')->unique()->nullable();
+            $table->string('gender')->nullable();
+            $table->string('nationalID')->unique()->nullable();
+            $table->string('address')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('location')->nullable();
+            $table->integer('solarPanelType')->nullable();
+            // $table->string('position')->nullable();
+            // $table->string('role')->nullable(); replaced by access level
+            $table->string('access_key')->nullable()->comment="generated for recovering option";
             $table->string('password');
+            $table->integer('accessLevel')->comment="0: Cashier | 1: Admin";
+            $table->integer('status')->comment="0: Disabled | 1: Active";
             $table->rememberToken();
             $table->timestamps();
         });
