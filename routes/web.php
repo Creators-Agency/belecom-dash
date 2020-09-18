@@ -17,10 +17,26 @@ Route::get('/', 'HomeController@home');
 
 Route::prefix('stock')->group(function(){
     Route::get('/', 'StockController@index');
+
     Route::get('/new/item', 'StockController@addNewItem');
     Route::get('/new/location', 'StockController@addNewLocation');
-    Route::post('/create','StockController@save')->name('CreateProducts');
-    Route::post('/delete/{id}','StockController@delete');
-    Route::get('/edit/{id}','StockController@edit');
-    Route::post('/update/{id}','StockController@update')->name('UpdateProducts');
+    Route::get('/new/solar/type', 'StockController@addNewType');
+
+    Route::post('/create/item','StockController@saveItem')->name('CreateItem');
+    Route::post('/create/location','StockController@saveLocation')->name('CreateLocation');
+    Route::post('/create/type','StockController@saveType')->name('CreateType');
+
+    Route::get('/delete/{id}/item', 'StockController@deleteItem');
+    Route::get('/delete/{id}/location', 'StockController@deleteLocation');
+    Route::get('/delete/{id}/type', 'StockController@deleteType');
+
+    Route::get('/edit/{id}/item', 'StockController@editType');
+    Route::get('/edit/{id}/location', 'StockController@editType');
+    Route::get('/edit/{id}/type', 'StockController@editType');
+
+    Route::post('/update/{id}/item', 'StockController@updateType')->name('UpdateItem');
+    Route::post('/update/{id}/location', 'StockController@updateType')->name('UpdateLocation');
+    Route::post('/update/{id}/type', 'StockController@updateType')->name('UpdateType');
+
+    
 });

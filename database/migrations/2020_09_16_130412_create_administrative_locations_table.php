@@ -17,6 +17,7 @@ class CreateAdministrativeLocationsTable extends Migration
             $table->id();
             $table->String('locationName')->unique()->nullable();
             $table->String('locationCode')->unique()->nullable();
+            $table->String('supervisor')->nullable();
             $table->integer('status')->nullable()->default(1)->comment="0: Inactive, 1:Active";
             $table->String('doneBy')->nullable();
             $table->timestamps();

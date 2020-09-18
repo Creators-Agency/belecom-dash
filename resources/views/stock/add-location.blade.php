@@ -17,34 +17,8 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="solarPanelType">Solar Panel Type</label>
-                                    <select class="custom-select" id="solarPanelType" required>
-                                        <option value="">Choose type of solar panel</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
-                                    <div class="invalid-tooltip">You must select valid solar type</div>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <div class="col-md-12 mb-3">
-                                    <label for="administrativeLocation">Administrative Location</label>
-                                    <select class="custom-select" id="administrativeLocation" required>
-                                        <option value="">Choose Administrative location</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
-                                    <div class="invalid-tooltip">You must select a valid location</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <div class="col-md-12 mb-3">
-                                <label for="NumberOfSolar">How Many</label>
-                                <input type="number" class="form-control" id="NumberOfSolar" placeholder="Number of solar panel" required>
+                                <label for="NumberOfSolar">Location Name</label>
+                                <input type="text" class="form-control" id="NumberOfSolar" placeholder="Number of solar panel" required>
                                 <div class="invalid-tooltip">
                                     This field shouldn't be empty
                                 </div>
@@ -52,11 +26,14 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                <label for="TotalPrice">Total Price</label>
-                                <input type="text" disabled class="form-control" id="TotalPrice" placeholder="0" required>
-                                <div class="invalid-tooltip">
-                                    Please provide a valid state.
-                                </div>
+                                    <label for="administrativeLocation">Supervisor</label>
+                                    <select class="custom-select" id="administrativeLocation" required>
+                                        <option value="">Select Supervisor</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                    <div class="invalid-tooltip">You must choose supervisor</div>
                                 </div>
                             </div>
                         </div>

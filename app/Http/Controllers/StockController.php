@@ -18,12 +18,17 @@ class StockController extends Controller
 
     public function addNewItem()
     {
-        return view('stock.add');
+        return view('stock.add-item');
     }
 
     public function addNewLocation()
     {
-        return view('stock.add');
+        return view('stock.add-location');
+    }
+
+    public function addNewType()
+    {
+        return view('stock.add-solar-type');
     }
 
     /**
