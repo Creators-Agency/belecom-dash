@@ -38,6 +38,51 @@
                     </form>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Registered Solar Panel Type</h4>
+                            <div class="table-responsive">
+                                <table id="zero_config" class="table table-striped table-bordered" style="width: 100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Serial Number</th>
+                                            <th>Type</th>
+                                            <th>Location</th>
+                                            <th>Registered date</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Tiger Nixon</td>
+                                            <td>System Architect</td>
+                                            <td>Edinburgh</td>
+                                            <td>2011/04/25</td>
+                                            <td>
+                                                <i class="far fa-edit text-primary p-2"></i>
+                                                <i class="fas fa-trash text-danger p-2"></i>
+                                            </td>
+                                        </tr>
+                                        
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Serial Number</th>
+                                            <th>Type</th>
+                                            <th>Location</th>
+                                            <th>Registered date</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

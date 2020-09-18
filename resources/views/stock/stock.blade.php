@@ -9,42 +9,6 @@
         </div>
     </div>
     <div class="container-fluid">
-        <!-- <div class="card-group">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="d-flex no-block align-items-center">
-                                <div>
-                                    <i class="mdi mdi-emoticon font-20 text-muted"></i>
-                                    <p class="font-16 m-b-5">Total Item</p>
-                                </div>
-                                <div class="ml-auto">
-                                    <h1 class="font-light text-right">23</h1>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="d-flex no-block align-items-center">
-                                <div>
-                                    <i class="mdi mdi-image font-20  text-muted"></i>
-                                    <p class="font-16 m-b-5">Value of Items</p>
-                                </div>
-                                <div class="ml-auto">
-                                    <h1 class="font-light text-right">169</h1>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
         <div class="row">
             <div class="col-lg-3 col-md-6">
                 <div class="card">
