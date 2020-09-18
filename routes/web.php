@@ -14,3 +14,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'HomeController@home');
+
+Route::prefix('stock')->group(function(){
+    Route::get('/', 'StockController@index');
+    Route::get('/new/item', 'StockController@addNewItem');
+    Route::get('/new/location', 'StockController@addNewLocation');
+    Route::post('/create','StockController@save')->name('CreateProducts');
+    Route::post('/delete/{id}','StockController@delete');
+    Route::get('/edit/{id}','StockController@edit');
+    Route::post('/update/{id}','StockController@update')->name('UpdateProducts');
+});

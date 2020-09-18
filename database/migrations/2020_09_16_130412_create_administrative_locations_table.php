@@ -16,6 +16,7 @@ class CreateAdministrativeLocationsTable extends Migration
         Schema::create('administrative_locations', function (Blueprint $table) {
             $table->id();
             $table->String('locationName')->unique()->nullable();
+            $table->String('locationCode')->unique()->nullable();
             $table->integer('status')->nullable()->default(1)->comment="0: Inactive, 1:Active";
             $table->String('doneBy')->nullable();
             $table->timestamps();

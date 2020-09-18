@@ -18,7 +18,7 @@ class CreateStocksTable extends Migration
             $table->integer('productID');
             $table->integer('quantity');
             $table->integer('doneBy');
-            $table->string('status')->default(1)->comment="0: Inactive, 1: Active";
+            $table->string('status')->default(0)->comment="0: Pending, 1: Approved";
             $table->timestamps();
         });
     }
