@@ -21,7 +21,21 @@ class StockControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function addNew()
+    public function addNewItem()
+    {
+        $response = $this->get('/new/item');
+
+        $response->assertStatus(200);
+    }
+
+    public function addNewLocation()
+    {
+        $response = $this->get('/new/item');
+
+        $response->assertStatus(200);
+    }
+
+    public function addNewType()
     {
         $response = $this->get('/new/item');
 

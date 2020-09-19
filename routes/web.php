@@ -34,9 +34,9 @@ Route::prefix('stock')->group(function(){
     Route::get('/edit/{id}/location', 'StockController@editType');
     Route::get('/edit/{id}/type', 'StockController@editType');
 
-    Route::post('/update/{id}/item', 'StockController@updateType')->name('UpdateItem');
-    Route::post('/update/{id}/location', 'StockController@updateType')->name('UpdateLocation');
-    Route::post('/update/{id}/type', 'StockController@updateType')->name('UpdateType');
+    Route::post('/update/{id}/item', 'StockController@updateItem')->name('UpdateItem');
+    Route::post('/update/{id}/location', 'StockController@updateLocation')->name('UpdateLocation');
+    Route::post('/update/type', 'StockController@updateType')->name('UpdateType');
 
     
 });

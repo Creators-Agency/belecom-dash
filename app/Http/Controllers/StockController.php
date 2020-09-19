@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Redirect;
+use Validator;
+use App\Models\Stock;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
-
+use App\Models\SolarPanelType;
+use App\Models\AdministrativeLocation;
 class StockController extends Controller
 {
     /**
@@ -28,7 +33,11 @@ class StockController extends Controller
 
     public function addNewType()
     {
-        return view('stock.add-solar-type');
+        $Get_solarType = SolarPanelType::orderBy('id','DESC')->get();   
+        return view('stock.add-solar-type', [
+            'SolarTypes' => $Get_solarType,
+            'ifRecord' => count($Get_solarType)
+        ]);
     }
 
     /**
@@ -37,6 +46,97 @@ class StockController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created SolarType in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function saveType(Request $request)
+    {
+        /*--------- Validating Data -------------------*/
+        $rules = array (
+            'SolarTypeName' => 'required',
+            'SolarTypePrice' => 'required|max:7',
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
+
+
+        /*----------- Saving New solar type -------------*/
+        $solarType = new SolarPanelType();
+        $solarType->solarTypeName = $request->SolarTypeName;
+        $solarType->price = $request->SolarTypePrice;
+        $solarType->isActive = 1;
+        $solarType->doneBy = 1;
+
+        // if success
+        if ($solarType->save()) {
+
+            /*============== Updating Activity Logs =========*/
+            $Get_solarType = SolarPanelType::orderBy('id','DESC')->first();
+            $this->ActivityLogs('New','Solar Panel Type', $Get_solarType->id);
+        }
+
+        // failed 
+        // alert()->danger('Oops!', 'Failed to save');
+        return Redirect::back()->withErrors($validator)->withInput();
+    }
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function saveLocation(Request $request)
+    {
+        /*--------- Validating Data -------------------*/
+        $rules = array (
+            'locationName' => 'required',
+            'supervisor' => 'required',
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
+
+
+        /*----------- Saving New solar type -------------*/
+        $location = new AdministrativeLocation();
+        $location->locationName = $request->locationName;
+        $location->supervisor = $request->supervisor;
+        $location->doneBy = 1;
+
+        // if success
+        if ($location->save()) {
+
+            /*============== Updating Activity Logs =========*/
+            $Get_location = SolarPanelType::orderBy('id','DESC')->first();
+            $this->ActivityLogs('New','Administrative Location', $Get_location->id);
+        }
+
+        // failed 
+        // alert()->danger('Oops!', 'Failed to save');
+        return Redirect::back()->withErrors($validator)->withInput();
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function saveItem(Request $request)
     {
         //
     }
@@ -69,9 +169,17 @@ class StockController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function editType($id)
     {
-        //
+        $Get_solarType = SolarPanelType::where('id',$id)->first();
+        // check if the record exist
+        if ($Get_solarType) {
+            return view('stock.edit-type',[
+                'singleType' => $Get_solarType
+            ]);
+        }
+        // alert()->danger('Oops!', 'No Record Found');
+        return Redirect('/stock/new/solar/type');
     }
 
     /**
@@ -81,9 +189,33 @@ class StockController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateType(Request $request)
     {
-        //
+        /*--------- Validating Data -------------------*/
+        $rules = array (
+            'SolarTypeName' => 'required',
+            'SolarTypePrice' => 'required|max:7',
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
+
+        $update = SolarPanelType::where('id', $request->KeyToEdit)
+                ->update([
+                    'solarTypeName' => $request->SolarTypeName,
+                    'price' => $request->SolarTypePrice,
+                ]);
+
+        // if success
+        if ($update) {
+            // alert()->success('Done!', 'saved with success!');
+            return Redirect::back();
+        }
+        // alert()->danger('Oops!', 'Failed to save');
+        return Redirect::back();
+
     }
 
     /**
@@ -95,5 +227,34 @@ class StockController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+
+    public function ActivityLogs($actionName,$modelName,$modelPrimaryKey)
+    {
+        /*
+            Sometimes it might failed to save, but we gotta give it a try!
+            this method will repeat atleast 1 time if it fail, 
+            else it will break to loop 
+        */
+        for ($i=0; $i <1 ; $i++) { 
+
+            $activityLog = new ActivityLog();
+            $activityLog->userID = 1; //Authenticated user
+            $activityLog->actionName = $actionName;
+            $activityLog->modelName = $modelName;
+            $activityLog->modelPrimaryKey = $modelPrimaryKey;
+            
+            // if sucess
+            if ($activityLog->save()) {
+                // break the loop
+                // alert()->success('Done!', 'saved with success!');
+                return Redirect::back();
+            }
+        }
+        // else report error!
+        // alert()->danger('Oops!', 'Failed to save');
+         return Redirect::back();
     }
 }

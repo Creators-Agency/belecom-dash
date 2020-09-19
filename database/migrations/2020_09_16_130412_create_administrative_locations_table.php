@@ -15,11 +15,11 @@ class CreateAdministrativeLocationsTable extends Migration
     {
         Schema::create('administrative_locations', function (Blueprint $table) {
             $table->id();
-            $table->String('locationName')->unique()->nullable();
-            $table->String('locationCode')->unique()->nullable();
-            $table->String('supervisor')->nullable();
+            $table->String('locationName')->unique();
+            $table->String('locationCode')->unique();
+            $table->String('supervisor')->unique();
             $table->integer('status')->nullable()->default(1)->comment="0: Inactive, 1:Active";
-            $table->String('doneBy')->nullable();
+            $table->String('doneBy');
             $table->timestamps();
         });
     }
