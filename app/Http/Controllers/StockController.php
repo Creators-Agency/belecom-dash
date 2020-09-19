@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Redirect;
 use Validator;
 use App\Models\Stock;
+use App\Models\SolarPanel;
 use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use App\Models\SolarPanelType;
@@ -23,17 +24,35 @@ class StockController extends Controller
 
     public function addNewItem()
     {
-        return view('stock.add-item');
+
+        $Get_location = AdministrativeLocation::orderBy('id','DESC')
+                        ->where('status',1)
+                        ->get();
+        $Get_solarType = SolarPanelType::orderBy('id','DESC')
+                        ->where('isActive',1)
+                        ->get();   
+        return view('stock.add-item',[
+            'Locations' => $Get_location,
+            'SolarTypes' => $Get_solarType
+        ]);
     }
 
     public function addNewLocation()
     {
-        return view('stock.add-location');
+        $Get_location = AdministrativeLocation::orderBy('id','DESC')
+                        ->where('status',1)
+                        ->get();
+        return view('stock.add-location', [
+            'Locations' => $Get_location,
+            'ifRecord' => count($Get_location)
+        ]);
     }
 
     public function addNewType()
     {
-        $Get_solarType = SolarPanelType::orderBy('id','DESC')->get();   
+        $Get_solarType = SolarPanelType::orderBy('id','DESC')
+                        ->where('isActive',1)
+                        ->get();   
         return view('stock.add-solar-type', [
             'SolarTypes' => $Get_solarType,
             'ifRecord' => count($Get_solarType)
@@ -111,7 +130,7 @@ class StockController extends Controller
         }
 
 
-        /*----------- Saving New solar type -------------*/
+        /*----------- Saving New Location -------------*/
         $location = new AdministrativeLocation();
         $location->locationName = $request->locationName;
         $location->supervisor = $request->supervisor;
@@ -121,7 +140,7 @@ class StockController extends Controller
         if ($location->save()) {
 
             /*============== Updating Activity Logs =========*/
-            $Get_location = SolarPanelType::orderBy('id','DESC')->first();
+            $Get_location = AdministrativeLocation::orderBy('id','DESC')->first();
             $this->ActivityLogs('New','Administrative Location', $Get_location->id);
         }
 
@@ -138,7 +157,37 @@ class StockController extends Controller
      */
     public function saveItem(Request $request)
     {
-        //
+        /*--------- Validating Data -------------------*/
+        $rules = array (
+            'solarPanelType' => 'required',
+            'location' => 'required',
+            'numberOfSolar' => 'required',
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
+
+
+        /*----------- Saving New solar panel -------------*/
+        $solar = new SolarPanel();
+        $solar->solarPanelType = $request->solarPanelType;
+        $solar->location = $request->location;
+        $solar->doneBy = 1;
+        $Get_location = AdministrativeLocation::orderBy('id','DESC')
+                        ->where('status',1)
+                        ->first();
+        for ($i=0; $i < $request->numberOfSolar ; $i++) { 
+            $solar->solarPanelSerialNumber =$Get_location->locationCode.date('Y/m/d').'/'.$i;
+            $solar->save(); 
+
+            if ($location->save()) {
+                /*============== Updating Activity Logs =========*/
+                $Get_solar = SolarPanel::orderBy('id','DESC')->first();
+                $this->ActivityLogs('New','Solar Panel', $Get_solar->id);
+            }
+        }
     }
 
     /**

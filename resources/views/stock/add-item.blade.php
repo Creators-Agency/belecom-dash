@@ -20,9 +20,9 @@
                                     <label for="solarPanelType">Solar Panel Type</label>
                                     <select class="custom-select" id="solarPanelType" required>
                                         <option value="">Choose type of solar panel</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                        @foreach($SolarTypes as $singleType)
+                                            <option value="{{ ($singleType->id) }}">{{ ($singleType->solarTypeName) }}</option>
+                                        @endforeach
                                     </select>
                                     <div class="invalid-tooltip">You must select valid solar type</div>
                                 </div>
@@ -32,9 +32,9 @@
                                     <label for="administrativeLocation">Administrative Location</label>
                                     <select class="custom-select" id="administrativeLocation" required>
                                         <option value="">Choose Administrative location</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                        @foreach($Locations as $location)
+                                            <option value="{{ ($location->id) }}">{{ ($location->locationName) }}</option>
+                                        @endforeach
                                     </select>
                                     <div class="invalid-tooltip">You must select a valid location</div>
                                 </div>
