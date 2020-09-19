@@ -134,6 +134,7 @@ class StockController extends Controller
         $location = new AdministrativeLocation();
         $location->locationName = $request->locationName;
         $location->supervisor = $request->supervisor;
+        $location->locationCode = 'K023';
         $location->doneBy = 1;
 
         // if success
@@ -179,13 +180,15 @@ class StockController extends Controller
                         ->where('status',1)
                         ->first();
         for ($i=0; $i < $request->numberOfSolar ; $i++) { 
-            $solar->solarPanelSerialNumber =$Get_location->locationCode.date('Y/m/d').'/'.$i;
+            // generating serial nuber
+            $solar->solarPanelSerialNumber =$Get_location->locationCode.date('Ymd').rand()  ;
             $solar->save(); 
 
-            if ($location->save()) {
+            if ($solar->save()) {
                 /*============== Updating Activity Logs =========*/
                 $Get_solar = SolarPanel::orderBy('id','DESC')->first();
                 $this->ActivityLogs('New','Solar Panel', $Get_solar->id);
+                return Redirect('/stock');
             }
         }
     }
@@ -299,11 +302,12 @@ class StockController extends Controller
             if ($activityLog->save()) {
                 // break the loop
                 // alert()->success('Done!', 'saved with success!');
-                return Redirect::back();
+                // return Redirect::back();
+                 break;
             }
         }
         // else report error!
         // alert()->danger('Oops!', 'Failed to save');
-         return Redirect::back();
+         // return Redirect::back('/stock');
     }
 }

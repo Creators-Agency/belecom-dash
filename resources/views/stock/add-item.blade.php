@@ -13,12 +13,13 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title mb-5 pb-2">Update Stock</h4>
-                    <form class="needs-validation" novalidate>
+                    <form class="needs-validation" method="POST" action="{{ route('CreateItem') }}" novalidate>
+                        @csrf
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="solarPanelType">Solar Panel Type</label>
-                                    <select class="custom-select" id="solarPanelType" required>
+                                    <select class="custom-select" name="solarPanelType" id="solarPanelType" required>
                                         <option value="">Choose type of solar panel</option>
                                         @foreach($SolarTypes as $singleType)
                                             <option value="{{ ($singleType->id) }}">{{ ($singleType->solarTypeName) }}</option>
@@ -30,7 +31,7 @@
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="administrativeLocation">Administrative Location</label>
-                                    <select class="custom-select" id="administrativeLocation" required>
+                                    <select class="custom-select" name="location" id="administrativeLocation" required>
                                         <option value="">Choose Administrative location</option>
                                         @foreach($Locations as $location)
                                             <option value="{{ ($location->id) }}">{{ ($location->locationName) }}</option>
@@ -44,7 +45,7 @@
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                 <label for="NumberOfSolar">How Many</label>
-                                <input type="number" class="form-control" id="NumberOfSolar" placeholder="Number of solar panel" required>
+                                <input type="number" name="numberOfSolar" class="form-control" id="NumberOfSolar" placeholder="Number of solar panel" required>
                                 <div class="invalid-tooltip">
                                     This field shouldn't be empty
                                 </div>
