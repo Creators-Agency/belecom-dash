@@ -44,4 +44,8 @@ Route::prefix('stock')->group(function(){
 
 Route::prefix('/client')->group(function(){
 	Route::get('/','ClientController@index');
+    Route::post('/create/client','ClientController@saveClient')->name('CreateClient');
+    Route::get('/edit/{id}/client', 'ClientController@editClient');
+    Route::post('/update/{id}/client', 'ClientController@updateClient')->name('UpdateClient');
+    Route::get('/delete/{id}/client', 'ClientController@deleteClient');
 });

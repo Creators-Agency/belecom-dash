@@ -13,21 +13,21 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title mb-5 pb-2">Register Client</h4>
-                    <form class="needs-validation" method="POST" action="{{ route('CreateItem') }}" novalidate>
+                    <form class="needs-validation" method="POST" action="{{ route('CreateClient') }}" novalidate>
                         @csrf
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="FirstName">First Name</label>
-                                    <input type="text" name="firstName" class="form-control" id="FirstName" placeholder="First Name" required>
-                                    <div class="invalid-tooltip">You must select valid solar type</div>
+                                    <input type="text" name="firstName" class="form-control" id="FirstName" placeholder="First Name" value="{{ old('firstName') }}" required>
+                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="LastName">Last Name</label>
-                                    <input type="text" name="lastName" class="form-control" id="FirstName" placeholder="Last Name" required>
-                                    <div class="invalid-tooltip">You must select valid solar type</div>
+                                    <input type="text" name="lastName" class="form-control" value="{{ old('lastName') }}" id="FirstName" placeholder="Last Name" required>
+                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
                         </div>
@@ -35,15 +35,15 @@
                             <div class="form-group col-md-12">
                                 <div class="col-md-12 mb-3">
                                     <label for="Identification">Identification</label>
-                                    <input type="number" name="identification" class="form-control" id="Identification" placeholder="Identification" required>
-                                    <div class="invalid-tooltip">You must select valid solar type</div>
+                                    <input type="number" name="identification" class="form-control" value="{{ old('identification') }}" id="Identification" placeholder="Identification" required>
+                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="col-md-12 mb-3">
-                                    <label for="Age">Age</label>
-                                    <input type="number" name="age" class="form-control" id="Age" placeholder="Client's Age" required>
-                                    <div class="invalid-tooltip">You must select valid solar type</div>
+                                    <label for="Age">DOB</label>
+                                    <input type="date" name="age" class="form-control" id="Age" value="{{ old('age') }}" placeholder="Birth date" required>
+                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
                         </div>
@@ -51,15 +51,15 @@
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="PrimaryNumber">Primary Number</label>
-                                    <input type="number" name="primaryNumber" class="form-control" id="PrimaryNumber" placeholder="Primary Number" required>
-                                    <div class="invalid-tooltip">You must select valid solar type</div>
+                                    <input type="number" name="primaryNumber" class="form-control" value="{{ old('primaryNumber') }}" id="PrimaryNumber" placeholder="Primary Number" required>
+                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="SecondaryNumber">Secondary Number</label>
-                                    <input type="number" name="secondaryNumber" class="form-control" id="SecondaryNumber" placeholder="Secondary Number" required>
-                                    <div class="invalid-tooltip">You must select valid solar type</div>
+                                    <input type="number" name="secondaryNumber" class="form-control" id="SecondaryNumber" placeholder="Secondary Number" value="{{ old('secondaryNumber') }}" >
+                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
                         </div>
@@ -77,7 +77,7 @@
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="VillageName">Village Name</label>
-                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" required>
+                                    <input type="text" name="villageName" class="form-control" value="{{ old('villageName') }}" id="VillageName" placeholder="Village Name" required>
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
@@ -86,14 +86,14 @@
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="QuarterName">Quarter Name</label>
-                                    <input type="text" name="quarterName" class="form-control" id="QuarterName" placeholder="Quarter Name" required>
+                                    <input type="text" value="{{ old('quarterName') }}" name="quarterName" class="form-control" id="QuarterName" placeholder="Quarter Name" required>
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="HouseNumber">House Number</label>
-                                    <input type="number" name="houseNumber" class="form-control" id="HouseNumber" placeholder="House Number" required>
+                                    <input type="number" value="{{ old('houseNumber') }}" name="houseNumber" class="form-control" id="HouseNumber" placeholder="House Number" required>
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
@@ -106,13 +106,13 @@
                                         <div class="form-check form-check-inline">
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" class="custom-control-input" id="GenderM" name="gender" value="1" required>
-                                                <label class="custom-control-label" for="GenderM">1</label>
+                                                <label class="custom-control-label" for="GenderM">Male</label>
                                             </div>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" class="custom-control-input" id="GenderF" name="gender" value="0" required>
-                                                <label class="custom-control-label" for="GenderF">2</label>
+                                                <label class="custom-control-label" for="GenderF">Female</label>
                                             </div>
                                         </div>
                                     </div>
@@ -125,13 +125,13 @@
                                         <div class="form-check form-check-inline">
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" class="custom-control-input change-ref" data-selector="show-form-ref" id="RefYes" name="refer" value="1"  required>
-                                                <label class="custom-control-label" for="RefYes">1</label>
+                                                <label class="custom-control-label" for="RefYes">Yes</label>
                                             </div>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" class="custom-control-input change-ref" data-selector="hide-form-ref" id="RefNo" name="refer" value="0" required>
-                                                <label class="custom-control-label" for="RefNo">2</label>
+                                                <label class="custom-control-label" for="RefNo">No</label>
                                             </div>
                                         </div>
                                     </div>
@@ -140,17 +140,17 @@
                             <div class="form-group col-md-3">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h4 class="card-title">Inline Custom Radios</h4>
+                                        <h4 class="card-title">Any additional Info</h4>
                                         <div class="form-check form-check-inline">
                                             <div class="custom-control custom-radio">
-                                                <input type="radio" class="custom-control-input" id="customControlValidation2" name="radio-stacked" required>
-                                                <label class="custom-control-label" for="customControlValidation2">1</label>
+                                                <input type="radio" class="custom-control-input change-more-info" data-selector="show-form-info" id="customControlValidation2" name="additional-info" required>
+                                                <label class="custom-control-label" for="customControlValidation2">Yes</label>
                                             </div>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <div class="custom-control custom-radio">
-                                                <input type="radio" class="custom-control-input" id="customControlValidation3" name="radio-stacked" required>
-                                                <label class="custom-control-label" for="customControlValidation3">2</label>
+                                                <input type="radio" class="custom-control-input change-more-info" data-selector="hide-form-info" id="customControlValidation3" name="additional-info" required>
+                                                <label class="custom-control-label" for="customControlValidation3">No</label>
                                             </div>
                                         </div>
                                     </div>
@@ -206,7 +206,7 @@
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="Location">Highest Education Level</label>
-                                    <select class="custom-select" name="location" id="Location" required>
+                                    <select class="custom-select" name="location" id="Location" >
                                         <option value="">Select Educational Level</option>
                                         <option value="1">one</option>
                                     </select>
@@ -217,7 +217,7 @@
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="Location">Location</label>
-                                    <select class="custom-select" name="location" id="Location" required>
+                                    <select class="custom-select" name="location" id="Location" >
                                         <option value="">Choose Location</option>
                                         <option value="1">one</option>
                                     </select>
@@ -228,7 +228,7 @@
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="Location">Location</label>
-                                    <select class="custom-select" name="location" id="Location" required>
+                                    <select class="custom-select" name="location" id="Location" >
                                         <option value="">Choose Location</option>
                                         <option value="1">one</option>
                                     </select>
@@ -239,7 +239,7 @@
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="VillageName">Village Name</label>
-                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" required>
+                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" >
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
@@ -247,7 +247,7 @@
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="VillageName">Village Name</label>
-                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" required>
+                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" >
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
@@ -255,7 +255,7 @@
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="VillageName">Village Name</label>
-                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" required>
+                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" >
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
@@ -263,7 +263,7 @@
                             <div class="form-group col-md-12">
                                 <div class="col-md-12 mb-3">
                                     <label for="VillageName">Village Name</label>
-                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" required>
+                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" >
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
@@ -271,7 +271,7 @@
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="VillageName">Village Name</label>
-                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" required>
+                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" >
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
@@ -279,7 +279,7 @@
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="VillageName">Village Name</label>
-                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" required>
+                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" >
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
@@ -287,7 +287,7 @@
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="VillageName">Village Name</label>
-                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" required>
+                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" >
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
@@ -295,7 +295,7 @@
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="VillageName">Village Name</label>
-                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" required>
+                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" >
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
@@ -374,12 +374,14 @@
 
 
 $(function() {
-        $(".referee-info").hide();
-        $("#Referee-card1").hide();
-        $("#Referee-card2").hide();
-        $(".hide").hide();
 
-        $('.change-ref').click(function() {
+    $(".referee-info").hide();
+    $("#Other-info").hide();
+    $("#Referee-card1").hide();
+    $("#Referee-card2").hide();
+    $(".hide").hide();
+
+    $('.change-ref').click(function() {
         var button = $(this).data('selector');
         console.log('text');
         if (button=='show-form-ref') {
@@ -394,7 +396,16 @@ $(function() {
             $("#Referee-card2").hide(1000);
             $(".hide").hide(1000);
         }
-      })
+    })
+    $('.change-more-info').click(function() {
+        var button = $(this).data('selector');
+        if (button=='show-form-info') {
+            $("#Other-info").show(1000);
+        }
+        else if(button=='hide-form-info'){
+            $("#Other-info").hide(1000);
+        }
+    })
 
   })
 </script>
