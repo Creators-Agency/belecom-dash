@@ -9,6 +9,7 @@
             <div class="lds-pos"></div>
         </div>
     </div>
+    @include('sweet::alert')
     <div id="main-wrapper">
         <header class="topbar">
             <nav class="navbar top-navbar navbar-expand-md navbar-dark">

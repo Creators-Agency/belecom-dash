@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Redirect;
 use Validator;
+use SweetAlert;
 use App\Models\Stock;
 use App\Models\SolarPanel;
 use App\Models\ActivityLog;
@@ -12,6 +13,9 @@ use App\Models\SolarPanelType;
 use App\Models\AdministrativeLocation;
 class StockController extends Controller
 {
+    // status default for alert
+    public $status = 0;
+
     /**
      * Display a listing of the resource.
      *
@@ -102,11 +106,19 @@ class StockController extends Controller
             /*============== Updating Activity Logs =========*/
             $Get_solarType = SolarPanelType::orderBy('id','DESC')->first();
             $this->ActivityLogs('New','Solar Panel Type', $Get_solarType->id);
+            $status = 1;
         }
 
-        // failed 
-        // alert()->danger('Oops!', 'Failed to save');
-        return Redirect::back()->withErrors($validator)->withInput();
+        // check and alert if succed 
+        if ($status === 1) {
+           alert()->success('Success', 'New Solar panel type has been added!');
+           return Redirect()::back();
+        }
+        else{
+            // failed 
+            alert()->error('Oops', 'Something Wrong!');
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
     }
 
 
@@ -143,11 +155,19 @@ class StockController extends Controller
             /*============== Updating Activity Logs =========*/
             $Get_location = AdministrativeLocation::orderBy('id','DESC')->first();
             $this->ActivityLogs('New','Administrative Location', $Get_location->id);
+            $status = 1;
         }
 
-        // failed 
-        // alert()->danger('Oops!', 'Failed to save');
-        return Redirect::back()->withErrors($validator)->withInput();
+        // check and alert if succed 
+        if ($status === 1) {
+           alert()->success('Success', 'New Location has been added!');
+           return Redirect()::back();
+        }
+        else{
+            // failed 
+            alert()->error('Oops', 'Something Wrong!');
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
     }
 
     /**
@@ -179,17 +199,28 @@ class StockController extends Controller
         $Get_location = AdministrativeLocation::orderBy('id','DESC')
                         ->where('status',1)
                         ->first();
-        for ($i=0; $i < $request->numberOfSolar ; $i++) { 
+        for ($i=1; $i <= $request->numberOfSolar ; $i++) { 
             // generating serial nuber
             $solar->solarPanelSerialNumber =$Get_location->locationCode.date('Ymd').rand()  ;
-            $solar->save(); 
-
             if ($solar->save()) {
                 /*============== Updating Activity Logs =========*/
                 $Get_solar = SolarPanel::orderBy('id','DESC')->first();
                 $this->ActivityLogs('New','Solar Panel', $Get_solar->id);
-                return Redirect('/stock');
             }
+            if ($i == $request->numberOfSolar ) {
+                $status = 1;
+            }
+        }
+
+        // check and alert if succed 
+        if ($status === 1) {
+           alert()->success('Success', 'Operation is successful!');
+           return Redirect()::back();
+        }
+        else{
+            // failed 
+            alert()->error('Oops', 'Something Wrong!');
+            return Redirect::back()->withErrors($validator)->withInput();
         }
     }
 
@@ -230,7 +261,45 @@ class StockController extends Controller
                 'singleType' => $Get_solarType
             ]);
         }
-        // alert()->danger('Oops!', 'No Record Found');
+        alert()->danger('Oops!', 'No Record Found');
+        return Redirect('/stock/new/solar/type');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function editLocation($id)
+    {
+        $Get_solarType = SolarPanelType::where('id',$id)->first();
+        // check if the record exist
+        if ($Get_solarType) {
+            return view('stock.edit-type',[
+                'singleType' => $Get_solarType
+            ]);
+        }
+        alert()->danger('Oops!', 'No Record Found');
+        return Redirect('/stock/new/solar/type');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function editItem($id)
+    {
+        $Get_solarType = SolarPanelType::where('id',$id)->first();
+        // check if the record exist
+        if ($Get_solarType) {
+            return view('stock.edit-type',[
+                'singleType' => $Get_solarType
+            ]);
+        }
+        alert()->danger('Oops!', 'No Record Found');
         return Redirect('/stock/new/solar/type');
     }
 
@@ -262,10 +331,10 @@ class StockController extends Controller
 
         // if success
         if ($update) {
-            // alert()->success('Done!', 'saved with success!');
+            alert()->success('Done!', 'saved with success!');
             return Redirect::back();
         }
-        // alert()->danger('Oops!', 'Failed to save');
+        alert()->danger('Oops!', 'Failed to save');
         return Redirect::back();
 
     }
@@ -300,14 +369,9 @@ class StockController extends Controller
             
             // if sucess
             if ($activityLog->save()) {
-                // break the loop
-                // alert()->success('Done!', 'saved with success!');
-                // return Redirect::back();
-                 break;
+                // break the loop                
+                break;
             }
         }
-        // else report error!
-        // alert()->danger('Oops!', 'Failed to save');
-         // return Redirect::back('/stock');
     }
 }
