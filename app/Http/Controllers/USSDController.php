@@ -33,9 +33,9 @@ class USSDController extends Controller
          * Check level of application and display content accordingly
          */
 
-        if($level < 1){
+        if($level <= 1){
             $this->display_menu();
-        } else if($level >= 1) {
+        } else if($level > 1) {
             $this->run_app($input_exploded);
         }
     }
@@ -69,7 +69,7 @@ class USSDController extends Controller
     public function run_app($value) {
         $level = count($value);
         switch ($level) {
-            case '1':
+            case '2':
                 $content  = "Valentin, Tubahaye ikaze kuri Belecom \n";
                 $content .= "Kanda";
                 $content .= "1 wishure ifatabuguzi y'ukwezi \n";
@@ -79,25 +79,25 @@ class USSDController extends Controller
                 $this->proceed($content);
                 break;
 
-            case '2':
-                if($value[1] == "1") {
+            case '3':
+                if($value[2] == "1") {
                     $content  = "Proceed to pay on you MoMo account! \n";
                     $content .= "Amount: <b>".number_format(7000)."Rwf.</b>\n";
                     $content .= "Thank you!";
                     $this->stop($content);
-                } else if($value[1] == "2"){
+                } else if($value[2] == "2"){
                     $content = "Enter amount you wish to pay:";
                     $this->proceed($content);
                 } else {
                     $this->stop("Invalid Choice! \n Please try again later.");
                 }
                 break;
-            case '3':
-                if($value[2] > 7000){
+            case '4':
+                if($value[3] > 7000){
                     $this->stop("Amount entered is greated than balance! \n Please try again later.");
                 } else {
                     $content  = "Proceed to pay on you MoMo account! \n";
-                    $content .= "Amount: <b>".number_format($value[2])." Rwf.</b>\n";
+                    $content .= "Amount: <b>".number_format($value[3])." Rwf.</b>\n";
                     $content .= "Thank you!";
                     $this->stop($content);
                 }
