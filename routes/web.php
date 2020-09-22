@@ -38,7 +38,7 @@ Route::prefix('stock')->group(function(){
     Route::post('/update/{id}/location', 'StockController@updateLocation')->name('UpdateLocation');
     Route::post('/update/type', 'StockController@updateType')->name('UpdateType');
 
-    
+
 });
 
 
@@ -49,4 +49,5 @@ Route::prefix('/client')->group(function(){
     Route::post('/update/{id}/client', 'ClientController@updateClient')->name('UpdateClient');
     Route::get('/delete/{id}/client', 'ClientController@deleteClient');
 });
-Route::get('/ussd','USSDController@index');
+
+Route::post('/ussd','USSDController@index');
