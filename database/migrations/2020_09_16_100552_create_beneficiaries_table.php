@@ -20,8 +20,8 @@ class CreateBeneficiariesTable extends Migration
             $table->String('identification')->unique()->nullable();
             $table->String('gender')->nullable();
             $table->date('DOB')->nullable();
-            $table->integer('primaryPhone')->unique()->nullable();
-            $table->integer('secondaryPhone')->nullable();
+            $table->biginteger('primaryPhone')->unique()->nullable();
+            $table->biginteger('secondaryPhone')->nullable();
             $table->String('educationLevel')->nullable();
             $table->String('incomeSource')->nullable();
             $table->String('sourceOfEnergy')->nullable();

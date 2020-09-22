@@ -15,9 +15,9 @@ class CreateSolarPanelTypesTable extends Migration
     {
         Schema::create('solar_panel_types', function (Blueprint $table) {
             $table->id();
-            $table->String('solarTypeName')->nullable();
-            $table->integer('price')->nullable();
-            $table->integer('isActive')->nullable()->default(0)->comment="0: Inactive, 1: Active";
+            $table->String('solarTypeName')->unique();
+            $table->integer('price')->default(0);
+            $table->integer('isActive')->default(0)->comment="0: Inactive, 1: Active";
             $table->integer('doneBy')->nullable();
             $table->timestamps();
         });
