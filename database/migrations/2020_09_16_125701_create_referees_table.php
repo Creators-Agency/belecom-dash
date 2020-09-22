@@ -18,6 +18,7 @@ class CreateRefereesTable extends Migration
             $table->String('refereeName')->nullable();
             $table->String('refereeID')->nullable();
             $table->String('referrePhone')->nullable();
+            $table->String('refereeTo')->nullable();
             $table->String('relationship')->nullable();
             $table->timestamps();
         });

@@ -183,8 +183,8 @@
                         <div class="form-row" id="Referee-card2">
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                <label for="RefereeNumber">Referee Number</label>
-                                <input type="text"  class="form-control" id="RefereeNumber" placeholder="Referee Number" >
+                                <label for="RefereeNumber">Referee phone</label>
+                                <input type="text"  class="form-control" id="RefereeNumber" placeholder="Referee phone"  name="refereeNumber">
                                 <div class="invalid-tooltip">
                                     Please provide a valid state.
                                 </div>
@@ -205,8 +205,8 @@
                         <div class="form-row" id="Other-info">
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="Location">Highest Education Level</label>
-                                    <select class="custom-select" name="location" id="Location" >
+                                    <label for="Education">Highest Education Level</label>
+                                    <select class="custom-select" name="education" id="Education" >
                                         <option value="">Select Educational Level</option>
                                         <option value="1">one</option>
                                     </select>
@@ -216,8 +216,26 @@
 
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="Location">Location</label>
-                                    <select class="custom-select" name="location" id="Location" >
+                                    <label for="EmploymentStatus">Employment Status</label>
+                                    <select class="custom-select" name="employmentStatus" id="EmploymentStatus" >
+                                        <option value="">Choose Employment Status</option>
+                                        <option value="1">one</option>
+                                    </select>
+                                    <div class="invalid-tooltip">You must select valid Location</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <div class="col-md-12 mb-3">
+                                    <label for="sourceOfIncome">Source Of Income</label>
+                                    <input type="text" name="sourceOfIncome" class="form-control" id="SourceOfIncome" placeholder="source Of Income" >
+                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <div class="col-md-12 mb-3">
+                                    <label for="SourceOfEnergy">Source Of Energy</label>
+                                    <select class="custom-select" name="sourceOfEnergy" id="SourceOfEnergy" >
                                         <option value="">Choose Location</option>
                                         <option value="1">one</option>
                                     </select>
@@ -227,75 +245,55 @@
 
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="Location">Location</label>
-                                    <select class="custom-select" name="location" id="Location" >
-                                        <option value="">Choose Location</option>
-                                        <option value="1">one</option>
-                                    </select>
-                                    <div class="invalid-tooltip">You must select valid Location</div>
-                                </div>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <div class="col-md-12 mb-3">
-                                    <label for="VillageName">Village Name</label>
-                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" >
+                                    <label for="NumberOfPeopleSchool">Number of People in School</label>
+                                    <input type="number" name="numberOfPeopleSchool" class="form-control" id="NumberOfPeopleSchool" placeholder="Number Of People in School" >
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
 
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="VillageName">Village Name</label>
-                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" >
+                                    <label for="MemberInSchool">Member In School</label>
+                                    <input type="number" name="memberInSchool" class="form-control" id="MemberInSchool" placeholder="Member In School" >
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
 
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="VillageName">Village Name</label>
-                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" >
+                                    <label for="MinorF">Number of Female U/17</label>
+                                    <input type="number" name="minorF" class="form-control" id="MinorF" placeholder="Number of Female U/17" >
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
 
+                            <div class="form-group col-md-6">
+                                <div class="col-md-12 mb-3">
+                                    <label for="MajorF">Number of Female not U/18</label>
+                                    <input type="text" name="majorF" class="form-control" id="MajorF" placeholder="Number of Female Above 18" >
+                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <div class="col-md-12 mb-3">
+                                    <label for="MinorM">Male U/17</label>
+                                    <input type="text" name="minorM" class="form-control" id="MinorM" placeholder="Number of male Under 17" >
+                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <div class="col-md-12 mb-3">
+                                    <label for="MajorM">Male not U/17</label>
+                                    <input type="text" name="majorM" class="form-control" id="MajorM" placeholder="Male above 18" >
+                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
+                                </div>
+                            </div>
                             <div class="form-group col-md-12">
                                 <div class="col-md-12 mb-3">
-                                    <label for="VillageName">Village Name</label>
-                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" >
-                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
-                                </div>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <div class="col-md-12 mb-3">
-                                    <label for="VillageName">Village Name</label>
-                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" >
-                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
-                                </div>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <div class="col-md-12 mb-3">
-                                    <label for="VillageName">Village Name</label>
-                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" >
-                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
-                                </div>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <div class="col-md-12 mb-3">
-                                    <label for="VillageName">Village Name</label>
-                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" >
-                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
-                                </div>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <div class="col-md-12 mb-3">
-                                    <label for="VillageName">Village Name</label>
-                                    <input type="text" name="villageName" class="form-control" id="VillageName" placeholder="Village Name" >
+                                    <label for="RoofMaterial">Roof Material</label>
+                                    <input type="text" name="roofMaterial" class="form-control" id="RoofMaterial" placeholder="Roof Material" >
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>

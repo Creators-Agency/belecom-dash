@@ -49,3 +49,4 @@ Route::prefix('/client')->group(function(){
     Route::post('/update/{id}/client', 'ClientController@updateClient')->name('UpdateClient');
     Route::get('/delete/{id}/client', 'ClientController@deleteClient');
 });
+Route::get('/ussd','USSDController@index');

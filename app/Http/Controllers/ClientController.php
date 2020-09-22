@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Redirect;
 use Validator;
 use SweetAlert;
+use App\Models\Referee;
 use App\Models\Beneficiary;
 use Illuminate\Http\Request;
 use App\Models\AdministrativeLocation;
@@ -39,7 +40,7 @@ class ClientController extends Controller
      */
     public function saveClient(Request $request)
     {
-        // return $request;
+         // return $request;
         /*--------- Validating Data -------------------*/
         $rules = array (
             'firstName' => 'required',
@@ -49,7 +50,7 @@ class ClientController extends Controller
             'primaryNumber' => 'required',
             'secondaryNumber' => 'required',
             'location' => 'required',
-            // 'villageName' => 'required',
+            'villageName' => 'required',
             'quarterName' => 'required',
             'houseNumber' => 'required',
             'gender' => 'required',
@@ -59,36 +60,50 @@ class ClientController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
+            return $rules;
             alert()->error('Oops', 'Something Wrong!');
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
         $client = new Beneficiary();
-        $client->firstname = $request->firstname;
-        $client->lastname =$request->lastname;
+        $client->firstname = $request->firstName;
+        $client->lastname =$request->lastName;
         $client->identification =$request->identification;
         $client->gender =$request->gender;
-        $client->DOB =$request->DOB;
-        $client->primaryPhone =$request->primaryPhone;
-        $client->secondaryPhone =$request->secondaryPhone;
-        $client->educationLevel =$request->educationLevel;
-        $client->incomeSource =$request->incomeSource;
+        $client->DOB =$request->age;
+        $client->primaryPhone = $request->primaryNumber;
+        $client->secondaryPhone =$request->secondaryNumber;
+        $client->educationLevel =$request->education;
+        $client->incomeSource =$request->sourceOfIncome;
         $client->sourceOfEnergy =$request->sourceOfEnergy;
         $client->location =$request->location;
-        $client->village =$request->village;
+        $client->village =$request->villageName;
         $client->quarterName =$request->quarterName;
         $client->houseNumber =$request->houseNumber;
-        $client->buildingMaterial =$request->buildingMaterial;
-        $client->familyMember =$request->familyMember;
-        $client->membersInSchool =$request->membersInSchool;
-        $client->U18Male =$request->U18Male;
-        $client->U17Male =$request->U17Male;
-        $client->U18Female =$request->U18Female;
-        $client->U17Female =$request->U17Female;
-        $client->employmentStatus = $request->employmentStatus;
+        $client->buildingMaterial =$request->roofMaterial;
+        $client->familyMember =$request->numberOfPeopleSchool;
+        $client->membersInSchool =$request->memberInSchool;
+        $client->U18Male =$request->majorM;
+        $client->U17Male =$request->minorM;
+        $client->U18Female =$request->majorF;
+        $client->U17Female =$request->minorF;
+        $client->employmentStatus = 0;
         $client->referredby = $request->referredby;
         $client->isActive = 1;
-        // return $request;
+        $client->doneBy = 1;
+        $client->save();
+
+        // if he/she heard about from someone
+        if ($request->refer = 1) {
+            $refer = new Referee();
+            $refer->refereeName = $request->names;
+            $refer->refereeID = $request->identityReferee;
+            $refer->referrePhone = $request->refereeNumber;
+            $refer->relationship = $request->relationship;
+            $refer->save();
+        }
+        alert()->success('yes','done');
+        return $request;
     }
 
     /**
