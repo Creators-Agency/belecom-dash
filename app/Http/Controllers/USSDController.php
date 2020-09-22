@@ -36,7 +36,6 @@ class USSDController extends Controller
         $phoneNumber = $request->phoneNumber;
         // $input       = $_POST["text"];
         $input       = $request->text;
-         $level = 0;
          $input_exploded = explode("*", $input);
 
          $level = count($input_exploded);
