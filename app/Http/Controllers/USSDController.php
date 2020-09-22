@@ -25,7 +25,7 @@ class USSDController extends Controller
     /**
      * Check level of application and display content accordingly
      */
-    
+
     public function index(Request $request)
     {
         // $sessionId   = $_POST["sessionId"];
@@ -51,7 +51,7 @@ class USSDController extends Controller
      * proceed() is used to append CON on every USSD response message.
      * This informs the USSD API gateway that the USSD session is still in session and should still continue.
      */
-    function proceed($value){
+    public function proceed($value){
         header('Content-type: text/plain');
         echo "CON $value";
     }
@@ -60,7 +60,7 @@ class USSDController extends Controller
      * stop() is used to append END on every USSD response message.
      * This informs the USSD API gateway that the USSD session is terminated and should stop the app.
      */
-    function stop($value) {
+    public function stop($value) {
         header('Content-type: text/plain');
         echo "END $value";
     }
@@ -68,13 +68,13 @@ class USSDController extends Controller
     /**
      * display_menu() is the main menu of our application.
      */
-    function display_menu() {
+    public function display_menu() {
         $content  = "Welcome to Belecom \n";
         $content .= "Enter your Serial Number to pay bill.  \n";
         $this->proceed($content);
     }
 
-    function run_app($value) {
+    public function run_app($value) {
         $level = count($value);
         switch ($level) {
             case '2':
@@ -86,7 +86,7 @@ class USSDController extends Controller
                 $content .= "4 kureba ibyakozwe \n";
                 $this->proceed($content);
                 break;
-            
+
             case '3':
                 if($value[2] == "1") {
                     $content  = "Proceed to pay on you MoMo account! \n";
@@ -109,7 +109,7 @@ class USSDController extends Controller
                     $content .= "Thank you!";
                     stop($content);
                 }
-                
+
                 break;
             default:
                 stop("Thank you for using Belecom!");
