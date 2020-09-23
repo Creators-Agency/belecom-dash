@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use Illuminate\Http\Request;
 use App\Models\Beneficiary;
 
@@ -67,7 +68,8 @@ class USSDController extends Controller
     }
 
     public function run_app($value) {
-        $this->query_db('Payouts','45465656464');
+        $content = $this->query_db('payouts', ['id', '9090909']);
+        $this->stop($content);
         $level = count($value);
         switch ($level) {
             case '2':
@@ -110,8 +112,8 @@ class USSDController extends Controller
         }
     }
 
-    public function query_db($model, $value)
+    public function query_db($model, $content)
     {
-        $this->stop($model.'-'.$value);
+        return DB::table($model)->where($content[0], $content[1])->get();
     }
 }
