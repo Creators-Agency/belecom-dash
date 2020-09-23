@@ -67,11 +67,12 @@ class USSDController extends Controller
     }
 
     public function run_app($value) {
+        $this->query_db('Payouts','45465656464')
         $level = count($value);
         switch ($level) {
             case '2':
                 $content  = "Valentin, Tubahaye ikaze kuri Belecom \n";
-                $content .= "Kanda";
+                $content .= "Kanda \n";
                 $content .= "1 wishure ifatabuguzi y'ukwezi \n";
                 $content .= "2 wishure amezi wihitiyemo\n";
                 $content .= "3 wishure ibirarane \n";
@@ -107,5 +108,10 @@ class USSDController extends Controller
                 $this->stop("Thank you for using Belecom!");
                 break;
         }
+    }
+
+    public function query_db($model, $value)
+    {
+        $this->stop($model.'-'.$value);
     }
 }
