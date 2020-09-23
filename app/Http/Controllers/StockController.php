@@ -161,7 +161,7 @@ class StockController extends Controller
         // check and alert if succed 
         if ($status === 1) {
            alert()->success('Success', 'New Location has been added!');
-           return Redirect()::back();
+           return Redirect()->back();
         }
         else{
             // failed 
