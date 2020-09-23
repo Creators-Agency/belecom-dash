@@ -67,7 +67,7 @@ class USSDController extends Controller
     }
 
     public function run_app($value) {
-        $this->query_db('Payouts','45465656464')
+        $this->query_db('Payouts','45465656464');
         $level = count($value);
         switch ($level) {
             case '2':
