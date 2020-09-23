@@ -38,7 +38,7 @@ class CreateBeneficiariesTable extends Migration
             $table->integer('U17Female')->nullable();
             $table->integer('employmentStatus')->default(0)->comment="0: Un-employed, 1: Employed";
             $table->String('referredby')->nullable();
-            $table->integer('isActive')->default()->comment="0: Deleted, 1:Active";
+            $table->integer('isActive')->default()->comment="0: Deleted, 1:Active, 3:assigned";
             $table->integer('doneBy');
             $table->timestamps();
         });
