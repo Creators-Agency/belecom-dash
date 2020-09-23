@@ -192,16 +192,15 @@ class StockController extends Controller
 
 
         /*----------- Saving New solar panel -------------*/
-        $solar = new SolarPanel();
-        $solar->solarPanelType = $request->solarPanelType;
-        $solar->location = $request->location;
-        $solar->doneBy = 1;
-        $Get_location = AdministrativeLocation::orderBy('id','DESC')
-                        ->where('status',1)
-                        ->first();
-        for ($i=1; $i <= $request->numberOfSolar ; $i++) { 
+        for ($i=1; $i <= $request->numberOfSolar ; $i++) {
+
+            $solar = new SolarPanel();
+            $solar->solarPanelType = $request->solarPanelType;
+            $solar->location = $request->location;
+            $solar->doneBy = 1;
+         
             // generating serial nuber
-            $solar->solarPanelSerialNumber =$Get_location->locationCode.date('Ymd').rand()  ;
+            $solar->solarPanelSerialNumber = strtotime(date('Y-m-d')).rand(100,999);
             if ($solar->save()) {
                 /*============== Updating Activity Logs =========*/
                 $Get_solar = SolarPanel::orderBy('id','DESC')->first();
@@ -212,10 +211,10 @@ class StockController extends Controller
             }
         }
 
-        // check and alert if succed 
+        // check and alert if succe 
         if ($status === 1) {
            alert()->success('Success', 'Operation is successful!');
-           return Redirect()::back();
+           return Redirect('/stock');
         }
         else{
             // failed 

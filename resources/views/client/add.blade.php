@@ -299,7 +299,7 @@
                             </div>
                         </div>
 
-                        <button class="btn btn-primary" type="submit">Submit form</button>
+                        <button class="btn btn-primary ml-3" type="submit">Save Client</button>
                     </form>
                 </div>
             </div>
@@ -312,34 +312,46 @@
                         <table id="zero_config" class="table table-striped table-bordered" style="width: 100%">
                             <thead>
                                 <tr>
-                                    <th>Serial Number</th>
-                                    <th>Type</th>
+                                    <th>Identification</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Gender</th>
                                     <th>Location</th>
-                                    <th>Registered date</th>
-                                    <th>Action</th>
+                                    <th>Phone</th>
+                                    <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($clients as $client)
                                 <tr>
-                                    <td>Tiger Nixon</td>
-                                    <td>System Architect</td>
-                                    <td>Edinburgh</td>
-                                    <td>2011/04/25</td>
-                                    <td>
-                                        <i class="far fa-edit text-primary p-2"></i>
-                                        <i class="fas fa-trash text-danger p-2"></i>
+                                    <td>{{ ($client->identification) }}</td>
+                                    <td>{{ ($client->firstname) }}</td>
+                                    <td>{{ ($client->lastname) }}</td>
+                                    <td>{{ ($client->gender) }}</td>
+                                    <td>{{ ($client->location) }}</td>
+                                    <td>{{ ($client->primaryPhone) }}</td>
+                                    <td class="text-center">
+                                        <a href="" class="btn btn-primary">Assign</a>
+                                        <a href="">
+                                            <i class="fas fa-edit text-primary p-2"></i>
+                                        </a>
+                                        <a href="">
+                                            <i class="fas fa-trash text-danger p-2"></i>
+                                        </a>
+                                        
                                     </td>
                                 </tr>
-                                
-                                </tr>
+                                @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>Serial Number</th>
-                                    <th>Type</th>
+                                    <th>Identification</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Gender</th>
                                     <th>Location</th>
-                                    <th>Registered date</th>
-                                    <th>Action</th>
+                                    <th>Phone</th>
+                                    <th class="text-center">Action</th>
                                 </tr>
                             </tfoot>
                         </table>

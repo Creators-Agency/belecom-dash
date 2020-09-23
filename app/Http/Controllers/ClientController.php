@@ -6,6 +6,7 @@ use Redirect;
 use Validator;
 use SweetAlert;
 use App\Models\Referee;
+use App\Models\ActivityLog;
 use App\Models\Beneficiary;
 use Illuminate\Http\Request;
 use App\Models\AdministrativeLocation;
@@ -19,7 +20,11 @@ class ClientController extends Controller
      */
     public function index()
     {
-        return view('client.add');
+        $Get_clients = Beneficiary::where('isActive',1)
+                        ->get();
+        return view('client.add',[
+            'clients' => $Get_clients
+        ]);
     }
 
     /**
@@ -48,7 +53,7 @@ class ClientController extends Controller
             'identification' => 'required',
             'age' => 'required',
             'primaryNumber' => 'required',
-            'secondaryNumber' => 'required',
+            // 'secondaryNumber' => 'required',
             'location' => 'required',
             'villageName' => 'required',
             'quarterName' => 'required',
@@ -60,7 +65,6 @@ class ClientController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return $rules;
             alert()->error('Oops', 'Something Wrong!');
             return Redirect::back()->withErrors($validator)->withInput();
         }
@@ -91,7 +95,7 @@ class ClientController extends Controller
         $client->referredby = $request->referredby;
         $client->isActive = 1;
         $client->doneBy = 1;
-        $client->save();
+        
 
         // if he/she heard about from someone
         if ($request->refer = 1) {
@@ -100,10 +104,44 @@ class ClientController extends Controller
             $refer->refereeID = $request->identityReferee;
             $refer->referrePhone = $request->refereeNumber;
             $refer->relationship = $request->relationship;
-            $refer->save();
+            /*----check if inserted*/
+            if($refer->save()){
+                $get_refer = Referee::orderBy('id','DESC')->first();
+                $client->referredby = $get_refer->id;
+
+                #save client
+                if ($client->save()) {
+                    
+                    /*============== Updating Activity Logs =========*/
+                    $Get_beneficiary = Beneficiary::orderBy('id','DESC')->first();
+                    $this->ActivityLogs('Registration','Beneficiary', $Get_beneficiary->id);
+                    alert()->success('yes','done');
+                    return Redirect('/client');
+                }
+                alert()->error('alert','dumb');
+                return Redirect::back()->withErrors($validator)->withInput();
+            }
+            alert()->warning('Oops','Error occured');
+            return Redirect::back()->withErrors($validator)->withInput();
+
         }
-        alert()->success('yes','done');
-        return $request;
+        else{
+            $client->referredby = 0;
+
+            #save client
+            if ($client->save()) {
+                
+                /*============== Updating Activity Logs =========*/
+                $Get_beneficiary = Beneficiary::orderBy('id','DESC')->first();
+                $this->ActivityLogs('Registration','Beneficiary', $Get_beneficiary->id);
+                alert()->success('yes','done');
+                return Redirect('/client');
+            }            
+
+        }
+
+        
+        
     }
 
     /**
@@ -149,5 +187,28 @@ class ClientController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function ActivityLogs($actionName,$modelName,$modelPrimaryKey)
+    {
+        /*
+            Sometimes it might failed to save, but we gotta give it a try!
+            this method will repeat atleast 1 time if it fail, 
+            else it will break to loop 
+        */
+        for ($i=0; $i <1 ; $i++) { 
+
+            $activityLog = new ActivityLog();
+            $activityLog->userID = 1; //Authenticated user
+            $activityLog->actionName = $actionName;
+            $activityLog->modelName = $modelName;
+            $activityLog->modelPrimaryKey = $modelPrimaryKey;
+            
+            // if sucess
+            if ($activityLog->save()) {
+                // break the loop                
+                break;
+            }
+        }
     }
 }
