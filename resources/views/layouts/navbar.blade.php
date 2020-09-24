@@ -6,9 +6,55 @@
         </a>
     </li>
     <li class="sidebar-item">
+        <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+            <i class="mdi mdi-crop-square"></i>
+            <span class="hide-menu">Stock Managment</span>
+        </a>
+        <ul aria-expanded="false" class="collapse  first-level">
+            <li class="sidebar-item">
+                <a href="{{ URL::to('/stock') }}" class="sidebar-link">
+                    <i class="mdi mdi-format-align-left"></i>
+                    <span class="hide-menu">Stock Overview </span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="{{ URL::to('/stock/new/item') }}" class="sidebar-link">
+                    <i class="mdi mdi-format-align-right"></i>
+                    <span class="hide-menu"> Add solar panel(s) </span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="{{ URL::to('/stock/new/solar/type') }}" class="sidebar-link">
+                    <i class="mdi mdi-format-align-right"></i>
+                    <span class="hide-menu"> New solar Type</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="{{ URL::to('/stock/new/location') }}" class="sidebar-link">
+                    <i class="mdi mdi-format-align-right"></i>
+                    <span class="hide-menu"> Add Branch </span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="sidebar-item">
+        <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+            <i class="mdi mdi-crop-square"></i>
+            <span class="hide-menu">Clients Managment </span>
+        </a>
+        <ul aria-expanded="false" class="collapse  first-level">
+            <li class="sidebar-item">
+                <a href="{{ URL::to('/client') }}" class="sidebar-link">
+                    <i class="mdi mdi-format-align-left"></i>
+                    <span class="hide-menu"> Add client </span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <!-- <li class="sidebar-item">
         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="authentication-login1.html" aria-expanded="false">
             <i class="fa fa-sign-out-alt"></i>
             <span class="hide-menu">Log Out</span>
         </a>
-    </li>
+    </li> -->
 </ul>
