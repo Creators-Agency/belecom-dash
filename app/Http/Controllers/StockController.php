@@ -112,7 +112,7 @@ class StockController extends Controller
         // check and alert if succed 
         if ($status === 1) {
            alert()->success('Success', 'New Solar panel type has been added!');
-           return Redirect()::back();
+           return Redirect()->back();
         }
         else{
             // failed 
@@ -330,11 +330,11 @@ class StockController extends Controller
 
         // if success
         if ($update) {
-            alert()->success('Done!', 'saved with success!');
-            return Redirect::back();
+            alert()->success('saved with success!', 'Done!');
+            return Redirect()->back();
         }
-        alert()->danger('Oops!', 'Failed to save');
-        return Redirect::back();
+        alert()->danger('Failed to save', 'Oops!');
+        return Redirect()->back();
 
     }
 
