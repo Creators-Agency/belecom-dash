@@ -145,14 +145,18 @@ class ClientController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Assign solar panel, View
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function assignClient($id)
     {
-        //
+        alert('Hello World!')->persistent("Close this");
+        $client = Beneficiary::where('id',$id)->first();
+        return view('client.assign',[
+            'client' => $client
+        ]);
     }
 
     /**

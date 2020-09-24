@@ -16,12 +16,14 @@ class CreatePayoutsTable extends Migration
         Schema::create('payouts', function (Blueprint $table) {
             $table->id();
             $table->String('solarSerialNumber')->comment="solar panel type";
-            $table->String('clientAccount');
-            $table->integer('amountpaid')->nullable();
-            $table->integer('monthpaid')->nullable();
+            $table->String('clientNames');
+            $table->String('clientID');
+            $table->String('clientPhone');
+            $table->integer('monthYear')->nullable();
+            $table->integer('payment')->nullable();
+            $table->integer('balance')->nullable();
             $table->String('transactionID');
             $table->String('status');
-            $table->String('doneBy');
             $table->timestamps();
         });
     }
