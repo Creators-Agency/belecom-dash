@@ -28,24 +28,28 @@ class USSDController extends Controller
         /**
          * Get menu level from client's input
          */
-        $level = count($input_exploded);
+        $level = sizeof($input_exploded);
 
         /**
-         * Check level of application and display content accordingly
+         * Fire up the app passing the level of application and content from input
          */
-
-        if($level <= 1){
-            $this->display_menu();
-        } else if($level > 1) {
-            $this->run_app($input_exploded);
+        if($input_exploded[0] != "") {
+            $this->run_app($level, $input_exploded, $phoneNumber);
+        } else {
+            /**
+             * Login Phase of the app.
+             */
+            $content  = "Welcome to Belecom \n";
+            $content .= "Enter your Serial Number to pay bill.  \n";
+            $this->proceed($content);
         }
     }
+
     /**
      * proceed() is used to append CON on every USSD response message.
      * This informs the USSD API gateway that the USSD session is still in session and should still continue.
      */
     public function proceed($value){
-        header('Content-type: text/plain');
         echo "CON $value";
     }
 
@@ -54,60 +58,56 @@ class USSDController extends Controller
      * This informs the USSD API gateway that the USSD session is terminated and should stop the app.
      */
     public function stop($value) {
-        header('Content-type: text/plain');
         echo "END $value";
     }
 
-    /**
-     * display_menu() is the main menu of our application.
-     */
-    public function display_menu() {
-        $content  = "Welcome to Belecom \n";
-        $content .= "Enter your Serial Number to pay bill.  \n";
-        $this->proceed($content);
-    }
-
-    public function run_app($value) {
-        $content = $this->query_db('payouts', ['id', '9090909']);
-        $this->stop($content);
-        $level = count($value);
+    public function run_app($level, $values, $phoneNumber) {
         switch ($level) {
-            case '2':
-                $content  = "Valentin, Tubahaye ikaze kuri Belecom \n";
-                $content .= "Kanda \n";
-                $content .= "1 wishure ifatabuguzi y'ukwezi \n";
-                $content .= "2 wishure amezi wihitiyemo\n";
-                $content .= "3 wishure ibirarane \n";
-                $content .= "4 kureba ibyakozwe \n";
+            /**
+             * Menu Phase of the app.
+             */
+            case '1':
+                // $this->query_db('payouts', ['id', '9090909']);
+                // $this->payment_api('0784101221', '100');
+
+                $content  = "Ikaze kuri Belecom, ".$values[0]." \n";
+                $content .= "Emeza: \n";
+                $content .= "1 mwishyure ifatabuguzi ry'ukwezi. \n";
+                $content .= "2 mwishyure ibirarane. \n";
+                $content .= "3 Kubona ubutumwa bw'ibyakozwe. \n";
                 $this->proceed($content);
-                break;
+            break;
 
-            case '3':
-                if($value[2] == "1") {
-                    $content  = "Proceed to pay on you MoMo account! \n";
-                    $content .= "Amount: <b>".number_format(7000)."Rwf.</b>\n";
-                    $content .= "Thank you!";
+            /**
+             * Payment Phase of the app
+             */
+            case '2':
+                if($values[1] == "1") {
+                    $content  = "Mukwiye kwishyura: <b>".number_format(100)."Rwf.</b>! \n";
+                    $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
+                    $content .= "Murakoze!";
                     $this->stop($content);
-                } else if($value[2] == "2"){
-                    $content = "Enter amount you wish to pay:";
-                    $this->proceed($content);
+                } else if($values[1] == "2") {
+                    $content  = "Mufite ikirarane cya: <b>".number_format(100)."Rwf.</b>! \n";
+                    $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
+                    $content .= "Murakoze!";
+                    $this->stop($content);
+                } else if($values[1] == "3") {
+                    $content  = "Turaboherereza ubutumwa bugufi bukubiyemo incamake ku bwishyu bwose mwakoze. \n";
+                    $content .= "Murakoze!";
+                    $this->stop($content);
                 } else {
-                    $this->stop("Invalid Choice! \n Please try again later.");
-                }
-                break;
-            case '4':
-                if($value[3] > 7000){
-                    $this->stop("Amount entered is greated than balance! \n Please try again later.");
-                } else {
-                    $content  = "Proceed to pay on you MoMo account! \n";
-                    $content .= "Amount: <b>".number_format($value[3])." Rwf.</b>\n";
-                    $content .= "Thank you!";
+                    $content  = "Mwahisemo nabi! \n Mwongere mugerageze nanone.";
                     $this->stop($content);
                 }
+            break;
 
-                break;
+            /**
+             * Default Phase of the app
+             */
             default:
-                $this->stop("Thank you for using Belecom!");
+                $content = "Mwahisemo nabi! \n Mwongere mugerageze nanone.";
+                $this->stop($content);
                 break;
         }
     }
@@ -115,5 +115,43 @@ class USSDController extends Controller
     public function query_db($model, $content)
     {
         return DB::table($model)->where($content[0], $content[1])->get();
+    }
+
+    public function payment_api($phone, $amount)
+    {
+        $transactionID = sha1(md5(time())).'-'.rand(102,0);
+        $url = "https://opay-api.oltranz.com/opay/paymentrequest";
+        $content = "{
+            'telephoneNumber'   :   '".$phone."',
+            'amount'            :   ".$amount.",
+            'organizationId'    :   'fa99567c-a2ab-4fbe-84c5-1d20093a3c8e',
+            'description'       :   'Payment of Solar Panel',
+            'callbackUrl'       :   'http://belecom.creators.rw/callback',
+            'transactionId'     :   '".$transactionID."'
+        }";
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_TIMEOUT => 30000,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $content,
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json'
+            )
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+
+        if ($err) {
+            return "cURL Error #:" . $err;
+        } else {
+            return $response;
+        }
     }
 }
