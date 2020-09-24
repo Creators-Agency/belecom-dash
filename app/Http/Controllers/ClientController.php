@@ -6,9 +6,12 @@ use Redirect;
 use Validator;
 use SweetAlert;
 use App\Models\Referee;
+use App\Models\Account;
+use App\Models\SolarPanel;
 use App\Models\ActivityLog;
 use App\Models\Beneficiary;
 use Illuminate\Http\Request;
+use App\Models\SolarPanelType;
 use App\Models\AdministrativeLocation;
 
 class ClientController extends Controller
@@ -150,12 +153,13 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function assignClient($id)
+    public function assign($id)
     {
-        alert('Hello World!')->persistent("Close this");
         $client = Beneficiary::where('id',$id)->first();
+        $solarType = SolarPanelType::get();
         return view('client.assign',[
-            'client' => $client
+            'client' => $client,
+            'SolarTypes' => $solarType
         ]);
     }
 
@@ -165,9 +169,49 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function assignClient(Request $request)
     {
-        //
+        /*------------getting solar using type selected----------------*/
+        $serialNumber = SolarPanel::where('solarPanelType',$request->solarPanelType)
+                                ->where('status',0)
+                                ->first();
+        $account = new Account();
+        $account->beneficiary = $request->clientIdentification;
+        $account->productNumber = $serialNumber->solarPanelSerialNumber;
+        $account->loan = $request->price;
+        $account->doneBy = 1;
+
+        /*------- check if this number does not exist in account table*/
+        $chec_account = Account::where('beneficiary', $request->clientIdentification)
+                                ->orWhere('productNumber', $serialNumber->solarPanelSerialNumber)
+                                ->count();
+        if ($chec_account == 0) {
+            
+            /*---------------- save and check if succed ------------*/
+            if ($account->save()) {
+
+                /* changing Beneficiary status*/
+                 Beneficiary::where('identification', $request->clientIdentification)
+                    ->update([
+                        'isActive' => 3
+                    ]);
+                /*----------updating activity log--------------*/
+                $Get_account = Account::orderBy('id','DESC')->first();
+                $this->ActivityLogs('Creating new','Account',$Get_account->id);
+
+                alert()->success('yes','done');
+                return Redirect('/client');
+
+            }else{
+                /*----------Catch error if it failed to save------------*/
+                alert()->error('Something went Wrong!','Oops!!');
+                return Redirect()->back()->withErrors($validator)->withInput();
+            }
+        }else{
+            /*-------------Catch error if account exist-----------------*/
+            alert()->warning('Account exist!','Oops!!');
+            return Redirect('/client');
+        }
     }
 
     /**

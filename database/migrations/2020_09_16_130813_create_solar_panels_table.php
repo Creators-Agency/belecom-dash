@@ -18,7 +18,7 @@ class CreateSolarPanelsTable extends Migration
             $table->String('solarPanelSerialNumber')->unique();
             $table->integer('solarPanelType');
             $table->integer('location');
-            $table->integer('status')->nullable()->default(0)->comment="0: Pending, 1: Sold, 3: Returned";
+            $table->integer('status')->default(0)->comment="0: Pending, 1: Sold, 3: Returned";
             $table->integer('doneBy')->nullable();
             $table->timestamps();
         });

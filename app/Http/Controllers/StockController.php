@@ -117,7 +117,7 @@ class StockController extends Controller
         else{
             // failed 
             alert()->error('Oops', 'Something Wrong!');
-            return Redirect::back()->withErrors($validator)->withInput();
+            return Redirect()->back()->withErrors($validator)->withInput();
         }
     }
 
