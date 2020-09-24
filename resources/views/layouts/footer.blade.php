@@ -5,6 +5,7 @@
 <script src="{{ URL::asset('dist/js/app.init.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js') }}"></script>
 <script src="{{ URL::asset('dist/js/custom.min.js') }}"></script>
+<script src="{{ URL::asset('dist/js/sidebarmenu.js') }}"></script>
 <script src="{{ URL::asset('dist/js/app-style-switcher.js') }}"></script>
 <script src="{{ URL::asset('dist/js/pages/dashboards/dashboard1.js') }}"></script>
 <script src="{{URL::asset('assets/extra-libs/DataTables/datatables.min.js')}}"></script>

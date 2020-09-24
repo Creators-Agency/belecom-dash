@@ -331,11 +331,11 @@
                                     <td>{{ ($client->location) }}</td>
                                     <td>{{ ($client->primaryPhone) }}</td>
                                     <td class="text-center">
-                                        <a href="" class="btn btn-primary">Assign</a>
-                                        <a href="">
+                                        <a href="{{ URL::to('/client/'.$client->id.'/assign') }}" class="btn btn-primary">Assign</a>
+                                        <a href="{{ URL::to('/client/'.$client->id.'/edit') }}">
                                             <i class="fas fa-edit text-primary p-2"></i>
                                         </a>
-                                        <a href="">
+                                        <a href="{{ URL::to('/client/'.$client->id.'/delete') }}">
                                             <i class="fas fa-trash text-danger p-2"></i>
                                         </a>
                                         
