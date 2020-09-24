@@ -181,21 +181,36 @@ class ClientController extends Controller
         $account->loan = $request->price;
         $account->doneBy = 1;
 
-        /*if succed*/
-        if ($account->save()) {
-
-            /* changing Beneficiary status*/
-             Beneficiary::where('identification', $request->clientIdentification)
-                ->update([
-                    'isActive' => 3
-                ]);
-            /*----------updating activity log--------------*/
-            $Get_account = Account::orderBy('id','DESC')->first();
-            $this->ActivityLogs('Creating new','Account',$Get_account->id);
+        /*------- check if this number does not exist in account table*/
+        $chec_account = Account::where('beneficiary', $request->clientIdentification)
+                                ->orWhere('productNumber', $serialNumber->solarPanelSerialNumber)
+                                ->count();
+        if ($chec_account == 0) {
             
-            alert()->success('yes','done');
-            return Redirect('/client');
+            /*---------------- save and check if succed ------------*/
+            if ($account->save()) {
 
+                /* changing Beneficiary status*/
+                 Beneficiary::where('identification', $request->clientIdentification)
+                    ->update([
+                        'isActive' => 3
+                    ]);
+                /*----------updating activity log--------------*/
+                $Get_account = Account::orderBy('id','DESC')->first();
+                $this->ActivityLogs('Creating new','Account',$Get_account->id);
+
+                alert()->success('yes','done');
+                return Redirect('/client');
+
+            }else{
+                /*----------Catch error if it failed to save------------*/
+                alert()->error('Something went Wrong!','Oops!!');
+                return Redirect()->back()->withErrors($validator)->withInput();
+            }
+        }else{
+            /*-------------Catch error if account exist-----------------*/
+            alert()->warning('Account exist!','Oops!!');
+            return Redirect('/client');
         }
     }
 
