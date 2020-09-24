@@ -50,9 +50,9 @@ Route::prefix('/client')->group(function(){
     Route::post('/{id}/update', 'ClientController@updateClient')->name('UpdateClient');
     Route::get('/{id}/delete', 'ClientController@deleteClient');
 
-    Route::get('/{id}/assign', 'ClientController@assignClient');
+    Route::get('/{id}/assign', 'ClientController@assign');
+    Route::post('/assign', 'ClientController@assignClient')->name('assignClient');
 
-    // Route::get('/{id}/edit','ClientController@')
 });
 
 Route::post('/ussd','USSDController@index');

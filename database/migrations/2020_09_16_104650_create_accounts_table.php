@@ -15,7 +15,8 @@ class CreateAccountsTable extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
-            $table->integer('beneficiary')->unique();
+            $table->biginteger('beneficiary')->unique();
+            $table->biginteger('productNumber')->unique();
             $table->integer('monthPaid')->nullable()->comment="Month a clients has paid";
             $table->integer('loan')->default(0)->comment="Total Amount of Loan he/she has";
             $table->String('monthleft')->default(0)->comment="Amount left to be paid";
