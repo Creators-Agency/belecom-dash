@@ -91,33 +91,42 @@ class StockController extends Controller
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();
         }
+        $check_solartype = SolarPanelType::where('solarTypeName', $request->SolarTypeName)
+                                            ->count();
+        /**
+         * Check if this type exist in DB.
+         */
+        if ($check_solartype == 0) {
 
+            /*----------- Saving New solar type -------------*/
+            $solarType = new SolarPanelType();
+            $solarType->solarTypeName = $request->SolarTypeName;
+            $solarType->price = $request->SolarTypePrice;
+            $solarType->isActive = 1;
+            $solarType->doneBy = 1;
 
-        /*----------- Saving New solar type -------------*/
-        $solarType = new SolarPanelType();
-        $solarType->solarTypeName = $request->SolarTypeName;
-        $solarType->price = $request->SolarTypePrice;
-        $solarType->isActive = 1;
-        $solarType->doneBy = 1;
+            // if success
+            if ($solarType->save()) {
 
-        // if success
-        if ($solarType->save()) {
+                /*============== Updating Activity Logs =========*/
+                $Get_solarType = SolarPanelType::orderBy('id','DESC')->first();
+                $this->ActivityLogs('New','Solar Panel Type', $Get_solarType->id);
+                $status = 1;
+            }
 
-            /*============== Updating Activity Logs =========*/
-            $Get_solarType = SolarPanelType::orderBy('id','DESC')->first();
-            $this->ActivityLogs('New','Solar Panel Type', $Get_solarType->id);
-            $status = 1;
-        }
-
-        // check and alert if succed 
-        if ($status === 1) {
-           alert()->success('Success', 'New Solar panel type has been added!');
-           return Redirect()->back();
-        }
-        else{
-            // failed 
-            alert()->error('Oops', 'Something Wrong!');
-            return Redirect()->back()->withErrors($validator)->withInput();
+            // check and alert if succed 
+            if ($status === 1) {
+               alert()->success('Success', 'New Solar panel type has been added!');
+               return Redirect()->back();
+            }
+            else{
+                // failed 
+                alert()->error('Oops', 'Something Wrong!');
+                return Redirect()->back()->withErrors($validator)->withInput();
+            }
+        }else{
+            alert()->error('Type exist, try with different name','Operation Failed!');
+            return Redirect::back()->withErrors($validator)->withInput();
         }
     }
 
@@ -140,32 +149,41 @@ class StockController extends Controller
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();
         }
+        $check_Location = AdministrativeLocation::where('locationName', $request->locationName)
+                                            ->count();
+        /**
+         * Check if the Location exist in DB.
+         */
+        if ($check_Location == 0) {
 
+            /*----------- Saving New Location -------------*/
+            $location = new AdministrativeLocation();
+            $location->locationName = $request->locationName;
+            $location->supervisor = $request->supervisor;
+            $location->locationCode = 'K023';
+            $location->doneBy = 1;
 
-        /*----------- Saving New Location -------------*/
-        $location = new AdministrativeLocation();
-        $location->locationName = $request->locationName;
-        $location->supervisor = $request->supervisor;
-        $location->locationCode = 'K023';
-        $location->doneBy = 1;
+            // if success
+            if ($location->save()) {
 
-        // if success
-        if ($location->save()) {
+                /*============== Updating Activity Logs =========*/
+                $Get_location = AdministrativeLocation::orderBy('id','DESC')->first();
+                $this->ActivityLogs('New','Administrative Location', $Get_location->id);
+                $status = 1;
+            }
 
-            /*============== Updating Activity Logs =========*/
-            $Get_location = AdministrativeLocation::orderBy('id','DESC')->first();
-            $this->ActivityLogs('New','Administrative Location', $Get_location->id);
-            $status = 1;
-        }
-
-        // check and alert if succed 
-        if ($status === 1) {
-           alert()->success('Success', 'New Location has been added!');
-           return Redirect()->back();
-        }
-        else{
-            // failed 
-            alert()->error('Oops', 'Something Wrong!');
+            // check and alert if succed 
+            if ($status === 1) {
+               alert()->success('Success', 'New Location has been added!');
+               return Redirect()->back();
+            }
+            else{
+                // failed 
+                alert()->error('Oops', 'Something Wrong!');
+                return Redirect::back()->withErrors($validator)->withInput();
+            }
+        }else{
+            alert()->error('Location exist, try with different name','Operation Failed!');
             return Redirect::back()->withErrors($validator)->withInput();
         }
     }
@@ -279,7 +297,7 @@ class StockController extends Controller
                 'singleType' => $Get_solarType
             ]);
         }
-        alert()->danger('Oops!', 'No Record Found');
+        alert()->danger('No Record Found!', 'Oops!');
         return Redirect('/stock/new/solar/type');
     }
 
@@ -298,7 +316,7 @@ class StockController extends Controller
                 'singleType' => $Get_solarType
             ]);
         }
-        alert()->danger('Oops!', 'No Record Found');
+        alert()->danger('No Record Found!', 'Oops!');
         return Redirect('/stock/new/solar/type');
     }
 

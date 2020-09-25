@@ -67,7 +67,12 @@ class USSDController extends Controller
              * Menu Phase of the app.
              */
             case '1':
-                // $this->query_db('payouts', ['id', '9090909']);
+                $check = $this->query_db('pending_payouts', ['id', '9090909']);
+                if ($check) {
+                    $content = 'this works'.$check->solarSerialNumber;
+                    $this->proceed($content);
+                }
+                else{
                 // $this->payment_api('0784101221', '100');
 
                 $content  = "Ikaze kuri Belecom, ".$values[0]." \n";
@@ -76,6 +81,7 @@ class USSDController extends Controller
                 $content .= "2 mwishyure ibirarane. \n";
                 $content .= "3 Kubona ubutumwa bw'ibyakozwe. \n";
                 $this->proceed($content);
+            }
             break;
 
             /**
