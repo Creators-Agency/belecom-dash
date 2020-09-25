@@ -73,6 +73,8 @@ class USSDController extends Controller
                     $this->proceed($content);
                 }
                 else{
+
+                // $this->query_db('payouts', ['id', '9090909']);
                 // $this->payment_api('0784101221', '100');
 
                 $content  = "Ikaze kuri Belecom, ".$values[0]." \n";
@@ -81,7 +83,9 @@ class USSDController extends Controller
                 $content .= "2 mwishyure ibirarane. \n";
                 $content .= "3 Kubona ubutumwa bw'ibyakozwe. \n";
                 $this->proceed($content);
+
             }
+
             break;
 
             /**
