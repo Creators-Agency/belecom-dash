@@ -67,9 +67,9 @@ class USSDController extends Controller
              * Menu Phase of the app.
              */
             case '1':
-                $check = $this->query_db('pending_payouts', ['id', '9090909']);
-                if ($check) {
-                    $content = 'this works'.$check->solarSerialNumber;
+                $check = $this->query_db('pending_payouts', ['solarSerialNumber', $values[0]]);
+                if (!empty($check)) {
+                    $content = 'this works '.$check->solarSerialNumber;
                     $this->proceed($content);
                 }
                 else{
@@ -120,7 +120,7 @@ class USSDController extends Controller
 
     public function query_db($model, $content)
     {
-        return DB::table($model)->where($content[0], $content[1])->get();
+        return DB::table($model)->where($content[0], $content[1])->first();
     }
 
     public function payment_api($phone, $amount)
