@@ -121,19 +121,14 @@ class USSDController extends Controller
                     }else{
                     // if NO insert  new Record!
 
-
-clientNames
-monthPaid
-loan
-monthleft
                         $new_payout = new Payout();
                         $new_payout->solarSerialNumber = $check->productNumber;
                         $new_payout->clientNames = $check->clientNames;
                         $new_payout->clientID = $check->beneficiary;
-                        $new_payout->clientPhone = $check->$values[1]
-                        $new_payout->monthYear = $check->
-                        $new_payout->payment = $check->
-                        $content = 'this'.$check->clientNames;
+                        $new_payout->clientPhone = $phoneNumber;
+                        $new_payout->monthYear = date("m-Y");
+                        $new_payout->payment = number_format($check->loan/36);
+                        $content = 'this'.$new_payout;
                         $this->proceed($content);
                     }
                     
