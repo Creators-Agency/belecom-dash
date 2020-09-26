@@ -189,6 +189,7 @@ class ClientController extends Controller
         $account = new Account();
         $account->beneficiary = $request->clientIdentification;
         $account->productNumber = $serialNumber->solarPanelSerialNumber;
+        $account->clientNames = $request->firstname;
         $account->loan = $request->price;
         $account->doneBy = 1;
 
@@ -205,6 +206,12 @@ class ClientController extends Controller
                  Beneficiary::where('identification', $request->clientIdentification)
                     ->update([
                         'isActive' => 3
+                    ]);
+
+                /* changing solar status*/
+                 solarPanel::where('solarPanelSerialNumber', $serialNumber->solarPanelSerialNumber)
+                    ->update([
+                        'status' => 1
                     ]);
                 /*----------updating activity log--------------*/
                 $Get_account = Account::orderBy('id','DESC')->first();

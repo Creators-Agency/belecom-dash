@@ -18,10 +18,11 @@ class CreatePayoutsTable extends Migration
             $table->String('solarSerialNumber')->comment="solar panel";
             $table->String('clientNames');
             $table->String('clientID');
-            $table->String('clientPhone');
+            $table->String('clientPhone')->comment="tel used paying";
             $table->string('monthYear');
             $table->integer('payment');
-            $table->integer('balance');
+            // $table->integer('month');
+            // $table->integer('balance');
             $table->String('transactionID');
             $table->String('status');
             $table->timestamps();

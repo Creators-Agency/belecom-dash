@@ -17,6 +17,7 @@ class CreateAccountsTable extends Migration
             $table->id();
             $table->biginteger('beneficiary')->unique();
             $table->biginteger('productNumber')->unique();
+            $table->String('clientNames')->unique();
             $table->integer('monthPaid')->nullable()->comment="Month a clients has paid";
             $table->integer('loan')->default(0)->comment="Total Amount of Loan he/she has";
             $table->String('monthleft')->default(0)->comment="Amount left to be paid";

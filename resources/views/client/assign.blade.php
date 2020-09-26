@@ -38,6 +38,7 @@
                                 </div>
                             </div>
                             <input type="hidden" name="clientIdentification" value="{{ ($client->identification) }}">
+                            <input type="hidden" name="firstname" value="{{ ($client->firstname) }}">
                             <input type="hidden" name="price" value="0">
                         </div>
                         <div class="form-row">

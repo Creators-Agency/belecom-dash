@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use App\Models\Beneficiary;
+use App\Models\Payout;
 
 class USSDController extends Controller
 {
@@ -40,7 +41,7 @@ class USSDController extends Controller
              * Login Phase of the app.
              */
             $content  = "Welcome to Belecom \n";
-            $content .= "Enter your Serial Number to pay bill.  \n";
+            $content .= "Shyiramo inimero y'umurasire wawe.  \n";
             $this->proceed($content);
         }
     }
@@ -62,28 +63,39 @@ class USSDController extends Controller
     }
 
     public function run_app($level, $values, $phoneNumber) {
+        /**
+         * check if serial number entered Match any Record from user Accounts.
+         */
+
+        $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1]);
         switch ($level) {
+
             /**
              * Menu Phase of the app.
              */
+
             case '1':
-                $check = $this->query_db('pending_payouts', ['solarSerialNumber', $values[0]]);
                 if (!empty($check)) {
-                    $content = 'this works '.$check->solarSerialNumber;
+                    $content  = "Ikaze kuri Belecom, ".$check->clientName." \n";
+                    $content .= "Emeza: \n";
+                    $content .= "1 mwishyure ifatabuguzi ry'ukwezi. \n";
+                    $content .= "2 mwishyure ibirarane. \n";
+                    $content .= "3 Kubona ubutumwa bw'ibyakozwe. \n";
                     $this->proceed($content);
                 }
                 else{
 
+                    /**
+                     * ending session because this serial number doesn't exist 
+                     * or it hasn't assigned yet to anyone.
+                     */
+
+                    $content  = "inimero mwashizemo nago ibaho! \n Gana ibiro bikwegereye bya belecom bagufashe \n Murakoze!.".$values[1];
+                    $this->stop($content);
                 // $this->query_db('payouts', ['id', '9090909']);
                 // $this->payment_api('0784101221', '100');
 
-                $content  = "Ikaze kuri Belecom, ".$values[0]." \n";
-                $content .= "Emeza: \n";
-                $content .= "1 mwishyure ifatabuguzi ry'ukwezi. \n";
-                $content .= "2 mwishyure ibirarane. \n";
-                $content .= "3 Kubona ubutumwa bw'ibyakozwe. \n";
-                $this->proceed($content);
-
+                
             }
 
             break;
@@ -93,10 +105,38 @@ class USSDController extends Controller
              */
             case '2':
                 if($values[1] == "1") {
-                    $content  = "Mukwiye kwishyura: <b>".number_format(100)."Rwf.</b>! \n";
-                    $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
-                    $content .= "Murakoze!";
-                    $this->stop($content);
+                    /**
+                     * Check if entered Serial number exist in payout table. 
+                     * 
+                     */
+
+                    $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[0]],NULL);
+
+                    // if YES
+                    if (!empty($check_payout)) {
+                        $content  = "Mukwiye kwishyura: <b>".number_format(100)."Rwf.</b>! \n";
+                        $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
+                        $content .= "Murakoze!";
+                        $this->stop($content);
+                    }else{
+                    // if NO insert  new Record!
+
+
+clientNames
+monthPaid
+loan
+monthleft
+                        $new_payout = new Payout();
+                        $new_payout->solarSerialNumber = $check->productNumber;
+                        $new_payout->clientNames = $check->clientNames;
+                        $new_payout->clientID = $check->beneficiary;
+                        $new_payout->clientPhone = $check->$values[1]
+                        $new_payout->monthYear = $check->
+                        $new_payout->payment = $check->
+                        $content = 'this'.$check->clientNames;
+                        $this->proceed($content);
+                    }
+                    
                 } else if($values[1] == "2") {
                     $content  = "Mufite ikirarane cya: <b>".number_format(100)."Rwf.</b>! \n";
                     $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
@@ -122,9 +162,13 @@ class USSDController extends Controller
         }
     }
 
-    public function query_db($model, $content)
+    public function query_db($model, $content, $constraint)
     {
-        return DB::table($model)->where($content[0], $content[1])->first();
+        if($constraint == NULL){
+            return DB::table($model)->where($content[0], $content[1])->first();
+        }else{
+            return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->first();
+        }
     }
 
     public function payment_api($phone, $amount)
