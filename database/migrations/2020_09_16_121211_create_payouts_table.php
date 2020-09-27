@@ -19,8 +19,8 @@ class CreatePayoutsTable extends Migration
             $table->String('clientNames');
             $table->String('clientID');
             $table->String('clientPhone')->comment="tel used paying";
-            $table->string('monthYear');
-            $table->integer('payment');
+            $table->String('monthYear');
+            $table->biginteger('payment');
             // $table->integer('month');
             // $table->integer('balance');
             $table->String('transactionID');

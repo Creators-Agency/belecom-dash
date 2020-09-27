@@ -63,39 +63,35 @@ class USSDController extends Controller
     }
 
     public function run_app($level, $values, $phoneNumber) {
-        /**
-         * check if serial number entered Match any Record from user Accounts.
-         */
 
-        $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1]);
         switch ($level) {
 
             /**
              * Menu Phase of the app.
              */
-
             case '1':
-                if (!empty($check)) {
-                    $content  = "Ikaze kuri Belecom, ".$check->clientName." \n";
-                    $content .= "Emeza: \n";
-                    $content .= "1 mwishyure ifatabuguzi ry'ukwezi. \n";
-                    $content .= "2 mwishyure ibirarane. \n";
-                    $content .= "3 Kubona ubutumwa bw'ibyakozwe. \n";
-                    $this->proceed($content);
-                }
-                else{
+            /**
+             * check if serial number entered Match any Record from user Accounts.
+             */
 
-                    /**
-                     * ending session because this serial number doesn't exist 
-                     * or it hasn't assigned yet to anyone.
-                     */
+            $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1]);
+            if (!empty($check)) {
+                $content  = "Ikaze kuri Belecom, ".$check->clientName." \n";
+                $content .= "Emeza: \n";
+                $content .= "1 mwishyure ifatabuguzi ry'ukwezi. \n";
+                $content .= "2 mwishyure ibirarane. \n";
+                $content .= "3 Kubona ubutumwa bw'ibyakozwe. \n";
+                $this->proceed($content);
+            }
+            else{
 
-                    $content  = "inimero mwashizemo nago ibaho! \n Gana ibiro bikwegereye bya belecom bagufashe \n Murakoze!.".$values[1];
-                    $this->stop($content);
-                // $this->query_db('payouts', ['id', '9090909']);
-                // $this->payment_api('0784101221', '100');
+                /**
+                 * ending session because this serial number doesn't exist 
+                 * or it hasn't assigned yet to anyone.
+                 */
 
-                
+                $content  = "inimero mwashizemo nago ibaho! \n Gana ibiro bikwegereye bya belecom bagufashe \n Murakoze!.";
+                $this->stop($content);            
             }
 
             break;
@@ -104,47 +100,72 @@ class USSDController extends Controller
              * Payment Phase of the app
              */
             case '2':
-                if($values[1] == "1") {
-                    /**
-                     * Check if entered Serial number exist in payout table. 
-                     * 
-                     */
+                    
+                $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1]);
 
-                    $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[0]],NULL);
+                if (!empty($check)) {
 
-                    // if YES
-                    if (!empty($check_payout)) {
-                        $content  = "Mukwiye kwishyura: <b>".number_format(100)."Rwf.</b>! \n";
+                    if($values[1] == "1") {
+                        /**
+                         * Check if entered Serial number exist in payout table. 
+                         * 
+                         */
+
+                        $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[0]],NULL);
+
+                        // if YES
+                        if (!empty($check_payout)) {
+                            $transactionID = sha1(md5(time())).'-'.rand(102,0);
+                            $new_payout = new Payout();
+
+                            $content  = "Mugiye kwishyura: <b>". str_replace(',', '',$check_payout->payment)." Rwf.</b>! \n";
+                            $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
+                            $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe. \n";
+                            $content .= "Murakoze!";
+                            $a = str_replace(',', '', $check_payout->payment);
+                            $this->payment_api($phoneNumber, $a, $transactionID);
+                            $this->stop($content);
+                        }else{
+                        // if NO insert  new Record!
+
+                            $transactionID = sha1(md5(time())).'-'.rand(102,0);
+                            $new_payout = new Payout();
+                            $new_payout->solarSerialNumber = $check->productNumber;
+                            $new_payout->clientNames = $check->clientNames;
+                            $new_payout->clientID = $check->beneficiary;
+                            $new_payout->clientPhone = $phoneNumber;
+                            $new_payout->monthYear = date("m-Y");
+                            $new_payout->payment = number_format($check->loan/36);
+                            $new_payout->transactionID = $transactionID;
+                            $new_payout->status = 0;
+                            if($new_payout->save()){
+
+                            }else{
+                                $content  = "Ibyo musabye nibikunze mwogere mukanya \n Murakoze!.";
+                                $this->stop($content);
+                                $this->payment_api('250784101221',str_replace(',', '',number_format($check->loan/36)),$transactionID);
+                            }
+                            $content = 'this'.$new_payout;
+                            $this->proceed($content);
+                        }
+                        
+                    } else if($values[1] == "2") {
+                        $content  = "Mufite ikirarane cya: <b>".number_format(100)."Rwf.</b>! \n";
                         $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
                         $content .= "Murakoze!";
                         $this->stop($content);
-                    }else{
-                    // if NO insert  new Record!
-
-                        $new_payout = new Payout();
-                        $new_payout->solarSerialNumber = $check->productNumber;
-                        $new_payout->clientNames = $check->clientNames;
-                        $new_payout->clientID = $check->beneficiary;
-                        $new_payout->clientPhone = $phoneNumber;
-                        $new_payout->monthYear = date("m-Y");
-                        $new_payout->payment = number_format($check->loan/36);
-                        $content = 'this'.$new_payout;
-                        $this->proceed($content);
+                    } else if($values[1] == "3") {
+                        $content  = "Turaboherereza ubutumwa bugufi bukubiyemo incamake ku bwishyu bwose mwakoze. \n";
+                        $content .= "Murakoze!";
+                        $this->stop($content);
+                    } else {
+                        $content  = "Mwahisemo nabi! \n Mwongere mugerageze nanone.";
+                        $this->stop($content);
                     }
-                    
-                } else if($values[1] == "2") {
-                    $content  = "Mufite ikirarane cya: <b>".number_format(100)."Rwf.</b>! \n";
-                    $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
-                    $content .= "Murakoze!";
+                 }else{
+                    $content  = "inimero mwashizemo nago ibaho! \n Gana ibiro bikwegereye bya belecom bagufashe \n Murakoze!.";
                     $this->stop($content);
-                } else if($values[1] == "3") {
-                    $content  = "Turaboherereza ubutumwa bugufi bukubiyemo incamake ku bwishyu bwose mwakoze. \n";
-                    $content .= "Murakoze!";
-                    $this->stop($content);
-                } else {
-                    $content  = "Mwahisemo nabi! \n Mwongere mugerageze nanone.";
-                    $this->stop($content);
-                }
+                 } 
             break;
 
             /**
@@ -166,18 +187,28 @@ class USSDController extends Controller
         }
     }
 
-    public function payment_api($phone, $amount)
+    public function payment_api($phone, $amount, $transactionID)
     {
-        $transactionID = sha1(md5(time())).'-'.rand(102,0);
-        $url = "https://opay-api.oltranz.com/opay/paymentrequest";
-        $content = "{
-            'telephoneNumber'   :   '".$phone."',
-            'amount'            :   ".$amount.",
-            'organizationId'    :   'fa99567c-a2ab-4fbe-84c5-1d20093a3c8e',
-            'description'       :   'Payment of Solar Panel',
-            'callbackUrl'       :   'http://belecom.creators.rw/callback',
-            'transactionId'     :   '".$transactionID."'
-        }";
+        // $content = $phone.' '.$amount.' '.$transactionID;
+        // $this->proceed($content);
+            $url = "https://opay-api.oltranz.com/opay/paymentrequest";
+            $content = '{
+                "telephoneNumber" : "'.$phone.'",
+                "amount" : "'.$amount.'",
+                "organizationId" : "fa99567c-a2ab-4fbe-84c5-1d20093a3c8e",
+                "description" : "Payment of Solar Panel",
+                "callbackUrl" : "http://belecom.creators.rw/callback",
+                "transactionId" : "'.$transactionID.'"
+            }';
+        // $url = "https://opay-api.oltranz.com/opay/paymentrequest";
+        // $content = "{
+        //     'telephoneNumber'   :   "''",
+        //     'amount'            :   "",
+        //     'organizationId'    :   'fa99567c-a2ab-4fbe-84c5-1d20093a3c8e',
+        //     'description'       :   'Payment of Solar Panel',
+        //     'callbackUrl'       :   '',
+        //     'transactionId'     :   '""'
+        // }";
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -201,6 +232,29 @@ class USSDController extends Controller
             return "cURL Error #:" . $err;
         } else {
             return $response;
+        }
+    }
+
+    public function ActivityLogs($actionName,$modelName,$modelPrimaryKey)
+    {
+        /*
+            Sometimes it might failed to save, but we gotta give it a try!
+            this method will repeat atleast 1 time if it fail, 
+            else it will break to loop 
+        */
+        for ($i=0; $i <1 ; $i++) { 
+
+            $activityLog = new ActivityLog();
+            $activityLog->userID = 1; //Authenticated user
+            $activityLog->actionName = $actionName;
+            $activityLog->modelName = $modelName;
+            $activityLog->modelPrimaryKey = $modelPrimaryKey;
+            
+            // if sucess
+            if ($activityLog->save()) {
+                // break the loop                
+                break;
+            }
         }
     }
 }
