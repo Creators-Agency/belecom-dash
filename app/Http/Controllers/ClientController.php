@@ -11,6 +11,7 @@ use App\Models\SolarPanel;
 use App\Models\ActivityLog;
 use App\Models\Beneficiary;
 use Illuminate\Http\Request;
+use App\Models\Payout;
 use App\Models\SolarPanelType;
 use App\Models\AdministrativeLocation;
 
@@ -23,6 +24,8 @@ class ClientController extends Controller
      */
     public function index()
     {
+        $check_payout = Payout::first();
+        return $new =  strtotime($check_payout->monthYear.' +2 month');
         $Get_clients = Beneficiary::where('isActive',1)
                         ->get();
         return view('client.add',[

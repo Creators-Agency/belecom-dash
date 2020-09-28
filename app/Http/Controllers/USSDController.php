@@ -76,7 +76,7 @@ class USSDController extends Controller
 
             $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1]);
             if (!empty($check)) {
-                $content  = "Ikaze kuri Belecom, ".$check->clientName." \n";
+                $content  = "Ikaze kuri Belecom, ".$check->clientNames." \n";
                 $content .= "Emeza: \n";
                 $content .= "1 mwishyure ifatabuguzi ry'ukwezi. \n";
                 $content .= "2 mwishyure ibirarane. \n";
@@ -88,7 +88,7 @@ class USSDController extends Controller
                 /**
                  * ending session because this serial number doesn't exist 
                  * or it hasn't assigned yet to anyone.
-                 */
+                **/
 
                 $content  = "inimero mwashizemo nago ibaho! \n Gana ibiro bikwegereye bya belecom bagufashe \n Murakoze!.";
                 $this->stop($content);            
@@ -116,14 +116,34 @@ class USSDController extends Controller
                         // if YES
                         if (!empty($check_payout)) {
                             $transactionID = sha1(md5(time())).'-'.rand(102,0);
+                            $payment_fee = str_replace(',', '',$check_payout->payment);
                             $new_payout = new Payout();
+                            $new_payout->solarSerialNumber = $values[0];
+                            $new_payout->clientNames = $check_payout->clientNames;
+                            $new_payout->clientID = $check_payout->clientID;
+                            $new_payout->clientPhone = $phoneNumber;
+                            $new_payout->monthYear = $check_payout->monthYear;
+                            $new_payout->payment = $check_payout->payment;
+                            $new_payout->transactionID = $transactionID;
+                            $new_payout->status = 0;
+                            $new = date('m-Y', strtotime(strtotime($check_payout->monthYear).' +2 month'));
 
-                            $content  = "Mugiye kwishyura: <b>". str_replace(',', '',$check_payout->payment)." Rwf.</b>! \n";
+                            /*
+                             *                      to be done 
+                             * =========================================================
+                             *      insert a new record with existing month + 1
+                             * ---------------------------------------------------------
+                             *  solarSerialNumber, clientNames, clientID
+                             *  clientPhone, monthYear, payment, transactionID, status
+                             *
+                             *
+                             * *********************************************************
+                             */
+                            $content  = "Mugiye kwishyura: <b>".$payment_fee." Rwf for ".$new."</b>! \n";
                             $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
                             $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe. \n";
                             $content .= "Murakoze!";
-                            $a = str_replace(',', '', $check_payout->payment);
-                            $this->payment_api($phoneNumber, $a, $transactionID);
+                            $this->payment_api($phoneNumber, $payment_fee, $transactionID);
                             $this->stop($content);
                         }else{
                         // if NO insert  new Record!
