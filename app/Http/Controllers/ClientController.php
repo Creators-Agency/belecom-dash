@@ -24,8 +24,6 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $check_payout = Payout::first();
-        return $new =  strtotime($check_payout->monthYear.' +2 month');
         $Get_clients = Beneficiary::where('isActive',1)
                         ->get();
         return view('client.add',[

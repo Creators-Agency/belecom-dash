@@ -92,7 +92,8 @@ Route::prefix('/client')->group(function(){
 
 Route::prefix('/payment')->group(function(){
 	Route::get('/','PaymentController@index');
-    Route::post('/create/client','PaymentController@saveClient')->name('CreateClient');
+	Route::get('/charges','PaymentController@charge');
+    Route::post('/charges','PaymentController@saveCharges')->name('CreateCharges');
 
     Route::get('/{id}/edit', 'PaymentController@editClient');
     Route::post('/{id}/update', 'PaymentController@updateClient')->name('UpdateClient');
