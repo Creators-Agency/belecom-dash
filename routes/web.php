@@ -14,7 +14,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'HomeController@home');
-
+/*
+ *                      	Stock
+ * =========================================================
+ *      				CRUD Operations 
+ * ---------------------------------------------------------
+ *  Model: Stock, SolarPanel, ActivityLog, SolarPanelType,
+ *	User, AdministrativeLocation
+ * ---------------------------------------------------------
+ *	Addtional info:
+ * *********************************************************
+ */
 Route::prefix('stock')->group(function(){
     Route::get('/', 'StockController@index');
 
@@ -41,6 +51,18 @@ Route::prefix('stock')->group(function(){
 
 });
 
+/*
+ *                      	Client
+ * =========================================================
+ *      				CRUD Operations 
+ * ---------------------------------------------------------
+ *  Model:Referee, Account, SolarPanel, ActivityLog, 
+ *	Beneficiary, Payout, SolarPanelType, 
+ *	AdministrativeLocation
+ * ---------------------------------------------------------
+ *	Addtional info:
+ * *********************************************************
+ */
 
 Route::prefix('/client')->group(function(){
 	Route::get('/','ClientController@index');
@@ -52,6 +74,33 @@ Route::prefix('/client')->group(function(){
 
     Route::get('/{id}/assign', 'ClientController@assign');
     Route::post('/assign', 'ClientController@assignClient')->name('assignClient');
+
+});
+
+/*
+ *                      	Payment
+ * =========================================================
+ *      				CRUD Operations 
+ * ---------------------------------------------------------
+ *  Model:Referee, Account, SolarPanel, ActivityLog, 
+ *	Beneficiary, Payout, SolarPanelType, 
+ *	AdministrativeLocation
+ * ---------------------------------------------------------
+ *	Addtional info:
+ * *********************************************************
+ */
+
+Route::prefix('/payment')->group(function(){
+	Route::get('/','PaymentController@index');
+	Route::get('/charges','PaymentController@charge');
+    Route::post('/charges','PaymentController@saveCharges')->name('CreateCharges');
+
+    Route::get('/{id}/edit', 'PaymentController@editClient');
+    Route::post('/{id}/update', 'PaymentController@updateClient')->name('UpdateClient');
+    Route::get('/{id}/delete', 'PaymentController@deleteClient');
+
+    Route::get('/{id}/assign', 'PaymentController@assign');
+    Route::post('/assign', 'PaymentController@assignClient')->name('assignClient');
 
 });
 
