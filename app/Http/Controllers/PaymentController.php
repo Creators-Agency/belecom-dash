@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Redirect;
+use Validator;
 use SweetAlert;
 use App\Models\Charge;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use App\Models\SolarPanelType;
 
@@ -39,9 +42,14 @@ class PaymentController extends Controller
      */
     public function charge()
     {
-         $Get_solarType = SolarPanelType::orderBy('id','DESC')
+        $Get_solarType = SolarPanelType::orderBy('id','DESC')
                         ->where('isActive',1)
+                        ->get();
+
+        $Get_solarType = Charge::orderBy('id','DESC')
                         ->get(); 
+        $charges =  SolarPanelType::get();  
+        // return $charges->charge;          
         return view('payment.charge',[
             'SolarTypes' => $Get_solarType,
             'ifRecord' => count($Get_solarType)
@@ -84,10 +92,17 @@ class PaymentController extends Controller
             $charge->solarPanelType = $request->solarPanelType;
             $charge->charges = $request->charges;
             $charge->doneBy = 0;
-            $charge->save();
+            if ($charge->save()) {
+
+                /*============== Updating Activity Logs =========*/
+                $Get_charge = Charge::orderBy('id','DESC')->first();
+                $this->ActivityLogs('New','Charge', $Get_charge->id);
+                alert()->warning('New charge added', 'Scuccess')->autoclose(3500);
+                return Redirect('/payment');
+            }
         }
         else{
-            alert()->warning()->('Charge Of This Solar Type is already set! you can edit', 'Oops!')->autoclose(3500);
+            alert()->warning('Charge Of This Solar Type is already set! you can edit', 'Oops!')->autoclose(3500);
             return Redirect::back()->withErrors($validator)->withInput();
         }
     }
@@ -135,5 +150,28 @@ class PaymentController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function ActivityLogs($actionName,$modelName,$modelPrimaryKey)
+    {
+        /*
+            Sometimes it might failed to save, but we gotta give it a try!
+            this method will repeat atleast 1 time if it fail, 
+            else it will break to loop 
+        */
+        for ($i=0; $i <1 ; $i++) { 
+
+            $activityLog = new ActivityLog();
+            $activityLog->userID = 1; //Authenticated user
+            $activityLog->actionName = $actionName;
+            $activityLog->modelName = $modelName;
+            $activityLog->modelPrimaryKey = $modelPrimaryKey;
+            
+            // if sucess
+            if ($activityLog->save()) {
+                // break the loop                
+                break;
+            }
+        }
     }
 }
