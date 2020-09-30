@@ -21,8 +21,7 @@ class CreatePayoutsTable extends Migration
             $table->String('clientPhone')->comment="tel used paying";
             $table->String('monthYear');
             $table->biginteger('payment');
-            // $table->integer('month');
-            // $table->integer('balance');
+            $table->integer('loanStatus')->default(0)->comment="0: still in paying process, 1: payment is done";
             $table->String('transactionID');
             $table->String('status');
             $table->timestamps();
