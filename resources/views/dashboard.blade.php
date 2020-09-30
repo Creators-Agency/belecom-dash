@@ -81,8 +81,8 @@
                             </div>
                         </div>
                         <div class="mt-5">
-                            {{-- {!! $analytics->container() !!}
-                            {!! $analytics->script() !!} --}}
+                            {!! $analytics->container() !!}
+                            {!! $analytics->script() !!}
                         </div>
                     </div>
                 </div>
@@ -90,4 +90,7 @@
         </div>
     </div>
 </div>
+@endsection
+@section('script')
+
 @endsection

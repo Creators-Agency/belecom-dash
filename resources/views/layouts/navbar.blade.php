@@ -1,6 +1,6 @@
 <ul id="sidebarnav">
     <li class="sidebar-item">
-        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#">
+        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/">
             <i class="fa fa-home"></i>
             <span class="hide-menu">Home</span>
         </a>
