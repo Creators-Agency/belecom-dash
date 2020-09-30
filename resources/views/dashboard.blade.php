@@ -79,6 +79,36 @@
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-7">
+                                <i class="mdi mdi-currency-eur font-20 text-purple"></i>
+                                <p class="font-16 m-b-5" style="font-size: 10px !important;padding: 3px">Total Loans Amount</p>
+                            </div>
+                            <div class="col-5">
+                                <h1 class="font-light text-right mb-0" style="font-size: 12px !important;">{{ ($loanAmount) }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-7">
+                                <i class="mdi mdi-poll font-20 text-danger"></i>
+                                <p class="font-16 m-b-5" style="font-size: 10px !important;padding: 3px"> Paid Installment Amount</p>
+                            </div>
+                            <div class="col-5">
+                                <h1 class="font-light text-right mb-0">{{ ($latestSalesAmount) }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-7">
                                 <i class="mdi mdi-image font-20 text-success"></i>
                                 <p class="font-16 m-b-5" style="font-size: 10px !important;padding: 3px">Registered Solar Panels</p>
                             </div>
@@ -94,26 +124,11 @@
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-7">
-                                <i class="mdi mdi-currency-eur font-20 text-purple"></i>
-                                <p class="font-16 m-b-5" style="font-size: 10px !important;padding: 3px">Current Loan</p>
+                                <i class="mdi mdi-image font-20 text-success"></i>
+                                <p class="font-16 m-b-5" style="font-size: 10px !important;padding: 3px">Number of our Branch</p>
                             </div>
                             <div class="col-5">
-                                <h1 class="font-light text-right mb-0" style="font-size: 12px !important;">{{ ($loanAmount) }}</h1>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-7">
-                                <i class="mdi mdi-poll font-20 text-danger"></i>
-                                <p class="font-16 m-b-5">New Sales</p>
-                            </div>
-                            <div class="col-5">
-                                <h1 class="font-light text-right mb-0">236</h1>
+                                <h1 class="font-light text-right mb-0">{{ ($locations) }}</h1>
                             </div>
                         </div>
                     </div>

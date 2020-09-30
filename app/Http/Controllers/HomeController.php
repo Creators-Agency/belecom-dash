@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Charts\Analytics;
 
 /*models*/
+use App\Models\AdministrativeLocation;
 use App\Models\Beneficiary;
 use App\Models\SolarPanel;
 use App\Models\Payout;
@@ -72,6 +73,12 @@ class HomeController extends Controller {
 
     	$get_solar = SolarPanel::where('status', 1)
     							->get();
+    	/*
+		 * getting location
+    	 */
+
+    	$get_location = AdministrativeLocation::where('status', 1)
+    							->get();
         $analytics = new Analytics;
         $analytics->labels(['Jan', 'Feb', 'Mar']);
         $analytics->dataset('Users by trimester', 'line', [10, 25, 13]);
@@ -93,7 +100,9 @@ class HomeController extends Controller {
             'latestSalesAmount' => number_format($get_latest_sales),
 
             // get registered panel
-            'panels' => number_format(count($get_solar))
+            'panels' => number_format(count($get_solar)),
+            // locations
+            'locations' => number_format(count($get_location))
 
         ]);
     }
