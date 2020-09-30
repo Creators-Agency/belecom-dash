@@ -23,7 +23,33 @@ class StockController extends Controller
      */
     public function index()
     {
-        return view('stock.stock');
+        /**
+         *
+         * Getting number of number of all solar panel
+         *
+         */
+        $unassigned = SolarPanel::where('status', 0)
+                                ->get();
+        $assigned = SolarPanel::where('status', 1)
+                                ->get();
+        $returned = SolarPanel::where('status', 3)
+                                ->get();
+        
+        $number = SolarPanel::get();
+        $amount = 0;
+        foreach ($number as $key) {
+            $price = SolarPanelType::where('id',$key->solarPanelType)
+                                    ->sum('price');
+            $amount = $amount + $price;
+
+        }
+        
+        return view('stock.stock',[
+            'numberOfSolarAssigned' =>number_format(count($assigned)),
+            'numberOfSolarUnAssigned' =>number_format(count($unassigned)),
+            'numberOfSolarReturned' =>number_format(count($returned)),
+            'amount' => number_format($amount)
+        ]);
     }
 
     public function addNewItem()

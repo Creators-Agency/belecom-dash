@@ -15,11 +15,11 @@
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-7">
-                                <i class="mdi mdi-emoticon font-20 text-info"></i>
-                                <p class="font-16 m-b-5">New Clients</p>
+                                <!-- <i class="mdi mdi-emoticon font-20 text-info"></i> -->
+                                <p class="font-16 m-b-5" style="font-size: 12px !important;padding: 3px">Non assigned Item</p>
                             </div>
                             <div class="col-5">
-                                <h1 class="font-light text-right mb-0">23</h1>
+                                <h1 class="font-light text-right mb-0" style="font-size: 12px !important;">{{ ($numberOfSolarUnAssigned) }}</h1>
                             </div>
                         </div>
                     </div>
@@ -30,11 +30,11 @@
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-7">
-                                <i class="mdi mdi-image font-20 text-success"></i>
-                                <p class="font-16 m-b-5">New Projects</p>
+                                <!-- <i class="mdi mdi-image font-20 text-success"></i> -->
+                                <p class="font-16 m-b-5" style="font-size: 12px !important;padding: 3px">Assigned item</p>
                             </div>
                             <div class="col-5">
-                                <h1 class="font-light text-right mb-0">169</h1>
+                                <h1 class="font-light text-right mb-0" style="font-size: 12px !important;">{{ ($numberOfSolarAssigned) }}</h1>
                             </div>
                         </div>
                     </div>
@@ -45,11 +45,11 @@
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-7">
-                                <i class="mdi mdi-currency-eur font-20 text-purple"></i>
-                                <p class="font-16 m-b-5">New Invoices</p>
+                                <!-- <i class="mdi mdi-currency-eur font-20 text-purple"></i> -->
+                                <p class="font-16 m-b-5" style="font-size: 12px !important;padding: 3px">Returned Item</p>
                             </div>
                             <div class="col-5">
-                                <h1 class="font-light text-right mb-0">157</h1>
+                                <h1 class="font-light text-right mb-0" style="font-size: 12px !important;">{{ ($numberOfSolarReturned) }}</h1>
                             </div>
                         </div>
                     </div>
@@ -60,11 +60,11 @@
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-7">
-                                <i class="mdi mdi-poll font-20 text-danger"></i>
-                                <p class="font-16 m-b-5">New Sales</p>
+                                <!-- <i class="mdi mdi-poll font-20 text-danger"></i> -->
+                                <p class="font-16 m-b-5" style="font-size: 12px !important;padding: 3px">Amount of all item</p>
                             </div>
                             <div class="col-5">
-                                <h1 class="font-light text-right mb-0">236</h1>
+                                <h1 class="font-light text-right mb-0" style="font-size: 12px !important;">{{ ($amount) }} RW</h1>
                             </div>
                         </div>
                     </div>
