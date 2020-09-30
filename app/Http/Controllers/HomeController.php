@@ -9,6 +9,7 @@ class HomeController extends Controller {
         $analytics = new Analytics;
         $analytics->labels(['Jan', 'Feb', 'Mar']);
         $analytics->dataset('Users by trimester', 'line', [10, 25, 13]);
+
         return view('dashboard', [
             'analytics' => $analytics
         ]);
