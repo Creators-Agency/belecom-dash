@@ -82,16 +82,17 @@ class USSDController extends Controller
                 $content .= "2 mwishyure ibirarane. \n";
                 $content .= "3 Kubona ubutumwa bw'ibyakozwe. \n";
                 $this->proceed($content);
-            }
-            else{
+            } else {
 
                 /**
-                 * ending session because this serial number doesn't exist 
+                 * ending session because this serial number doesn't exist
                  * or it hasn't assigned yet to anyone.
                 **/
 
-                $content  = "inimero mwashizemo nago ibaho! \n Gana ibiro bikwegereye bya belecom bagufashe \n Murakoze!.";
-                $this->stop($content);            
+                $content  = "Nimero mwashyizemo ntiyandikishije! \n";
+                $content .= "Gana ibiro bikwegereye bya Belecom bagufashe. \n";
+                $content .= "Murakoze!";
+                $this->stop($content);
             }
 
             break;
@@ -100,15 +101,15 @@ class USSDController extends Controller
              * Payment Phase of the app
              */
             case '2':
-                    
+
                 $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1]);
 
                 if (!empty($check)) {
 
                     if($values[1] == "1") {
                         /**
-                         * Check if entered Serial number exist in payout table. 
-                         * 
+                         * Check if entered Serial number exist in payout table.
+                         *
                          */
 
                         $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[0]],NULL);
@@ -129,7 +130,7 @@ class USSDController extends Controller
                             $new = date('m-Y', strtotime(strtotime($check_payout->monthYear).' +2 month'));
 
                             /*
-                             *                      to be done 
+                             *                      to be done
                              * =========================================================
                              *      insert a new record with existing month + 1
                              * ---------------------------------------------------------
@@ -145,7 +146,7 @@ class USSDController extends Controller
                             $content .= "Murakoze!";
                             $this->payment_api($phoneNumber, $payment_fee, $transactionID);
                             $this->stop($content);
-                        }else{
+                        } else {
                         // if NO insert  new Record!
 
                             $transactionID = sha1(md5(time())).'-'.rand(102,0);
@@ -160,7 +161,7 @@ class USSDController extends Controller
                             $new_payout->status = 0;
                             if($new_payout->save()){
 
-                            }else{
+                            } else {
                                 $content  = "Ibyo musabye nibikunze mwogere mukanya \n Murakoze!.";
                                 $this->stop($content);
                                 $this->payment_api('250784101221',str_replace(',', '',number_format($check->loan/36)),$transactionID);
@@ -168,7 +169,7 @@ class USSDController extends Controller
                             $content = 'this'.$new_payout;
                             $this->proceed($content);
                         }
-                        
+
                     } else if($values[1] == "2") {
                         $content  = "Mufite ikirarane cya: <b>".number_format(100)."Rwf.</b>! \n";
                         $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
@@ -179,13 +180,14 @@ class USSDController extends Controller
                         $content .= "Murakoze!";
                         $this->stop($content);
                     } else {
-                        $content  = "Mwahisemo nabi! \n Mwongere mugerageze nanone.";
+                        $content  = "Mwahisemo nabi! \n";
+                        $content .= "Mwongere mugerageze nanone.";
                         $this->stop($content);
                     }
-                 }else{
+                 } else {
                     $content  = "inimero mwashizemo nago ibaho! \n Gana ibiro bikwegereye bya belecom bagufashe \n Murakoze!.";
                     $this->stop($content);
-                 } 
+                 }
             break;
 
             /**
@@ -259,20 +261,20 @@ class USSDController extends Controller
     {
         /*
             Sometimes it might failed to save, but we gotta give it a try!
-            this method will repeat atleast 1 time if it fail, 
-            else it will break to loop 
+            this method will repeat atleast 1 time if it fail,
+            else it will break to loop
         */
-        for ($i=0; $i <1 ; $i++) { 
+        for ($i=0; $i <1 ; $i++) {
 
             $activityLog = new ActivityLog();
             $activityLog->userID = 1; //Authenticated user
             $activityLog->actionName = $actionName;
             $activityLog->modelName = $modelName;
             $activityLog->modelPrimaryKey = $modelPrimaryKey;
-            
+
             // if sucess
             if ($activityLog->save()) {
-                // break the loop                
+                // break the loop
                 break;
             }
         }
