@@ -23,7 +23,7 @@
                             </div>
                         </div>
                     </div>
-                </div>                        
+                </div>
             </div>
             <div class="col-lg-3 col-md-6">
                 <div class="card">
@@ -38,7 +38,7 @@
                             </div>
                         </div>
                     </div>
-                </div>                        
+                </div>
             </div>
             <div class="col-lg-3 col-md-6">
                 <div class="card">
@@ -53,7 +53,7 @@
                             </div>
                         </div>
                     </div>
-                </div>                        
+                </div>
             </div>
             <div class="col-lg-3 col-md-6">
                 <div class="card">
@@ -68,7 +68,7 @@
                             </div>
                         </div>
                     </div>
-                </div>                        
+                </div>
             </div>
         </div>
         <div class="row">
@@ -81,8 +81,8 @@
                             </div>
                         </div>
                         <div class="mt-5">
-                            {{-- {!! $analytics->container() !!}
-                            {!! $analytics->script() !!} --}}
+                            {!! $analytics->container() !!}
+                            {!! $analytics->script() !!}
                         </div>
                     </div>
                 </div>
