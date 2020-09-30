@@ -136,7 +136,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-12 col-md-12">
+            <div class="col-lg-6 col-md-6">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
@@ -145,8 +145,23 @@
                             </div>
                         </div>
                         <div class="mt-5">
-                            {!! $analytics->container() !!}
-                            {!! $analytics->script() !!}
+                            {!! $loans->container() !!}
+                            {!! $loans->script() !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <h4 class="card-title">Sales Analytics</h4>
+                            </div>
+                        </div>
+                        <div class="mt-5">
+                            {!! $payments->container() !!}
+                            {!! $payments->script() !!}
                         </div>
                     </div>
                 </div>

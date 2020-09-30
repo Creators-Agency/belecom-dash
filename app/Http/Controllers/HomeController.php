@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Charts\Analytics;
+use DB;
 
 /*models*/
 use App\Models\AdministrativeLocation;
@@ -79,13 +80,51 @@ class HomeController extends Controller {
 
     	$get_location = AdministrativeLocation::where('status', 1)
     							->get();
-        $analytics = new Analytics;
-        $analytics->labels(['Jan', 'Feb', 'Mar']);
-        $analytics->dataset('Users by trimester', 'line', [10, 25, 13]);
+
+    	/*infographics about all sold solar */
+    	$data_loan = DB::table('accounts')
+            ->select(DB::raw('sum(loan) as `amount`'), DB::raw('MONTHNAME(created_at) month'))
+            ->groupby('month')
+            ->orderBy('created_at', 'ASC')
+            ->where('isActive',1)
+            ->get(); 
+
+        $month_loan = [];
+        $amount_loan = [];
+
+        foreach ($data_loan as $point) {
+            array_push($amount_loan, $point->amount);
+            array_push($month_loan, $point->month);
+        }
+
+        $loans = new Analytics;
+        $loans->labels($month_loan);
+        $loans->dataset('Amount of sold panel', 'line', $amount_loan);
+
+
+
+        /*info about monthly payment*/
+        $data_payment = DB::table('payouts')
+                ->select(DB::raw('sum(payment) as `amount`'), DB::raw('MONTHNAME(created_at) month'))
+                ->groupby('month')
+                ->orderBy('created_at', 'ASC')
+                ->where('status',1)
+                ->get();
+        $month_payment = [];
+        $amount_payment = [];
+
+        foreach ($data_payment as $point) {
+            array_push($amount_payment, $point->amount);
+            array_push($month_payment, $point->month);
+        } 
+        $payments = new Analytics;
+        $payments->labels($month_payment);
+        $payments->dataset('Loan Payments', 'line', $month_payment);
 
         return view('dashboard', [
         	// Analytics Graph
-            'analytics' => $analytics,
+            'loans' => $loans,
+            'payments' => $payments,
 
             // perspective clients data
             'perspectives' => count($get_perspective),
