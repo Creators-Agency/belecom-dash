@@ -176,7 +176,7 @@ class ClientController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for assigning client a solar.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -240,10 +240,32 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateClient(Request $request, $id)
     {
         //
     }
+
+
+    /**
+     *
+     * Blade for editing client
+     *
+     * @return View
+     * @param int $id of the client
+     *
+     */
+
+    public function editClient($id, $dob)
+    {
+        $Get_clients = Beneficiary::where('isActive',1)
+                                    ->where('id', $id)
+                                    ->get();
+        return view('client.edit', [
+            '$clients' => $Get_clients
+        ]);
+    }
+
+
 
     /**
      * Remove the specified resource from storage.

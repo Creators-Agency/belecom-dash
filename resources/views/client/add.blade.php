@@ -332,7 +332,7 @@
                                     <td>{{ ($client->primaryPhone) }}</td>
                                     <td class="text-center">
                                         <a href="{{ URL::to('/client/'.$client->id.'/assign') }}" class="btn btn-primary">Assign</a>
-                                        <a href="{{ URL::to('/client/'.$client->id.'/edit') }}">
+                                        <a href="{{ URL::to('/client/'.$client->identification.'-'.strtotime($client->DOB).'/edit') }}">
                                             <i class="fas fa-edit text-primary p-2"></i>
                                         </a>
                                         <a href="{{ URL::to('/client/'.$client->id.'/delete') }}">

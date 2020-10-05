@@ -64,12 +64,12 @@ Route::prefix('stock')->group(function(){
  * *********************************************************
  */
 
-Route::prefix('/client')->group(function(){
+Route::prefix('client')->group(function(){
 	Route::get('/','ClientController@index');
     Route::post('/create/client','ClientController@saveClient')->name('CreateClient');
 
-    Route::get('/{id}/edit', 'ClientController@editClient');
-    Route::post('/{id}/update', 'ClientController@updateClient')->name('UpdateClient');
+    Route::get('/{id}-{dob}/edit', 'ClientController@editClient');
+    Route::post('/', 'ClientController@updateClient')->name('UpdateClient');
     Route::get('/{id}/delete', 'ClientController@deleteClient');
 
     Route::get('/{id}/assign', 'ClientController@assign');
@@ -96,12 +96,12 @@ Route::prefix('/payment')->group(function(){
     Route::post('/charges','PaymentController@saveCharges')->name('CreateCharges');
 
     Route::get('/{id}/edit', 'PaymentController@editClient');
-    Route::post('/{id}/update', 'PaymentController@updateClient')->name('UpdateClient');
+    // Route::post('/{id}/update', 'PaymentController@updateClient')->name('UpdateClient');
     Route::get('/{id}/delete', 'PaymentController@deleteClient');
 
     Route::get('/{id}/assign', 'PaymentController@assign');
-    Route::post('/assign', 'PaymentController@assignClient')->name('assignClient');
-
+    // Route::post('/assign', 'PaymentController@assignClient')->name('assignClient');
+ 
 });
 
 Route::post('/ussd','USSDController@index');
