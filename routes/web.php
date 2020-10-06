@@ -117,5 +117,6 @@ Route::prefix('/payment')->group(function(){
  */
 Route::prefix('/staff')->group(function(){
     Route::get('register', 'StaffController@addStaff');
+    Route::post('register', 'StaffController@staffSave')->name('Register');
 });
 Route::post('/ussd','USSDController@index');
