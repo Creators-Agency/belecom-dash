@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 
+use Redirect;
+use Validator;
+use SweetAlert;
+
 class StaffController extends Controller
 {
     /**
@@ -29,7 +33,34 @@ class StaffController extends Controller
      */
     public function staffSave(Request $request)
     {
-        return $request;
+        $rules = array (
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'identification' => 'required',
+            'age' => 'required',
+            'primaryNumber' => 'required',
+            'email' => 'required',
+            'gender' => 'required',
+            'password' => 'required|min:8',
+            'copassword' => 'required',
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            alert()->error('Oops', 'Something Wrong!');
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
+        if($request->password !== $request->copassword){
+            alert()->error('Oops', 'Password Issues');
+            return Redirect::back()->withInput();
+        }
+        $check_user = User::where('nationalID', $request->identification)
+                                ->orWhere('phone', $request->primaryNumber)
+                                ->orWhere('email', $request->email)
+                                ->count();
+        if ($check_user == 0) {
+            return $request;
+        }
     }
 
     /**

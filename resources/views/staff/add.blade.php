@@ -49,7 +49,7 @@
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <div class="col-md-12 mb-3">
-                                    <label for="Identification">Identification</label>
+                                    <label for="Identification">National ID</label>
                                     <input type="number" name="identification" class="form-control" value="{{ old('identification') }}" id="Identification" placeholder="Identification" required>
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
@@ -61,39 +61,6 @@
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <div class="col-md-12 mb-3">
-                                    <label for="PrimaryNumber">Primary Number</label>
-                                    <input type="number" name="primaryNumber" class="form-control" value="{{ old('primaryNumber') }}" id="PrimaryNumber" placeholder="Primary Number" required>
-                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <div class="col-md-12 mb-3">
-                                    <label for="Email">Email</label>
-                                    <input type="number" name="email" class="form-control" id="Email"  placeholder="Secondary Number" value="{{ old('secondaryNumber') }}" required>
-                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
-                                </div>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <div class="col-md-12 mb-3">
-                                    <label for="Password">Password</label>
-                                    <input type="number" name="password" class="form-control" id="Email" placeholder="Secondary Number" value="{{ old('secondaryNumber') }}" required>
-                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
-                                </div>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <div class="col-md-12 mb-3">
-                                    <label for="CoPassword">Confirm Password</label>
-                                    <input type="number" name="copassword" class="form-control" id="Email" placeholder="Secondary Number" value="{{ old('secondaryNumber') }}" required>
-                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
-                                </div>
-                            </div>
-
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
@@ -115,6 +82,39 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <div class="col-md-12 mb-3">
+                                    <label for="PrimaryNumber">Primary Number</label>
+                                    <input type="number" name="primaryNumber" class="form-control" value="{{ old('primaryNumber') }}" id="PrimaryNumber" placeholder="Primary Number" required>
+                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <div class="col-md-12 mb-3">
+                                    <label for="Email">Email</label>
+                                    <input type="email" name="email" class="form-control" id="Email"  placeholder="Email" value="{{ old('email') }}" required>
+                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <div class="col-md-12 mb-3">
+                                    <label for="Password">Password</label>
+                                    <input type="password" name="password" class="form-control" id="Email" placeholder="password" value="{{ old('secondaryNumber') }}" required>
+                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <div class="col-md-12 mb-3">
+                                    <label for="CoPassword">Confirm Password</label>
+                                    <input type="password" name="copassword" class="form-control" id="Email" placeholder="Confirm password" value="{{ old('secondaryNumber') }}" required>
+                                    <div class="invalid-tooltip">This field shouldn't be empty</div>
+                                </div>
+                            </div>
+
                         </div>
                         <button class="btn btn-primary ml-3" type="submit">Register staff</button>
                     </form>
