@@ -115,4 +115,7 @@ Route::prefix('/payment')->group(function(){
  *	Addtional info:
  * *********************************************************
  */
+Route::prefix('/staff')->group(function(){
+    Route::get('register', 'StaffController@addStaff');
+});
 Route::post('/ussd','USSDController@index');

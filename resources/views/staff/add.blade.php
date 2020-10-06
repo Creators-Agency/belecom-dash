@@ -12,7 +12,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-5 pb-2">Register Client</h4>
+                    <h4 class="card-title mb-5 pb-2">Register staff</h4>
                     <form class="needs-validation" method="POST" action="{{ route('CreateClient') }}" novalidate>
                         @csrf
                         <div class="form-row">
@@ -299,7 +299,7 @@
                             </div>
                         </div>
 
-                        <button class="btn btn-primary ml-3" type="submit">Save Client</button>
+                        <button class="btn btn-primary ml-3" type="submit">Save staff</button>
                     </form>
                 </div>
             </div>
@@ -322,20 +322,20 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($clients as $client)
+                                @foreach($staffs as $staff)
                                 <tr>
-                                    <td>{{ ($client->identification) }}</td>
-                                    <td>{{ ($client->firstname) }}</td>
-                                    <td>{{ ($client->lastname) }}</td>
-                                    <td>{{ ($client->gender) }}</td>
-                                    <td>{{ ($client->location) }}</td>
-                                    <td>{{ ($client->primaryPhone) }}</td>
+                                    <td>{{ ($staff->identification) }}</td>
+                                    <td>{{ ($staff->firstname) }}</td>
+                                    <td>{{ ($staff->lastname) }}</td>
+                                    <td>{{ ($staff->gender) }}</td>
+                                    <td>{{ ($staff->location) }}</td>
+                                    <td>{{ ($staff->primaryPhone) }}</td>
                                     <td class="text-center">
-                                        <a href="{{ URL::to('/client/'.$client->id.'/assign') }}" class="btn btn-primary">Assign</a>
-                                        <a href="{{ URL::to('/client/'.$client->identification.'-'.strtotime($client->DOB).'/edit') }}">
+                                        <a href="{{ URL::to('/staff/'.$staff->id.'/assign') }}" class="btn btn-primary">Assign</a>
+                                        <a href="{{ URL::to('/staff/'.$staff->identification.'-'.strtotime($staff->DOB).'/edit') }}">
                                             <i class="fas fa-edit text-primary p-2"></i>
                                         </a>
-                                        <a href="{{ URL::to('/client/'.$client->id.'/delete') }}">
+                                        <a href="{{ URL::to('/staff/'.$staff->id.'/delete') }}">
                                             <i class="fas fa-trash text-danger p-2"></i>
                                         </a>
                                         
