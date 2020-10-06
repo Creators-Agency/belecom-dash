@@ -116,6 +116,7 @@ Route::prefix('/payment')->group(function(){
  * *********************************************************
  */
 Route::prefix('/staff')->group(function(){
+    Route::get('/', 'StaffController@index');
     Route::get('register', 'StaffController@addStaff');
     Route::post('register', 'StaffController@staffSave')->name('Register');
 });

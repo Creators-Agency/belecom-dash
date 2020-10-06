@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 use Redirect;
@@ -11,6 +12,11 @@ use SweetAlert;
 
 class StaffController extends Controller
 {
+
+    public function index()
+    {
+        return '';
+    }
     /**
      * Display a listing of the resource.
      *
@@ -59,7 +65,25 @@ class StaffController extends Controller
                                 ->orWhere('email', $request->email)
                                 ->count();
         if ($check_user == 0) {
-            return $request;
+            
+            // return $request;
+            $staff = new User();
+            $staff->firstname = $request->firstName;
+            $staff->lastname =$request->lastName;
+            $staff->nationalID =$request->identification;
+            $staff->gender =$request->gender;
+            $staff->DOB =$request->age;
+            $staff->phone = $request->primaryNumber;
+            $staff->email =$request->email;
+            $staff->password = Hash::make($request->password);
+            $staff->status = 1;
+            if($staff->save()){
+                alert()->success('New User is registered successfuly', 'Done');
+                return Redirect('/staff');
+            }else{
+                alert()->error('Unable to Register new staff member', 'Oops');
+                return Redirect::back()->withInput();
+            }
         }
     }
 

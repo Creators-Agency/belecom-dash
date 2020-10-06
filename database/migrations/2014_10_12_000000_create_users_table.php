@@ -15,21 +15,18 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('firstname')->nullable();
-            $table->string('lastname')->nullable();
+            $table->string('firstname');
+            $table->string('lastname');
             $table->string('photo')->nullable();
             $table->string('email')->unique()->nullable();
-            $table->string('gender')->nullable();
-            $table->string('nationalID')->unique()->nullable();
-            $table->string('address')->nullable();
+            $table->string('gender');
+            $table->string('DOB');
+            $table->string('nationalID')->unique();
             $table->string('phone')->nullable();
             $table->string('location')->nullable();
-            $table->integer('solarPanelType')->nullable();
-            // $table->string('position')->nullable();
-            // $table->string('role')->nullable(); replaced by access level
             $table->string('access_key')->nullable()->comment="generated for recovering option";
             $table->string('password');
-            $table->integer('accessLevel')->comment="0: Cashier | 1: Admin";
+            // $table->integer('accessLevel')->comment="0: Cashier | 1: Admin";
             $table->integer('status')->comment="0: Disabled | 1: Active";
             $table->rememberToken();
             $table->timestamps();
