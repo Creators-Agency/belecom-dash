@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'HomeController@home');
-Route::get('/login', 'HomeController@login');
+Route::get('/backdoor','WelcomController@register');
 /*
  *                      	Stock
  * =========================================================
@@ -105,4 +105,14 @@ Route::prefix('/payment')->group(function(){
  
 });
 
+/*
+ *                      	Staff
+ * =========================================================
+ *      				CRUD Operations 
+ * ---------------------------------------------------------
+ *  Model: User, AdministrativeLocation
+ * ---------------------------------------------------------
+ *	Addtional info:
+ * *********************************************************
+ */
 Route::post('/ussd','USSDController@index');

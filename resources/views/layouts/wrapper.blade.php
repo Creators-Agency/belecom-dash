@@ -11,6 +11,7 @@
     </div>
     @include('sweet::alert')
     <div id="main-wrapper">
+        @if(Auth::User())
         <header class="topbar">
             <nav class="navbar top-navbar navbar-expand-md navbar-dark">
                 <div class="navbar-header">
@@ -55,6 +56,7 @@
                 </nav>
             </div>
         </aside>
+        @endif
         @yield('content')
     </div>
     @include('layouts/footer')

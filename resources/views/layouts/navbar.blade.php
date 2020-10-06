@@ -1,3 +1,4 @@
+@if(Auth::User())
 <ul id="sidebarnav">
     <li class="sidebar-item">
         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/">
@@ -74,3 +75,4 @@
         </ul>
     </li>
 </ul>
+@endif
