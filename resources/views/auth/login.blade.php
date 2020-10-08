@@ -10,6 +10,7 @@
             <!-- Form -->
             <div class="row">
                 <div class="col-12">
+                @include('message')
                     <form class="form-horizontal m-t-20" method="POST" id="loginform" action="{{ route('login') }}">
                         @csrf
                         <div class="input-group mb-3">

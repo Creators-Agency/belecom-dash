@@ -11,6 +11,7 @@
     <div class="container-fluid">
         <div class="col-12">
             <div class="card">
+            @include('message')
                 <div class="card-body">
                     <h4 class="card-title mb-5 pb-2">Register staff</h4>
                     <form class="needs-validation" method="POST" action="{{ route('Register') }}" novalidate>
@@ -199,41 +200,5 @@
         }, false);
     })();
 
-
-$(function() {
-
-    $(".referee-info").hide();
-    $("#Other-info").hide();
-    $("#Referee-card1").hide();
-    $("#Referee-card2").hide();
-    $(".hide").hide();
-
-    $('.change-ref').click(function() {
-        var button = $(this).data('selector');
-        console.log('text');
-        if (button=='show-form-ref') {
-            $(".referee-info").show(1000);
-            $("#Referee-card1").show(1000);
-            $("#Referee-card2").show(1000);
-            $(".hide").show(1000);
-        }
-        else if (button=='hide-form-ref') {
-            $(".referee-info").hide(1000);
-            $("#Referee-card1").hide(1000);
-            $("#Referee-card2").hide(1000);
-            $(".hide").hide(1000);
-        }
-    })
-    $('.change-more-info').click(function() {
-        var button = $(this).data('selector');
-        if (button=='show-form-info') {
-            $("#Other-info").show(1000);
-        }
-        else if(button=='hide-form-info'){
-            $("#Other-info").hide(1000);
-        }
-    })
-
-  })
 </script>
 @endsection

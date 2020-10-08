@@ -24,19 +24,20 @@ class WelcomController extends Controller
         // return $request;
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            
+
             return Redirect::back()->withErrors($validator)->withInput();
         }
         // return '';
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password, 'status' => 1])){
             if(Auth::user()->accessLevel == 1) {
                 return redirect('/');
-            } else {
-                // return ;
-            }
+            // } else {
+            //     // return ;
+            // }
+            return redirect('/')->withErrors("Wrong Username or Password!");
+
         }
 
-        return redirect('/')->withErrors("Wrong Username or Password!");
     }
 
 }

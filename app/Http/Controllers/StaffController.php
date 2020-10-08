@@ -15,7 +15,11 @@ class StaffController extends Controller
 
     public function index()
     {
-        return '';
+        $Get_staff = User::where('status',1)
+                        ->get();
+        return view('staff.staff',[
+            'staffs' => $Get_staff
+        ]);
     }
     /**
      * Display a listing of the resource.
