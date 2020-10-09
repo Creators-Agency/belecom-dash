@@ -12,6 +12,9 @@ use SweetAlert;
 
 class StaffController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth');
+    }
 
     public function index()
     {
@@ -96,9 +99,14 @@ class StaffController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function editStaff()
     {
-        //
+        return 'edit Staff';
+    }
+
+    public function permissionStaff($id)
+    {
+        return view('staff.permission');
     }
 
 

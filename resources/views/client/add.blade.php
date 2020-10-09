@@ -307,7 +307,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Registered Solar Panel Type</h4>
+                    <h4 class="card-title">Registered Clients</h4>
                     <div class="table-responsive">
                         <table id="zero_config" class="table table-striped table-bordered" style="width: 100%">
                             <thead>

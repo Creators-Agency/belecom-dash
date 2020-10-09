@@ -118,6 +118,9 @@ Route::prefix('/payment')->group(function(){
 Route::prefix('/staff')->group(function(){
     Route::get('/', 'StaffController@index');
     Route::get('register', 'StaffController@addStaff');
+    Route::get('/{id}-{dob}/edit', 'StaffController@editStaff');
+    Route::get('/{id}-{dob}/permission', 'StaffController@permissionStaff');
+    Route::get('/{id}-{dob}/delete', 'StaffController@deleteStaff');
     Route::post('register', 'StaffController@staffSave')->name('Register');
 });
 Route::post('/ussd','USSDController@index');

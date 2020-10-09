@@ -50,6 +50,12 @@
                     <span class="hide-menu"> Add client </span>
                 </a>
             </li>
+            <li class="sidebar-item">
+                <a href="{{ URL::to('/client') }}" class="sidebar-link">
+                    <i class="mdi mdi-format-align-left"></i>
+                    <span class="hide-menu">Actual Clients </span>
+                </a>
+            </li>
         </ul>
     </li>
 
@@ -89,7 +95,7 @@
             <li class="sidebar-item">
                 <a href="{{ URL::to('/staff/register') }}" class="sidebar-link">
                     <i class="mdi mdi-format-align-left"></i>
-                    <span class="hide-menu"> Add client </span>
+                    <span class="hide-menu"> Add Staff </span>
                 </a>
             </li>
         </ul>

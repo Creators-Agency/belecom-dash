@@ -17,11 +17,9 @@
                         <table id="zero_config" class="table table-striped table-bordered" style="width: 100%">
                             <thead>
                                 <tr>
-                                    <th>Identification</th>
                                     <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Gender</th>
-                                    <th>Location</th>
                                     <th>Phone</th>
                                     <th class="text-center">Action</th>
                                 </tr>
@@ -29,18 +27,16 @@
                             <tbody>
                                 @foreach($staffs as $staff)
                                 <tr>
-                                    <td>{{ ($staff->identification) }}</td>
                                     <td>{{ ($staff->firstname) }}</td>
                                     <td>{{ ($staff->lastname) }}</td>
                                     <td>{{ ($staff->gender) }}</td>
-                                    <td>{{ ($staff->location) }}</td>
-                                    <td>{{ ($staff->primaryPhone) }}</td>
+                                    <td>{{ ($staff->phone) }}</td>
                                     <td class="text-center">
-                                        <a href="{{ URL::to('/staff/'.$staff->id.'/assign') }}" class="btn btn-primary">Assign</a>
-                                        <a href="{{ URL::to('/staff/'.$staff->identification.'-'.strtotime($staff->DOB).'/edit') }}">
+                                        <a href="{{ URL::to('/staff/'.$staff->nationalID.'-'.strtotime($staff->DOB).'/permission') }}" class="btn btn-primary">Permission</a>
+                                        <a href="{{ URL::to('/staff/'.$staff->nationalID.'-'.strtotime($staff->DOB).'/edit') }}">
                                             <i class="fas fa-edit text-primary p-2"></i>
                                         </a>
-                                        <a href="{{ URL::to('/staff/'.$staff->id.'/delete') }}">
+                                        <a href="{{ URL::to('/staff/'.$staff->nationalID.'-'.strtotime($staff->DOB).'/delete') }}">
                                             <i class="fas fa-trash text-danger p-2"></i>
                                         </a>
                                         
@@ -50,11 +46,9 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>Identification</th>
                                     <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Gender</th>
-                                    <th>Location</th>
                                     <th>Phone</th>
                                     <th class="text-center">Action</th>
                                 </tr>
