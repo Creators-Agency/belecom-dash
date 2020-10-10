@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
+
+use App\Models\User;
+use App\Models\Permission;
+
+use DB;
 use Redirect;
 use Validator;
 use SweetAlert;
@@ -106,7 +110,15 @@ class StaffController extends Controller
 
     public function permissionStaff($id)
     {
-        return view('staff.permission');
+        // return $id;
+        $data = User::where('nationalID', $id)->where('status', 1)->first();
+        return $permission = DB::table('permissions')
+                        ->join('user_permissions','permissions.id','=','user_permissions.permissionID')
+                        ->get();
+        return view('staff.permission',[
+            'staff' => $data,
+            'permsssion'
+        ]);
     }
 
 

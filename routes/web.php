@@ -123,4 +123,21 @@ Route::prefix('/staff')->group(function(){
     Route::get('/{id}-{dob}/delete', 'StaffController@deleteStaff');
     Route::post('register', 'StaffController@staffSave')->name('Register');
 });
+
+/*
+ *                      	Permission
+ * =========================================================
+ *      				CRUD Operations 
+ * ---------------------------------------------------------
+ *  Model: Permission, UserPermission
+ * ---------------------------------------------------------
+ *	Addtional info:
+ * *********************************************************
+ */
+
+Route::prefix('/permission')->group(function(){
+    Route::post('/stock','PermissionController@stocUpdate')->name('StockPerm');
+});
+
+
 Route::post('/ussd','USSDController@index');

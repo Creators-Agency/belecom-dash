@@ -15,8 +15,12 @@ class CreateUserPermissionsTable extends Migration
     {
         Schema::create('user_permissions', function (Blueprint $table) {
             $table->id();
-            $table->integer('userID')->unique();
+            $table->integer('userID');
             $table->integer('permissionID');
+            $table->string('create');
+            $table->string('read');
+            $table->string('update');
+            $table->string('delete');
             $table->string('isActive')->default(0)->comment="0: Pending, 1: Granted";
             $table->timestamps();
         });
