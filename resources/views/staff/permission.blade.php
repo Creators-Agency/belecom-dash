@@ -21,19 +21,23 @@
                                 <h4 class="ml-2">{{ ($permission['permission'])}}</h4>
                                 <div class="col-sm-12">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck1" />
-                                        <label class="custom-control-label" for="customCheck1">Read</label>
+                                        <input type="checkbox" class="custom-control-input" id="customCheck1"
+                                            {{ $permission['create'] == 1 ? 'checked': ''}} />
+                                        <label class="custom-control-label" for="customCheck1">Create</label>
                                     </div>
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck2" />
-                                        <label class="custom-control-label" for="customCheck2">Create</label>
+                                        <input type="checkbox" class="custom-control-input" id="customCheck2"
+                                            {{ $permission['read'] == 1 ? 'checked': ''}} />
+                                        <label class="custom-control-label" for="customCheck2">Read</label>
                                     </div>
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck3" />
+                                        <input type="checkbox" class="custom-control-input" id="customCheck3"
+                                            {{ $permission['update'] == 1 ? 'checked': ''}} />
                                         <label class="custom-control-label" for="customCheck3">Update</label>
                                     </div>
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck3" />
+                                        <input type="checkbox" class="custom-control-input" id="customCheck3"
+                                            {{ $permission['delete'] == 1 ? 'checked': ''}} />
                                         <label class="custom-control-label" for="customCheck3">Delete</label>
                                     </div>
                                 </div>
