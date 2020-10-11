@@ -118,14 +118,18 @@ class StaffController extends Controller
         $userPermission = [];
         $dataPermission = [];
         foreach ($permissions as $permission) {
-            $get = UserPermission::where('permissionID', $permission->id)->first();
+            $get = UserPermission::where('permissionID', $permission->id)
+                                    ->where('userID', $data->id)
+                                    ->first();
             if(empty($get) ){
+                $dataPermission['permissionID'] = $permission->id;
                 $dataPermission['permission'] = $permission->permissionName;
                 $dataPermission['create'] = 0;
                 $dataPermission['read'] = 0;
                 $dataPermission['update'] = 0;
                 $dataPermission['delete'] = 0;
             }else{
+                $dataPermission['permissionID'] = $permission->id;
                 $dataPermission['permission'] = $permission->permissionName;
                 $dataPermission['create'] = $get->create;
                 $dataPermission['read'] = $get->read;

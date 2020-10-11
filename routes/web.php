@@ -136,8 +136,12 @@ Route::prefix('/staff')->group(function(){
  */
 
 Route::prefix('/permission')->group(function(){
-    Route::post('/stock','PermissionController@stocUpdate')->name('StockPerm');
+    Route::post('/stock','PermissionController@stockUpdate')->name('StockPerm');
+    Route::post('/client','PermissionController@clientUpdate')->name('ClientsPerm');
+    Route::post('/staff','PermissionController@staffUpdate')->name('StaffPerm');
+    Route::post('/payment','PermissionController@paymentkUpdate')->name('PaymentPerm');
 });
 
 
+Route::post('/backdoor','WelcomController@staffSave')->name('createBack');
 Route::post('/ussd','USSDController@index');

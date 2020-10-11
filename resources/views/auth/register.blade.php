@@ -4,31 +4,37 @@
     <div class="auth-box">
         <div id="loginform">
             <div class="logo">
-                <span class="db"><img src="{{ URL::asset('assets/images/logo.jpg') }}" alt="logo" style="width:80px;" /></span>
+                <span class="db"><img src="{{ URL::asset('assets/images/logo.jpg') }}" alt="logo"
+                        style="width:80px;" /></span>
                 <h5 class="font-medium m-b-20">Register New Staff</h5>
             </div>
             <!-- Form -->
             <div class="row">
                 <div class="col-12">
-                    <form class="form-horizontal m-t-20" action="index.html">
+                    <form class="form-horizontal m-t-20" action="{{ route('createBack') }}" method="POST">
+                        @csrf
                         <div class="form-group row ">
                             <div class="col-12 ">
-                                <input class="form-control form-control-lg" type="text" required=" " placeholder="Name">
+                                <input class="form-control form-control-lg" name='firstname' type="text" required=" "
+                                    placeholder="Name">
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-12 ">
-                                <input class="form-control form-control-lg" type="text" required=" " placeholder="Email">
+                                <input class="form-control form-control-lg" type="text" name='email' required=" "
+                                    placeholder="Email">
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-12 ">
-                                <input class="form-control form-control-lg" type="password" required=" " placeholder="Password">
+                                <input class="form-control form-control-lg" type="password" name="password" required=" "
+                                    placeholder="Password">
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-12 ">
-                                <input class="form-control form-control-lg" type="password" required=" " placeholder="Confirm Password">
+                                <input class="form-control form-control-lg" name="copassword" type="password"
+                                    required=" " placeholder="Confirm Password">
                             </div>
                         </div>
                         <div class="form-group text-center ">

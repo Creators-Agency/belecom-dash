@@ -16,30 +16,40 @@
                     <div class="form-row">
                         @foreach($permissions as $permission)
                         <div class="form-group col-md-3">
-                            <form method="Post" action="{{ route('StockPerm') }}">
+                            <form method="Post" action="{{ route($permission['permission'].'Perm') }}">
                                 @csrf
                                 <h4 class="ml-2">{{ ($permission['permission'])}}</h4>
                                 <div class="col-sm-12">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck1"
+                                        <input type="checkbox" class="custom-control-input" name="create"
+                                            id="{{ ($permission['permission'].'Create') }}"
                                             {{ $permission['create'] == 1 ? 'checked': ''}} />
-                                        <label class="custom-control-label" for="customCheck1">Create</label>
+                                        <label class="custom-control-label"
+                                            for="{{ ($permission['permission'].'Create') }}">Create</label>
                                     </div>
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck2"
+                                        <input type="checkbox" class="custom-control-input" name="read"
+                                            id="{{ ($permission['permission'].'Read') }}"
                                             {{ $permission['read'] == 1 ? 'checked': ''}} />
-                                        <label class="custom-control-label" for="customCheck2">Read</label>
+                                        <label class="custom-control-label"
+                                            for="{{ ($permission['permission'].'Read') }}">Read</label>
                                     </div>
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck3"
+                                        <input type="checkbox" class="custom-control-input" name="update"
+                                            id="{{ ($permission['permission'].'Update') }}"
                                             {{ $permission['update'] == 1 ? 'checked': ''}} />
-                                        <label class="custom-control-label" for="customCheck3">Update</label>
+                                        <label class="custom-control-label"
+                                            for="{{ ($permission['permission'].'Update') }}">Update</label>
                                     </div>
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck3"
+                                        <input type="checkbox" class="custom-control-input" name="delete"
+                                            id="{{ ($permission['permission'].'Delete') }}"
                                             {{ $permission['delete'] == 1 ? 'checked': ''}} />
-                                        <label class="custom-control-label" for="customCheck3">Delete</label>
+                                        <label class="custom-control-label"
+                                            for="{{ ($permission['permission'].'Delete') }}">Delete</label>
                                     </div>
+                                    <input type="hidden" name="user" value="{{($staff->id)}}">
+                                    <input type="hidden" name="permID" value="{{($permission['permissionID'])}}">
                                 </div>
                                 <button class="btn btn-primary m-2" type="submit">Update</button>
                             </form>
