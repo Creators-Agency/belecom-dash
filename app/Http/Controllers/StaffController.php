@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
 use App\Models\Permission;
+use App\Models\UserPermission;
 
 use DB;
 use Redirect;
@@ -110,14 +111,33 @@ class StaffController extends Controller
 
     public function permissionStaff($id)
     {
+        
         // return $id;
         $data = User::where('nationalID', $id)->where('status', 1)->first();
-        return $permission = DB::table('permissions')
-                        ->join('user_permissions','permissions.id','=','user_permissions.permissionID')
-                        ->get();
+        $permissions = Permission::get();
+        $userPermission = [];
+        $dataPermission = [];
+        foreach ($permissions as $permission) {
+            $get = UserPermission::where('permissionID', $permission->id)->first();
+            if(empty($get) ){
+                $dataPermission['permission'] = $permission->permissionName;
+                $dataPermission['create'] = 0;
+                $dataPermission['read'] = 0;
+                $dataPermission['update'] = 0;
+                $dataPermission['delete'] = 0;
+            }else{
+                $dataPermission['permission'] = $permission->permissionName;
+                $dataPermission['create'] = $get->create;
+                $dataPermission['read'] = $get->read;
+                $dataPermission['update'] = $get->update;
+                $dataPermission['delete'] = $get->delete;
+            }
+            array_push($userPermission, $dataPermission);
+        }
+        // return $userPermission;
         return view('staff.permission',[
             'staff' => $data,
-            'permsssion'
+            'permissions' => $userPermission
         ]);
     }
 

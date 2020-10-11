@@ -16,7 +16,7 @@ class CreatePermissionsTable extends Migration
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
             $table->string('permissionName');
-            // $table->string('model');
+            $table->string('Description');
             $table->integer('status')->default(1)->comment="0: Inactive, 1:Active";;
             $table->timestamps();
         });

@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('location')->nullable();
             $table->string('access_key')->nullable()->comment="generated for recovering option";
             $table->string('password');
-            // $table->integer('accessLevel')->comment="0: Cashier | 1: Admin";
+            $table->integer('type')->default(0)->comment="0: simple | 1: Dev";
             $table->integer('status')->comment="0: Disabled | 1: Active";
             $table->rememberToken();
             $table->timestamps();
