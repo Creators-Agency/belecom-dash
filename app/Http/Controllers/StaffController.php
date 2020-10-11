@@ -24,6 +24,7 @@ class StaffController extends Controller
     public function index()
     {
         $Get_staff = User::where('status',1)
+                        ->where('type', 0)
                         ->get();
         return view('staff.staff',[
             'staffs' => $Get_staff
@@ -37,6 +38,7 @@ class StaffController extends Controller
     public function addStaff()
     {
         $Get_staff = User::where('status',1)
+                        ->where('type', 0)
                         ->get();
         return view('staff.add',[
             'staffs' => $Get_staff
@@ -89,6 +91,7 @@ class StaffController extends Controller
             $staff->email =$request->email;
             $staff->password = Hash::make($request->password);
             $staff->status = 1;
+            $staff->type = 0;
             if($staff->save()){
                 alert()->success('New User is registered successfuly', 'Done');
                 return Redirect('/staff');
