@@ -44,11 +44,17 @@ class StockController extends Controller
         $get_data = [];
         foreach ($branchs as $branch) {
             $get = SolarPanel::where('location', $branch->id)->get();
+            $price = 0;
+            foreach ($get as $value) {
+                $type = SolarPanelType::where('id',$value->solarPanelType)->first();
+                $price = $price + $type->price;
+            }
             $get_data['location'] = $branch->locationName;
             $get_data['product'] = count($get);
+            $get_data['price'] = number_format($price);
             array_push($data, $get_data);
         }
-        return $data;
+        // return $data;
         $number = SolarPanel::get();
         $amount = 0;
         foreach ($number as $key) {
@@ -62,7 +68,8 @@ class StockController extends Controller
             'numberOfSolarAssigned' =>number_format(count($assigned)),
             'numberOfSolarUnAssigned' =>number_format(count($unassigned)),
             'numberOfSolarReturned' =>number_format(count($returned)),
-            'amount' => number_format($amount)
+            'amount' => number_format($amount),
+            'location_data' => $data
         ]);
     }
 
@@ -202,7 +209,7 @@ class StockController extends Controller
             $location = new AdministrativeLocation();
             $location->locationName = $request->locationName;
             $location->supervisor = $request->supervisor;
-            $location->locationCode = 'K023';
+            $location->locationCode =  strtotime(date('Y-m-d')).rand(100,999);
             $location->doneBy = Auth::User()->id;
 
             // if success
