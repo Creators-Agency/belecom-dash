@@ -6,6 +6,7 @@ use Redirect;
 use Validator;
 use SweetAlert;
 use App\Models\Stock;
+use App\Models\User;
 use App\Models\SolarPanel;
 use App\Models\ActivityLog;
 use Illuminate\Http\Request;
@@ -37,7 +38,16 @@ class StockController extends Controller
                                 ->get();
         $returned = SolarPanel::where('status', 3)
                                 ->get();
-        
+        $branchs = AdministrativeLocation::where('status',1)->get();
+        $data = [];
+        $get_data = [];
+        foreach ($branchs as $branch) {
+            $get = SolarPanel::where('location', $branch->id)->get();
+            $get_data['location'] = $branch->locationName;
+            $get_data['product'] = count($get);
+            array_push($data, $get_data);
+        }
+        return $data;
         $number = SolarPanel::get();
         $amount = 0;
         foreach ($number as $key) {
@@ -75,9 +85,11 @@ class StockController extends Controller
         $Get_location = AdministrativeLocation::orderBy('id','DESC')
                         ->where('status',1)
                         ->get();
+        $staff = User::where('type',0)->where('status', 1)->get();
         return view('stock.add-location', [
             'Locations' => $Get_location,
-            'ifRecord' => count($Get_location)
+            'ifRecord' => count($Get_location),
+            'staffs' => $staff
         ]);
     }
 
