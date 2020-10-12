@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Redirect;
 use Validator;
 use SweetAlert;
+use Auth;
 use App\Models\Stock;
 use App\Models\User;
 use App\Models\SolarPanel;
@@ -144,7 +145,7 @@ class StockController extends Controller
             $solarType->solarTypeName = $request->SolarTypeName;
             $solarType->price = $request->SolarTypePrice;
             $solarType->isActive = 1;
-            $solarType->doneBy = 1;
+            $solarType->doneBy = Auth::User()->id;
 
             // if success
             if ($solarType->save()) {
@@ -202,7 +203,7 @@ class StockController extends Controller
             $location->locationName = $request->locationName;
             $location->supervisor = $request->supervisor;
             $location->locationCode = 'K023';
-            $location->doneBy = 1;
+            $location->doneBy = Auth::User()->id;
 
             // if success
             if ($location->save()) {
@@ -256,7 +257,7 @@ class StockController extends Controller
             $solar = new SolarPanel();
             $solar->solarPanelType = $request->solarPanelType;
             $solar->location = $request->location;
-            $solar->doneBy = 1;
+            $solar->doneBy = Auth::User()->id;
          
             // generating serial nuber
             $solar->solarPanelSerialNumber = strtotime(date('Y-m-d')).rand(100,999);
