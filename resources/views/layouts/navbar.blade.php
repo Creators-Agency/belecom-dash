@@ -51,7 +51,7 @@
                 </a>
             </li>
             <li class="sidebar-item">
-                <a href="{{ URL::to('/client') }}" class="sidebar-link">
+                <a href="{{ URL::to('/client/actual') }}" class="sidebar-link">
                     <i class="mdi mdi-format-align-left"></i>
                     <span class="hide-menu">Actual Clients </span>
                 </a>

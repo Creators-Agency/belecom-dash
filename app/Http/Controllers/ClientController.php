@@ -34,6 +34,14 @@ class ClientController extends Controller
             'clients' => $Get_clients
         ]);
     }
+    
+    public function actual()
+    {
+        $get_actual = Beneficiary::where('isActive',1)->get();
+        return view('client.actual',[
+            'clients' => $get_actual
+        ]);
+    }
 
     /**
      * Show the form for creating a new resource.
