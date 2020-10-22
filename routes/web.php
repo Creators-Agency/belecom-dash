@@ -49,6 +49,8 @@ Route::prefix('stock')->group(function(){
     Route::post('/update/{id}/location', 'StockController@updateLocation')->name('UpdateLocation');
     Route::post('/update/type', 'StockController@updateType')->name('UpdateType');
 
+    Route::get('/list/panel/','StockController@listPanel');
+
 
 });
 
@@ -67,6 +69,7 @@ Route::prefix('stock')->group(function(){
 
 Route::prefix('client')->group(function(){
 	Route::get('/','ClientController@index');
+	Route::get('/perspective','ClientController@perspective');
 	Route::get('/actual','ClientController@actual');
     Route::post('/create/client','ClientController@saveClient')->name('CreateClient');
 

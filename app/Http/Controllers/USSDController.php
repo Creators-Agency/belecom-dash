@@ -140,7 +140,7 @@ class USSDController extends Controller
                              *
                              * *********************************************************
                              */
-                            $content  = "Mugiye kwishyura: <b>".$payment_fee." Rwf for ".$new."</b>! \n";
+                            $content  = "Mugiye kwishyura: <b>".$payment_fee." Rwf</b>! \n";
                             $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
                             $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe. \n";
                             $content .= "Murakoze!";

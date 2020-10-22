@@ -51,6 +51,12 @@
                 </a>
             </li>
             <li class="sidebar-item">
+                <a href="{{ URL::to('/client/perspective') }}" class="sidebar-link">
+                    <i class="mdi mdi-format-align-left"></i>
+                    <span class="hide-menu">Perspective Clients </span>
+                </a>
+            </li>
+            <li class="sidebar-item">
                 <a href="{{ URL::to('/client/actual') }}" class="sidebar-link">
                     <i class="mdi mdi-format-align-left"></i>
                     <span class="hide-menu">Actual Clients </span>
@@ -65,39 +71,39 @@
             <span class="hide-menu">Payment Settings </span>
         </a>
         <ul aria-expanded="false" class="collapse  first-level">
-            <li class="sidebar-item">
+            {{--<li class="sidebar-item">
                 <a href="{{ URL::to('/payment') }}" class="sidebar-link">
-                    <i class="mdi mdi-format-align-left"></i>
-                    <span class="hide-menu"> Payment Overview </span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="{{ URL::to('/payment/charges') }}" class="sidebar-link">
-                    <i class="mdi mdi-format-align-left"></i>
-                    <span class="hide-menu"> Charges Fees </span>
-                </a>
-            </li>
-        </ul>
-    </li>
-    <hr>
+            <i class="mdi mdi-format-align-left"></i>
+            <span class="hide-menu"> Payment Overview </span>
+            </a>
+    </li>--}}
     <li class="sidebar-item">
-        <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-            <i class="mdi mdi-crop-square"></i>
-            <span class="hide-menu">Staff Managment </span>
+        <a href="{{ URL::to('/payment/charges') }}" class="sidebar-link">
+            <i class="mdi mdi-format-align-left"></i>
+            <span class="hide-menu"> Charges Fees </span>
         </a>
-        <ul aria-expanded="false" class="collapse  first-level">
-            <li class="sidebar-item">
-                <a href="{{ URL::to('/staff') }}" class="sidebar-link">
-                    <i class="mdi mdi-format-align-left"></i>
-                    <span class="hide-menu"> Staffs Overview </span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a href="{{ URL::to('/staff/register') }}" class="sidebar-link">
-                    <i class="mdi mdi-format-align-left"></i>
-                    <span class="hide-menu"> Add Staff </span>
-                </a>
-            </li>
-        </ul>
     </li>
+</ul>
+</li>
+<hr>
+<li class="sidebar-item">
+    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+        <i class="mdi mdi-crop-square"></i>
+        <span class="hide-menu">Staff Managment </span>
+    </a>
+    <ul aria-expanded="false" class="collapse  first-level">
+        <li class="sidebar-item">
+            <a href="{{ URL::to('/staff') }}" class="sidebar-link">
+                <i class="mdi mdi-format-align-left"></i>
+                <span class="hide-menu"> Staffs Overview </span>
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a href="{{ URL::to('/staff/register') }}" class="sidebar-link">
+                <i class="mdi mdi-format-align-left"></i>
+                <span class="hide-menu"> Add Staff </span>
+            </a>
+        </li>
+    </ul>
+</li>
 </ul>

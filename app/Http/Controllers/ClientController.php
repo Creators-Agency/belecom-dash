@@ -37,8 +37,16 @@ class ClientController extends Controller
     
     public function actual()
     {
-        $get_actual = Beneficiary::where('isActive',1)->get();
+        $get_actual = Beneficiary::where('isActive',3)->get();
         return view('client.actual',[
+            'clients' => $get_actual
+        ]);
+    }
+
+    public function perspective()
+    {
+        $get_actual = Beneficiary::where('isActive',1)->get();
+        return view('client.perspective',[
             'clients' => $get_actual
         ]);
     }

@@ -6,6 +6,7 @@ use Redirect;
 use Validator;
 use SweetAlert;
 use Auth;
+use DB;
 use App\Models\Stock;
 use App\Models\User;
 use App\Models\SolarPanel;
@@ -117,9 +118,17 @@ class StockController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function listPanel()
     {
-        //
+        $solarPanel = DB::table('solar_panels')
+                        ->join('solar_panel_types','solar_panel_types.id','=','solar_panels.solarPanelType')
+                        // ->select('solar_panel_types.solarTypeName')
+                        // ->where('')
+                        ->get();
+        // return $solarPanel;
+        return view('stock.product',[
+            'panels' => $solarPanel
+        ]);
     }
 
     /**
