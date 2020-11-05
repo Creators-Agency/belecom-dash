@@ -307,7 +307,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Registered Solar Panel Type</h4>
+                    <h4 class="card-title">Registered Clients</h4>
                     <div class="table-responsive">
                         <table id="zero_config" class="table table-striped table-bordered" style="width: 100%">
                             <thead>
@@ -332,7 +332,7 @@
                                     <td>{{ ($client->primaryPhone) }}</td>
                                     <td class="text-center">
                                         <a href="{{ URL::to('/client/'.$client->id.'/assign') }}" class="btn btn-primary">Assign</a>
-                                        <a href="{{ URL::to('/client/'.$client->id.'/edit') }}">
+                                        <a href="{{ URL::to('/client/'.$client->identification.'-'.strtotime($client->DOB).'/edit') }}">
                                             <i class="fas fa-edit text-primary p-2"></i>
                                         </a>
                                         <a href="{{ URL::to('/client/'.$client->id.'/delete') }}">

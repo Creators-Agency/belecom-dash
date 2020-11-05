@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
+
 <head>
     @include('layouts/header')
 </head>
+
 <body>
     <div class="preloader">
         <div class="lds-ripple">
@@ -11,6 +13,7 @@
     </div>
     @include('sweet::alert')
     <div id="main-wrapper">
+        @if(Auth::User())
         <header class="topbar">
             <nav class="navbar top-navbar navbar-expand-md navbar-dark">
                 <div class="navbar-header">
@@ -29,9 +32,17 @@
                     <ul class="navbar-nav float-left mr-auto"></ul>
                     <ul class="navbar-nav float-right">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="{{ URL::asset('assets/images/users/2.jpg') }}" alt="user" class="rounded-circle" width="40">
-                                <span class="m-l-5 font-medium d-none d-sm-inline-block">Keza Majyambere <i class="mdi mdi-chevron-down"></i></span>
+                            <a class="nav-link dropdown-toggle waves-effect waves-dark pro-pic" href=""
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img src="
+                                @if(Auth::User()->photo != NULL)
+                                    {{ URL::asset(Auth::user()->photo) }}
+                                @else
+                                    {{ URL::asset('assets/images/default.png') }}
+                                @endif
+                                " alt="user" class="rounded-circle" width="40">
+                                <span class="m-l-5 font-medium d-none d-sm-inline-block">Keza Majyambere <i
+                                        class="mdi mdi-chevron-down"></i></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
                                 <span class="with-arrow">
@@ -55,9 +66,11 @@
                 </nav>
             </div>
         </aside>
+        @endif
         @yield('content')
     </div>
     @include('layouts/footer')
     @yield('script')
 </body>
+
 </html>

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Redirect;
 use Validator;
 use SweetAlert;
+use Auth;
 use App\Models\Stock;
+use App\Models\User;
 use App\Models\SolarPanel;
 use App\Models\ActivityLog;
 use Illuminate\Http\Request;
@@ -13,6 +15,9 @@ use App\Models\SolarPanelType;
 use App\Models\AdministrativeLocation;
 class StockController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth');
+    }
     // status default for alert
     public $status = 0;
 
@@ -23,7 +28,49 @@ class StockController extends Controller
      */
     public function index()
     {
-        return view('stock.stock');
+        /**
+         *
+         * Getting number of number of all solar panel
+         *
+         */
+        $unassigned = SolarPanel::where('status', 0)
+                                ->get();
+        $assigned = SolarPanel::where('status', 1)
+                                ->get();
+        $returned = SolarPanel::where('status', 3)
+                                ->get();
+        $branchs = AdministrativeLocation::where('status',1)->get();
+        $data = [];
+        $get_data = [];
+        foreach ($branchs as $branch) {
+            $get = SolarPanel::where('location', $branch->id)->get();
+            $price = 0;
+            foreach ($get as $value) {
+                $type = SolarPanelType::where('id',$value->solarPanelType)->first();
+                $price = $price + $type->price;
+            }
+            $get_data['location'] = $branch->locationName;
+            $get_data['product'] = count($get);
+            $get_data['price'] = number_format($price);
+            array_push($data, $get_data);
+        }
+        // return $data;
+        $number = SolarPanel::get();
+        $amount = 0;
+        foreach ($number as $key) {
+            $price = SolarPanelType::where('id',$key->solarPanelType)
+                                    ->sum('price');
+            $amount = $amount + $price;
+
+        }
+        
+        return view('stock.stock',[
+            'numberOfSolarAssigned' =>number_format(count($assigned)),
+            'numberOfSolarUnAssigned' =>number_format(count($unassigned)),
+            'numberOfSolarReturned' =>number_format(count($returned)),
+            'amount' => number_format($amount),
+            'location_data' => $data
+        ]);
     }
 
     public function addNewItem()
@@ -46,9 +93,11 @@ class StockController extends Controller
         $Get_location = AdministrativeLocation::orderBy('id','DESC')
                         ->where('status',1)
                         ->get();
+        $staff = User::where('type',0)->where('status', 1)->get();
         return view('stock.add-location', [
             'Locations' => $Get_location,
-            'ifRecord' => count($Get_location)
+            'ifRecord' => count($Get_location),
+            'staffs' => $staff
         ]);
     }
 
@@ -103,7 +152,7 @@ class StockController extends Controller
             $solarType->solarTypeName = $request->SolarTypeName;
             $solarType->price = $request->SolarTypePrice;
             $solarType->isActive = 1;
-            $solarType->doneBy = 1;
+            $solarType->doneBy = Auth::User()->id;
 
             // if success
             if ($solarType->save()) {
@@ -160,8 +209,8 @@ class StockController extends Controller
             $location = new AdministrativeLocation();
             $location->locationName = $request->locationName;
             $location->supervisor = $request->supervisor;
-            $location->locationCode = 'K023';
-            $location->doneBy = 1;
+            $location->locationCode =  strtotime(date('Y-m-d')).rand(100,999);
+            $location->doneBy = Auth::User()->id;
 
             // if success
             if ($location->save()) {
@@ -215,7 +264,7 @@ class StockController extends Controller
             $solar = new SolarPanel();
             $solar->solarPanelType = $request->solarPanelType;
             $solar->location = $request->location;
-            $solar->doneBy = 1;
+            $solar->doneBy = Auth::User()->id;
          
             // generating serial nuber
             $solar->solarPanelSerialNumber = strtotime(date('Y-m-d')).rand(100,999);

@@ -12,33 +12,33 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-5 pb-2">Add New Type</h4>
-                    <form class="needs-validation" method="POST" action="{{ route('CreateType') }}" novalidate>
-                        @csrf
+                    <h4 class="card-title mb-5 pb-2">Late payments charges</h4>
+                    <form class="needs-validation" method="POST" action="{{ route('CreateCharges') }}" novalidate>
+                         @csrf
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="SolarType">New Type Name</label>
-                                    <input type="text" class="form-control" id="SolarType"
-                                        placeholder="Name of Solar Type" value="{{ old('SolarTypeName') }}"
-                                        name="SolarTypeName" required>
-                                    <div class="invalid-tooltip">
-                                        This field shouldn't be empty
-                                    </div>
+                                    <label for="solarPanelType">Solar Panel Type</label>
+                                    <select class="custom-select" name="solarPanelType" id="solarPanelType" required>
+                                        <option value="">Choose type of solar panel</option>
+                                        @foreach($SolarTypes as $singleType)
+                                            <option value="{{ ($singleType->id) }}" >{{ ($singleType->solarTypeName) }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-tooltip">You must select valid solar type</div>
                                 </div>
                             </div>
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="Price">Price</label>
-                                    <input type="number" class="form-control" id="Price" placeholder="0"
-                                        name="SolarTypePrice" value="{{ old('SolarTypePrice') }}" required>
-                                    <div class="invalid-tooltip">
-                                        This field shouldn't be empty
-                                    </div>
+                                <label for="Price">Charges in %</label>
+                                <input type="number" class="form-control" id="Charges" placeholder="Charges in %" name="charges" value="{{ old('charges') }}" required>
+                                <div class="invalid-tooltip">
+                                    This field shouldn't be empty
+                                </div>
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-primary ml-2" type="submit">Save</button>
+                        <button class="btn btn-primary" type="submit">Submit form</button>
                     </form>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                                         @foreach($SolarTypes as $singleType)
                                         <tr>
                                             <td>{{ ($singleType->solarTypeName) }}</td>
-                                            <td>{{ ($singleType->price) }} Frw</td>
+                                            <td>{{ ($singleType->price) }}</td>
                                             <td>{{ ($singleType->doneBy) }}</td>
                                             <td>{{ date('D d M, Y', strtotime($singleType->created_at)) }}</td>
                                             <td>
@@ -77,9 +77,9 @@
                                         </tr>
                                         @endforeach
                                         @else
-                                        <!-- No Record! -->
+                                            <!-- No Record! -->
                                         @endif
-
+                                        
                                         </tr>
                                     </tbody>
                                     <tfoot>
@@ -103,22 +103,22 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-(function() {
-    'use strict';
-    window.addEventListener('load', function() {
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        var forms = document.getElementsByClassName('needs-validation');
-        // Loop over them and prevent submission
-        var validation = Array.prototype.filter.call(forms, function(form) {
-            form.addEventListener('submit', function(event) {
-                if (form.checkValidity() === false) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-            }, false);
-        });
-    }, false);
-})();
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
 </script>
 @endsection

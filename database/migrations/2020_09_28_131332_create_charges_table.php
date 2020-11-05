@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePermissionsTable extends Migration
+class CreateChargesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreatePermissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('permissions', function (Blueprint $table) {
+        Schema::create('charges', function (Blueprint $table) {
             $table->id();
-            $table->string('permissionName');
-            $table->string('Description');
-            $table->integer('status')->default(1)->comment="0: Inactive, 1:Active";;
+            $table->integer('solarPanelType')->unique();
+            $table->integer('charges')->comment="charges per panel";
+            $table->integer('doneBy');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreatePermissionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('charges');
     }
 }

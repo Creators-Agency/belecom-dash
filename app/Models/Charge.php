@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SolarPanelType extends Model
+class Charge extends Model
 {
     use HasFactory;
-
-    public function charge()
+    public function type()
     {
-    	return $this->hasMany(Charge::class);
+        $this->belongsTo(SolarPanelType::class);
     }
 }
+

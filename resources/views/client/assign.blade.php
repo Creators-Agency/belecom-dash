@@ -19,10 +19,12 @@
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="solarPanelType">Solar Panel Type</label>
-                                    <select class="custom-select" name="solarPanelType" id="solarPanelType" required>
+                                    <select class="custom-select" name="solarPanelType" id="solarPanelType"
+                                        onchange="getPrice()" required>
                                         <option value="">Choose type of solar panel</option>
                                         @foreach($SolarTypes as $singleType)
-                                            <option value="{{ ($singleType->id) }}">{{ ($singleType->solarTypeName) }}</option>
+                                        <option value="{{ ($singleType->id) }}">{{ ($singleType->solarTypeName) }}
+                                        </option>
                                         @endforeach
                                     </select>
                                     <div class="invalid-tooltip">You must select valid solar type</div>
@@ -30,88 +32,80 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                <label for="TotalPrice">Total Price</label>
-                                <input type="text" disabled class="form-control" id="TotalPrice" placeholder="0" required>
-                                <div class="invalid-tooltip">
-                                    Please provide a valid state.
-                                </div>
+                                    <label for="TotalPrice">Total Price</label>
+                                    <input type="text" disabled class="form-control" id="TotalPrice" placeholder="0"
+                                        required>
+                                    <div class="invalid-tooltip">
+                                        Please provide a valid state.
+                                    </div>
                                 </div>
                             </div>
                             <input type="hidden" name="clientIdentification" value="{{ ($client->identification) }}">
-                            <input type="hidden" name="price" value="0">
+                            <input type="hidden" name="firstname" value="{{ ($client->firstname) }}">
+                            <input type="hidden" id="Price" name="price" value="0">
                         </div>
                         <div class="form-row">
-                            
+
                         </div>
-                        <button class="btn btn-primary" type="submit">Submit form</button>
+                        <button class="btn btn-primary" type="submit">Assign</button>
                     </form>
-                </div>
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Registered Solar Panel Type</h4>
-                    <div class="table-responsive">
-                        <table id="zero_config" class="table table-striped table-bordered" style="width: 100%">
-                            <thead>
-                                <tr>
-                                    <th>Serial Number</th>
-                                    <th>Type</th>
-                                    <th>Location</th>
-                                    <th>Registered date</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Tiger Nixon</td>
-                                    <td>System Architect</td>
-                                    <td>Edinburgh</td>
-                                    <td>2011/04/25</td>
-                                    <td>
-                                        <i class="far fa-edit text-primary p-2"></i>
-                                        <i class="fas fa-trash text-danger p-2"></i>
-                                    </td>
-                                </tr>
-                                
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Serial Number</th>
-                                    <th>Type</th>
-                                    <th>Location</th>
-                                    <th>Registered date</th>
-                                    <th>Action</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
+<?php
+  $all= array();
+  $qry=DB::table('solar_panel_types')
+            ->get();
+  foreach ($qry as $solar) {
+    $all_type=array();
+    $all_type['id']=$solar->id;
+    $all_type['solarTypeName']=$solar->solarTypeName;
+    $all_type['price']=$solar->price;
+    array_push($all, $all_type);
+  }
+?>
 @section('script')
 <script type="text/javascript">
-    (function() {
-        'use strict';
-        window.addEventListener('load', function() {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-            // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        }, false);
-    })();
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+
+var all = '<?php echo json_encode($all);?>';
+
+function getPrice() {
+    var sptype = $('#solarPanelType').val();
+    console.log(sptype);
+    var response = JSON.parse(all);
+    $.each(response, function(item, value) {
+        if (sptype == this.id) {
+
+            // var amount=installment*this.price;
+            // var total =(this.price*amountpaid)/installment;
+            // console.log(total);
+            // $('#pricetosave').val(total);
+            $('#Price').val(this.price);
+            $('#TotalPrice').val(this.price);
+            // $('#totalPrice').val(this.price);
+            // $('#totalPricedb').val(this.price);
+        }
+    })
+}
 </script>
 @endsection

@@ -1,6 +1,6 @@
 <ul id="sidebarnav">
     <li class="sidebar-item">
-        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#">
+        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/">
             <i class="fa fa-home"></i>
             <span class="hide-menu">Home</span>
         </a>
@@ -37,6 +37,7 @@
             </li>
         </ul>
     </li>
+
     <li class="sidebar-item">
         <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
             <i class="mdi mdi-crop-square"></i>
@@ -49,12 +50,54 @@
                     <span class="hide-menu"> Add client </span>
                 </a>
             </li>
+            <li class="sidebar-item">
+                <a href="{{ URL::to('/client/actual') }}" class="sidebar-link">
+                    <i class="mdi mdi-format-align-left"></i>
+                    <span class="hide-menu">Actual Clients </span>
+                </a>
+            </li>
         </ul>
     </li>
-    <!-- <li class="sidebar-item">
-        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="authentication-login1.html" aria-expanded="false">
-            <i class="fa fa-sign-out-alt"></i>
-            <span class="hide-menu">Log Out</span>
+
+    <li class="sidebar-item">
+        <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+            <i class="mdi mdi-crop-square"></i>
+            <span class="hide-menu">Payment Settings </span>
         </a>
-    </li> -->
+        <ul aria-expanded="false" class="collapse  first-level">
+            <li class="sidebar-item">
+                <a href="{{ URL::to('/payment') }}" class="sidebar-link">
+                    <i class="mdi mdi-format-align-left"></i>
+                    <span class="hide-menu"> Payment Overview </span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="{{ URL::to('/payment/charges') }}" class="sidebar-link">
+                    <i class="mdi mdi-format-align-left"></i>
+                    <span class="hide-menu"> Charges Fees </span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <hr>
+    <li class="sidebar-item">
+        <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+            <i class="mdi mdi-crop-square"></i>
+            <span class="hide-menu">Staff Managment </span>
+        </a>
+        <ul aria-expanded="false" class="collapse  first-level">
+            <li class="sidebar-item">
+                <a href="{{ URL::to('/staff') }}" class="sidebar-link">
+                    <i class="mdi mdi-format-align-left"></i>
+                    <span class="hide-menu"> Staffs Overview </span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="{{ URL::to('/staff/register') }}" class="sidebar-link">
+                    <i class="mdi mdi-format-align-left"></i>
+                    <span class="hide-menu"> Add Staff </span>
+                </a>
+            </li>
+        </ul>
+    </li>
 </ul>

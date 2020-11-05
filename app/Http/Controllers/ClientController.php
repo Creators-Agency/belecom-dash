@@ -11,11 +11,16 @@ use App\Models\SolarPanel;
 use App\Models\ActivityLog;
 use App\Models\Beneficiary;
 use Illuminate\Http\Request;
+use App\Models\Payout;
 use App\Models\SolarPanelType;
 use App\Models\AdministrativeLocation;
 
 class ClientController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth');
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -27,6 +32,14 @@ class ClientController extends Controller
                         ->get();
         return view('client.add',[
             'clients' => $Get_clients
+        ]);
+    }
+    
+    public function actual()
+    {
+        $get_actual = Beneficiary::where('isActive',1)->get();
+        return view('client.actual',[
+            'clients' => $get_actual
         ]);
     }
 
@@ -175,7 +188,7 @@ class ClientController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for assigning client a solar.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -189,6 +202,7 @@ class ClientController extends Controller
         $account = new Account();
         $account->beneficiary = $request->clientIdentification;
         $account->productNumber = $serialNumber->solarPanelSerialNumber;
+        $account->clientNames = $request->firstname;
         $account->loan = $request->price;
         $account->doneBy = 1;
 
@@ -205,6 +219,12 @@ class ClientController extends Controller
                  Beneficiary::where('identification', $request->clientIdentification)
                     ->update([
                         'isActive' => 3
+                    ]);
+
+                /* changing solar status*/
+                 solarPanel::where('solarPanelSerialNumber', $serialNumber->solarPanelSerialNumber)
+                    ->update([
+                        'status' => 1
                     ]);
                 /*----------updating activity log--------------*/
                 $Get_account = Account::orderBy('id','DESC')->first();
@@ -232,10 +252,32 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateClient(Request $request, $id)
     {
         //
     }
+
+
+    /**
+     *
+     * Blade for editing client
+     *
+     * @return View
+     * @param int $id of the client
+     *
+     */
+
+    public function editClient($id, $dob)
+    {
+        $Get_clients = Beneficiary::where('isActive',1)
+                                    ->where('id', $id)
+                                    ->get();
+        return view('client.edit', [
+            '$clients' => $Get_clients
+        ]);
+    }
+
+
 
     /**
      * Remove the specified resource from storage.

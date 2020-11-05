@@ -12,17 +12,19 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-5 pb-2">Update Stock</h4>
+                    <h4 class="card-title mb-5 pb-2">Add New Branch</h4>
                     <form class="needs-validation" method="POST" action="{{ route('CreateLocation') }}" novalidate>
-                         @csrf
+                        @csrf
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                <label for="LocationName">Location Name</label>
-                                <input type="text" class="form-control" id="LocationName" placeholder="Location Name" name="locationName" value="{{ old('locationName') }}" required>
-                                <div class="invalid-tooltip">
-                                    This field shouldn't be empty
-                                </div>
+                                    <label for="LocationName">Branch Name</label>
+                                    <input type="text" class="form-control" id="LocationName"
+                                        placeholder="Location Name" name="locationName"
+                                        value="{{ old('locationName') }}" required>
+                                    <div class="invalid-tooltip">
+                                        This field shouldn't be empty
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group col-md-6">
@@ -30,15 +32,16 @@
                                     <label for="Supervisor">Supervisor</label>
                                     <select class="custom-select" name="supervisor" id="Supervisor" required>
                                         <option value="">Select Supervisor</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                        @foreach($staffs as $staff)
+                                        <option value="{{ ($staff->id) }}">
+                                            {{ ($staff->firstname.' '.$staff->lastname) }}</option>
+                                        @endforeach
                                     </select>
                                     <div class="invalid-tooltip">You must choose supervisor</div>
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-primary" type="submit">Submit form</button>
+                        <button class="btn btn-primary" type="submit">Add Branch</button>
                     </form>
                 </div>
             </div>
@@ -73,12 +76,12 @@
                                         <a href="{{URL::to('stock/delete/'.$location->id.'/location')}}">
                                             <i class="fas fa-trash text-danger p-2"></i>
                                         </a>
-                                    </td>                               
+                                    </td>
                                 </tr>
                                 @endforeach
                                 @else
-                                    
-                                @endif  
+
+                                @endif
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -99,22 +102,22 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-    (function() {
-        'use strict';
-        window.addEventListener('load', function() {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-            // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        }, false);
-    })();
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
 </script>
 @endsection

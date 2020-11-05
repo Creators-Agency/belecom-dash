@@ -13606,3 +13606,6 @@ File: scss
 @media (max-width: 991.98px) {
   .do-block {
     display: block !important; } }
+.f-size-1{
+  font-size: 10px !important;
+}
