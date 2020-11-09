@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 use App\Models\Payout;
 use App\Models\SolarPanelType;
 use App\Models\AdministrativeLocation;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Client;
 
 class ClientController extends Controller
 {
@@ -252,7 +254,11 @@ class ClientController extends Controller
                  solarPanel::where('solarPanelSerialNumber', $serialNumber->solarPanelSerialNumber)
                     ->update([
                         'status' => 1
-                    ]);
+                    ]); 
+                /*---------- sending message -----*/
+                    // get user
+                    $user = Beneficiary::where('identification', $request->clientIdentification)->first();
+                $this->sendBulk($user->primaryPhone,$serialNumber->solarPanelSerialNumber, $user->lastname);
                 /*----------updating activity log--------------*/
                 $Get_account = Account::orderBy('id','DESC')->first();
                 $this->ActivityLogs('Creating new','Account',$Get_account->id);
@@ -338,5 +344,43 @@ class ClientController extends Controller
                 break;
             }
         }
+    }
+
+    public function sendBulk($number, $solarPanel, $names)
+    {
+        	$client = new Client([
+    		'base_uri'=>'https://www.intouchsms.co.rw',
+    		'timeout'=>'900.0'
+    	]); //GuzzleHttp\Client
+
+		// $result = $client->post('', [
+		//     'form_params' => [
+		//         'sample-form-data' => 'value'
+		//     ]
+		// ]);
+		// $number = '0784101221';
+		$result = $client->request('POST','api/sendsms/.json', [
+		    'form_params' => [
+		        'username' => 'Wilson',
+		        'password' => '123Muhirwa',
+		        'sender' => 'Belecom ltd',
+		        'recipients' => $number,
+		        'message' => $names.' Tuguhaye Ikaze mubafatabuguzi ba Belecom, inomero iranga umurasire ni:'.$solarPanel.', Kanda *652*'.$solarPanel.'# wishure, Murakoze!',
+		    ]
+		]);
+		// if ($result) {
+		// 	return redirect()->back()->with('message','<script type="text/javascript">alert("message sent!!");</script>');
+		// 	// return '';
+             	
+
+
+		// }
+		// else{
+		// 	return '<script type="text/javascript">alert("message not sent!!");</script>';
+        //     return redirect()->back()->with('message',''); 	
+
+
+		// }
+		// return $result;
     }
 }

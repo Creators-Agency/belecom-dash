@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use App\Models\Beneficiary;
+use App\Models\ActivityLog;
 use App\Models\Payout;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Client;
 
 class USSDController extends Controller
 {
@@ -160,8 +163,8 @@ class USSDController extends Controller
                             $new_payout->transactionID = $transactionID;
                             $new_payout->status = 0;
                             if($new_payout->save()){
-                                $this->payment_api('250784101221',str_replace(',', '',number_format($check->loan/36)),$transactionID);
-
+                                $this->payment_api($phoneNumber,str_replace(',', '',number_format($check->loan/36)),$transactionID);
+                                $this->ActivityLogs('Paying Loan','Beneficiary',$check->beneficiary);
                             } else {
                                 $content  = "Ibyo musabye nibikunze mwogere mukanya \n Murakoze!.";
                                 $this->stop($content);
@@ -176,9 +179,12 @@ class USSDController extends Controller
                         $content .= "Murakoze!";
                         $this->stop($content);
                     } else if($values[1] == "3") {
+                        $info = $this->query_db('payouts', ['solarSerialNumber', $values[0]],['status', 1]);
                         $content  = "Turaboherereza ubutumwa bugufi bukubiyemo incamake ku bwishyu bwose mwakoze. \n";
                         $content .= "Murakoze!";
                         $this->stop($content);
+                        $message = $info->clientNames.' muheruka kwishura '.$info->payment.' kwitariki '.$info->created_at;
+                        $this->BulkSms($phoneNumber,$message);
                     } else {
                         $content  = "Mwahisemo nabi! \n";
                         $content .= "Mwongere mugerageze nanone.";
@@ -267,7 +273,7 @@ class USSDController extends Controller
         for ($i=0; $i <1 ; $i++) {
 
             $activityLog = new ActivityLog();
-            $activityLog->userID = 1; //Authenticated user
+            $activityLog->userID = 0; //Authenticated user
             $activityLog->actionName = $actionName;
             $activityLog->modelName = $modelName;
             $activityLog->modelPrimaryKey = $modelPrimaryKey;
@@ -277,6 +283,155 @@ class USSDController extends Controller
                 // break the loop
                 break;
             }
+        }
+    }
+
+    // bulk sms
+    public function BulkSms($number,$message){
+        	$client = new Client([
+    		'base_uri'=>'https://www.intouchsms.co.rw',
+    		'timeout'=>'900.0'
+    	]); //GuzzleHttp\Client
+
+		// $result = $client->post('', [
+		//     'form_params' => [
+		//         'sample-form-data' => 'value'
+		//     ]
+		// ]);
+		// $number = '0784101221';
+		$result = $client->request('POST','api/sendsms/.json', [
+		    'form_params' => [
+		        'username' => 'Wilson',
+		        'password' => '123Muhirwa',
+		        'sender' => 'Belecom ltd',
+		        'recipients' => $number,
+		        'message' => $message,
+		    ]
+		]);
+		// if ($result) {
+		// 	return redirect()->back()->with('message','<script type="text/javascript">alert("message sent!!");</script>');
+		// 	// return '';
+             	
+
+
+		// }
+		// else{
+		// 	return '<script type="text/javascript">alert("message not sent!!");</script>';
+        //     return redirect()->back()->with('message',''); 	
+
+
+		// }
+		// return $result;
+    }
+
+    /*------------------- callBack ------------------*/
+    public function callBackPayment_actual(Request $request){
+        if($request->status === 'SUCCESS'){
+
+            // Here you start querying in your DB,
+            // $request->transactionId = Transaction you created in the DB, ugomba kuba wayi saving muri table 
+            $transaction = DB::table('transactions')->where('transactionID', $request->transactionId)->first();
+            $from = DB::table('temp_trans_info')->where('trans',$request->transactionId)
+                    ->first();
+            $user = DB::table('beneficiary')->where('identification',$from->b_id)->first();
+
+            // Umaze kuyibona, you can update it to successful payed
+            if(count($transaction)){
+
+                # For Beneficially Account
+                $data = array();
+                $data['b_id']=$from->b_id;        
+                $data['type_id']=$from->sp_type;
+                $data['monthpaid']=$from->monthpaid;
+                $data['monthleft']=$from->monthleft;
+                $data['loan']=$from->loan;
+                $data['updated_at']=Carbon::now();
+
+                # For Payout
+                $payout=array();
+                $payout['type_id']=$from->sp_type;
+                $payout['b_id']=$from->b_id;
+                $payout['amountpaid']=$from->amountpaid;
+                $payout['monthpaid']=$from->monthpaid;
+                $payout['recorded_by']=$from->recorded_by;
+                $payout['created_at']=Carbon::now();
+
+                DB::table('beneficiary_account')
+                ->where('b_id',$from->b_id)
+                ->update($data);
+                $getBen=DB::table('beneficiary_account')
+                    ->join('beneficiary','beneficiary_account.b_id','beneficiary.identification')
+                ->where('beneficiary_account.b_id',$from->b_id)
+                ->first();
+                $phone = $getBen->phone;
+                $Accountid=$getBen->b_id;
+                $activityLog=array();
+                $activityLog['act_name']='paying installment ';
+                $activityLog['doneBy']=$getBen->createdby;
+                $activityLog['moreDetail']='on this date: '.$time.' you have  handled payment operation of user with ID:'.$Accountid;
+                $activityLog['created_at']=Carbon::now();
+                DB::table('activitylog')->insert($activityLog);
+
+                DB::table('payout')->insert($payout);
+                $payment = Transaction::find($transaction->id);
+                $payment->status = "Payed";
+                $payment->save();
+
+                // Ino ni response usubiza abantu ba Opay kugira ubereke ko byaciyemo neza
+                $myObj = new \stdClass();
+                $myObj->message = 'Transaction succeeded!';
+                $myObj->success = 'true';
+                $myObj->request_id = $request->transactionId;
+                $myJSON = json_encode($myObj);
+                $client = new Client([
+                'base_uri'=>'https://www.intouchsms.co.rw',
+                'timeout'=>'900.0'
+                ]); //GuzzleHttp\Client
+
+                // $result = $client->post('', [
+                //     'form_params' => [
+                //         'sample-form-data' => 'value'
+                //     ]
+                // ]);
+                $result = $client->request('POST','api/sendsms/.json', [
+                    'form_params' => [
+                        'username' => 'Wilson',
+                        'password' => '123Muhirwa',
+                        'sender' => 'Belecom ltd',
+                        'recipients' => '0784101221',
+                        'message' => $user->firstname.' '.$user->lastname.'Kwishura byagenze neza,  Murakoze Gukoresha Service yo kwishura ya belecom' 
+                    ]
+                    // 'recipients' => '0'.$user->phone,
+                ]);
+                return $myJSON;
+            }
+        } else {
+            // Ino ni response usubiza abantu ba Opay kugira ubereke ko byakwamye tu
+            $myObj = new \stdClass();
+            $myObj->message = 'Transaction failed!';
+            $myObj->success = 'true';
+            $myObj->request_id = $request->transactionId;
+            $myJSON = json_encode($myObj);
+            $client = new Client([
+            'base_uri'=>'https://www.intouchsms.co.rw',
+            'timeout'=>'900.0'
+            ]); //GuzzleHttp\Client
+
+            // $result = $client->post('', [
+            //     'form_params' => [
+            //         'sample-form-data' => 'value'
+            //     ]
+            // ]);
+            $result = $client->request('POST','api/sendsms/.json', [
+                    'form_params' => [
+                        'username' => 'Wilson',
+                        'password' => '123Muhirwa',
+                        'sender' => 'Belecom ltd',
+                        'recipients' => '0784101221',
+                        'message' => $user->firstname.' '.$user->lastname.'Kwishura Ntibikunze mwongere niba hari ikibazo baza umukozi wa belecom kugira agufashe,  Murakoze Gukoresha Service yo kwishura ya belecom' 
+                    ]
+                ]);
+            return $myJSON;
         }
     }
 }
