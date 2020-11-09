@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use App\Models\Beneficiary;
+use App\Models\ActivityLog;
 use App\Models\Payout;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Client;
 
 class USSDController extends Controller
 {
@@ -140,7 +143,7 @@ class USSDController extends Controller
                              *
                              * *********************************************************
                              */
-                            $content  = "Mugiye kwishyura: <b>".$payment_fee." Rwf for ".$new."</b>! \n";
+                            $content  = "Mugiye kwishyura: <b>".$payment_fee." Rwf</b>! \n";
                             $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
                             $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe. \n";
                             $content .= "Murakoze!";
@@ -156,15 +159,15 @@ class USSDController extends Controller
                             $new_payout->clientID = $check->beneficiary;
                             $new_payout->clientPhone = $phoneNumber;
                             $new_payout->monthYear = date("m-Y");
-                            $new_payout->payment = number_format($check->loan/36);
+                            $new_payout->payment = $check->loan/36;
                             $new_payout->transactionID = $transactionID;
                             $new_payout->status = 0;
                             if($new_payout->save()){
-
+                                $this->payment_api($phoneNumber,str_replace(',', '',number_format($check->loan/36)),$transactionID);
+                                $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
                             } else {
                                 $content  = "Ibyo musabye nibikunze mwogere mukanya \n Murakoze!.";
                                 $this->stop($content);
-                                $this->payment_api('250784101221',str_replace(',', '',number_format($check->loan/36)),$transactionID);
                             }
                             $content = 'this'.$new_payout;
                             $this->proceed($content);
@@ -176,9 +179,12 @@ class USSDController extends Controller
                         $content .= "Murakoze!";
                         $this->stop($content);
                     } else if($values[1] == "3") {
+                        $info = $this->query_db('payouts', ['solarSerialNumber', $values[0]],['status', 1]);
                         $content  = "Turaboherereza ubutumwa bugufi bukubiyemo incamake ku bwishyu bwose mwakoze. \n";
                         $content .= "Murakoze!";
                         $this->stop($content);
+                        $message = $info->clientNames.' muheruka kwishura '.$info->payment.' kwitariki '.$info->created_at;
+                        $this->BulkSms($phoneNumber,$message);
                     } else {
                         $content  = "Mwahisemo nabi! \n";
                         $content .= "Mwongere mugerageze nanone.";
@@ -219,7 +225,7 @@ class USSDController extends Controller
                 "amount" : "'.$amount.'",
                 "organizationId" : "fa99567c-a2ab-4fbe-84c5-1d20093a3c8e",
                 "description" : "Payment of Solar Panel",
-                "callbackUrl" : "http://belecom.creators.rw/callback",
+                "callbackUrl" : "http://197.243.14.87/ussd/callBack",
                 "transactionId" : "'.$transactionID.'"
             }';
         // $url = "https://opay-api.oltranz.com/opay/paymentrequest";
@@ -267,7 +273,7 @@ class USSDController extends Controller
         for ($i=0; $i <1 ; $i++) {
 
             $activityLog = new ActivityLog();
-            $activityLog->userID = 1; //Authenticated user
+            $activityLog->userID = 0; //Authenticated user
             $activityLog->actionName = $actionName;
             $activityLog->modelName = $modelName;
             $activityLog->modelPrimaryKey = $modelPrimaryKey;
@@ -277,6 +283,55 @@ class USSDController extends Controller
                 // break the loop
                 break;
             }
+        }
+    }
+
+        /*
+            Method to send bulk sms
+            
+        */
+    public function BulkSms($number,$message){
+        	$client = new Client([
+    		'base_uri'=>'https://www.intouchsms.co.rw',
+    		'timeout'=>'900.0'
+    	]); //GuzzleHttp\Client
+
+		$result = $client->request('POST','api/sendsms/.json', [
+		    'form_params' => [
+		        'username' => 'Wilson',
+		        'password' => '123Muhirwa',
+		        'sender' => 'Belecom ltd',
+		        'recipients' => $number,
+		        'message' => $message,
+		    ]
+		]);
+    }
+
+    /*------------------- callBack ------------------*/
+
+    public function paymentCallBack(Request $request)
+    {
+        /* if transaction is successfuly */
+        if($request->status === 'SUCCESS'){
+            $get = Payout::where('transactionID', $request->transactionId)->first();
+            if(count($get) == 1){
+                $update = Payout::where('transactionID', $request->transactionId)
+                    ->update([
+                        'status' => 1
+                    ]);
+                $myObj = new \stdClass();
+                $myObj->message = 'Transaction succeeded!';
+                $myObj->success = 'true';
+                $myObj->request_id = $request->transactionId;
+                $myJSON = json_encode($myObj);
+                $com = Benefiaciary::where('identification', $$get ->clientID)->first();
+                $message = $com->firstname." turakumenyesha ko igikorwa cyo kwishura cyagenze neza \n Murakoze!";
+                $this->BulkSms($com->primaryPhone,$message);
+            }
+        }
+        else{
+            $message = 'Mukiriya mwiza kwishura ntibyagenze neza!';
+            $this->BulkSms($number,$message);
         }
     }
 }

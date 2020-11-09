@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Redirect;
 use Validator;
 use SweetAlert;
+use DB;
 use App\Models\Referee;
 use App\Models\Account;
 use App\Models\SolarPanel;
@@ -14,6 +15,8 @@ use Illuminate\Http\Request;
 use App\Models\Payout;
 use App\Models\SolarPanelType;
 use App\Models\AdministrativeLocation;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Client;
 
 class ClientController extends Controller
 {
@@ -28,17 +31,42 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $Get_clients = Beneficiary::where('isActive',1)
+        $Get_clients = DB::table('beneficiaries')
+                        ->join('administrative_locations','administrative_locations.id','=','beneficiaries.location')
+                        ->select(
+                            'beneficiaries.id as clientID',
+                            'beneficiaries.identification',
+                            'beneficiaries.firstname',
+                            'beneficiaries.lastname',
+                            'beneficiaries.gender',
+                            'beneficiaries.DOB',
+                            'beneficiaries.primaryPhone',
+                            'administrative_locations.id as locationID',
+                            'administrative_locations.locationName',
+                            )
+                        ->where('beneficiaries.isActive',1)
+                        ->where('administrative_locations.status',1)
+                        ->get();
+        $get_location = AdministrativeLocation::where('status', 1)
                         ->get();
         return view('client.add',[
-            'clients' => $Get_clients
+            'clients' => $Get_clients,
+            'locations' => $get_location
         ]);
     }
     
     public function actual()
     {
-        $get_actual = Beneficiary::where('isActive',1)->get();
+        $get_actual = Beneficiary::where('isActive',3)->get();
         return view('client.actual',[
+            'clients' => $get_actual
+        ]);
+    }
+
+    public function perspective()
+    {
+        $get_actual = Beneficiary::where('isActive',1)->get();
+        return view('client.perspective',[
             'clients' => $get_actual
         ]);
     }
@@ -97,8 +125,8 @@ class ClientController extends Controller
             $client->identification =$request->identification;
             $client->gender =$request->gender;
             $client->DOB =$request->age;
-            $client->primaryPhone = $request->primaryNumber;
-            $client->secondaryPhone =$request->secondaryNumber;
+            $client->primaryPhone = '0'.$request->primaryNumber;
+            $client->secondaryPhone = '0'.$request->secondaryNumber;
             $client->educationLevel =$request->education;
             $client->incomeSource =$request->sourceOfIncome;
             $client->sourceOfEnergy =$request->sourceOfEnergy;
@@ -195,6 +223,7 @@ class ClientController extends Controller
      */
     public function assignClient(Request $request)
     {
+            // return $request;
         /*------------getting solar using type selected----------------*/
         $serialNumber = SolarPanel::where('solarPanelType',$request->solarPanelType)
                                 ->where('status',0)
@@ -211,7 +240,7 @@ class ClientController extends Controller
                                 ->orWhere('productNumber', $serialNumber->solarPanelSerialNumber)
                                 ->count();
         if ($chec_account == 0) {
-            
+             
             /*---------------- save and check if succed ------------*/
             if ($account->save()) {
 
@@ -225,7 +254,11 @@ class ClientController extends Controller
                  solarPanel::where('solarPanelSerialNumber', $serialNumber->solarPanelSerialNumber)
                     ->update([
                         'status' => 1
-                    ]);
+                    ]); 
+                /*---------- sending message -----*/
+                    // get user
+                    $user = Beneficiary::where('identification', $request->clientIdentification)->first();
+                $this->sendBulk($user->primaryPhone,$serialNumber->solarPanelSerialNumber, $user->lastname);
                 /*----------updating activity log--------------*/
                 $Get_account = Account::orderBy('id','DESC')->first();
                 $this->ActivityLogs('Creating new','Account',$Get_account->id);
@@ -311,5 +344,43 @@ class ClientController extends Controller
                 break;
             }
         }
+    }
+
+    public function sendBulk($number, $solarPanel, $names)
+    {
+        	$client = new Client([
+    		'base_uri'=>'https://www.intouchsms.co.rw',
+    		'timeout'=>'900.0'
+    	]); //GuzzleHttp\Client
+
+		// $result = $client->post('', [
+		//     'form_params' => [
+		//         'sample-form-data' => 'value'
+		//     ]
+		// ]);
+		// $number = '0784101221';
+		$result = $client->request('POST','api/sendsms/.json', [
+		    'form_params' => [
+		        'username' => 'Wilson',
+		        'password' => '123Muhirwa',
+		        'sender' => 'Belecom ltd',
+		        'recipients' => $number,
+		        'message' => $names.' Tuguhaye Ikaze mubafatabuguzi ba Belecom, inomero iranga umurasire ni:'.$solarPanel.', Kanda *652*'.$solarPanel.'# wishure, Murakoze!',
+		    ]
+		]);
+		// if ($result) {
+		// 	return redirect()->back()->with('message','<script type="text/javascript">alert("message sent!!");</script>');
+		// 	// return '';
+             	
+
+
+		// }
+		// else{
+		// 	return '<script type="text/javascript">alert("message not sent!!");</script>';
+        //     return redirect()->back()->with('message',''); 	
+
+
+		// }
+		// return $result;
     }
 }
