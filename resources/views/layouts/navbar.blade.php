@@ -29,12 +29,6 @@
                     <span class="hide-menu"> New solar Type</span>
                 </a>
             </li>
-            <li class="sidebar-item">
-                <a href="{{ URL::to('/stock/new/location') }}" class="sidebar-link">
-                    <i class="mdi mdi-format-align-right"></i>
-                    <span class="hide-menu"> Add Branch </span>
-                </a>
-            </li>
         </ul>
     </li>
 
@@ -65,6 +59,20 @@
         </ul>
     </li>
 
+    <li class="sidebar-item">
+        <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+            <i class="mdi mdi-crop-square"></i>
+            <span class="hide-menu">Area of Operation </span>
+        </a>
+        <ul aria-expanded="false" class="collapse  first-level">
+            <li class="sidebar-item">
+                <a href="{{ URL::to('/stock/new/location') }}" class="sidebar-link">
+                    <i class="mdi mdi-format-align-right"></i>
+                    <span class="hide-menu"> Add Branch </span>
+                </a>
+            </li>
+        </ul>
+    </li>
     <li class="sidebar-item">
         <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
             <i class="mdi mdi-crop-square"></i>

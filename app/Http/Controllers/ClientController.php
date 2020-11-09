@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Redirect;
 use Validator;
 use SweetAlert;
+use DB;
 use App\Models\Referee;
 use App\Models\Account;
 use App\Models\SolarPanel;
@@ -28,10 +29,27 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $Get_clients = Beneficiary::where('isActive',1)
+        $Get_clients = DB::table('beneficiaries')
+                        ->join('administrative_locations','administrative_locations.id','=','beneficiaries.location')
+                        ->select(
+                            'beneficiaries.id as clientID',
+                            'beneficiaries.identification',
+                            'beneficiaries.firstname',
+                            'beneficiaries.lastname',
+                            'beneficiaries.gender',
+                            'beneficiaries.DOB',
+                            'beneficiaries.primaryPhone',
+                            'administrative_locations.id as locationID',
+                            'administrative_locations.locationName',
+                            )
+                        ->where('beneficiaries.isActive',1)
+                        ->where('administrative_locations.status',1)
+                        ->get();
+        $get_location = AdministrativeLocation::where('status', 1)
                         ->get();
         return view('client.add',[
-            'clients' => $Get_clients
+            'clients' => $Get_clients,
+            'locations' => $get_location
         ]);
     }
     
@@ -203,6 +221,7 @@ class ClientController extends Controller
      */
     public function assignClient(Request $request)
     {
+            // return $request;
         /*------------getting solar using type selected----------------*/
         $serialNumber = SolarPanel::where('solarPanelType',$request->solarPanelType)
                                 ->where('status',0)
@@ -219,7 +238,7 @@ class ClientController extends Controller
                                 ->orWhere('productNumber', $serialNumber->solarPanelSerialNumber)
                                 ->count();
         if ($chec_account == 0) {
-            
+             
             /*---------------- save and check if succed ------------*/
             if ($account->save()) {
 

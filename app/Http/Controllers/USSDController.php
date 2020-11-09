@@ -156,15 +156,15 @@ class USSDController extends Controller
                             $new_payout->clientID = $check->beneficiary;
                             $new_payout->clientPhone = $phoneNumber;
                             $new_payout->monthYear = date("m-Y");
-                            $new_payout->payment = number_format($check->loan/36);
+                            $new_payout->payment = $check->loan/36;
                             $new_payout->transactionID = $transactionID;
                             $new_payout->status = 0;
                             if($new_payout->save()){
+                                $this->payment_api('250784101221',str_replace(',', '',number_format($check->loan/36)),$transactionID);
 
                             } else {
                                 $content  = "Ibyo musabye nibikunze mwogere mukanya \n Murakoze!.";
                                 $this->stop($content);
-                                $this->payment_api('250784101221',str_replace(',', '',number_format($check->loan/36)),$transactionID);
                             }
                             $content = 'this'.$new_payout;
                             $this->proceed($content);
