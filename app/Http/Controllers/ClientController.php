@@ -125,8 +125,8 @@ class ClientController extends Controller
             $client->identification =$request->identification;
             $client->gender =$request->gender;
             $client->DOB =$request->age;
-            $client->primaryPhone = $request->primaryNumber;
-            $client->secondaryPhone =$request->secondaryNumber;
+            $client->primaryPhone = '0'.$request->primaryNumber;
+            $client->secondaryPhone = '0'.$request->secondaryNumber;
             $client->educationLevel =$request->education;
             $client->incomeSource =$request->sourceOfIncome;
             $client->sourceOfEnergy =$request->sourceOfEnergy;
