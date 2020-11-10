@@ -47,7 +47,8 @@
                         <div class="form-row">
 
                         </div>
-                        <button class="btn btn-primary " {{ ($btn == 1 ? 'disabled': '')}} type="submit">Assign</button>
+                        <button class="btn  {{ ($btn == 1 ? 'btn-danger': 'btn-primary')}} "
+                            {{ ($btn == 1 ? 'disabled': '')}} type="submit">Assign</button>
                     </form>
                 </div>
             </div>
