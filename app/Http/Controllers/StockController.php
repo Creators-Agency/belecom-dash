@@ -434,10 +434,13 @@ class StockController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function editSolar($serialNumber)
     {
-        //
+        return $data = SolarPanel::where('solarPanelSerialNumber', $serialNumber)->first();
+        return view('stock.edit-product');
     }
+
+    
 
 
 

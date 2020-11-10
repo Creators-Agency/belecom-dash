@@ -95,7 +95,7 @@ class PaymentController extends Controller
             $charge = new Charge();
             $charge->solarPanelType = $request->solarPanelType;
             $charge->charges = $request->charges;
-            $charge->doneBy = 0;
+            $charge->doneBy =  Auth::User()->id;
             if ($charge->save()) {
 
                 /*============== Updating Activity Logs =========*/

@@ -48,7 +48,7 @@
                                             @endif
                                         </td>
                                         <td class=" text-center">
-                                            <a href="{{ URL::to('/panel/'.$panel->solarPanelSerialNumber.'/edit') }}"
+                                            <a href="{{ URL::to('/stock/panel/'.$panel->solarPanelSerialNumber.'/edit') }}"
                                                 class="btn btn-primary">Edit
                                             </a>
                                         </td>

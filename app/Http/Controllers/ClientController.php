@@ -148,7 +148,7 @@ class ClientController extends Controller
             $client->employmentStatus = 0;
             $client->referredby = $request->referredby;
             $client->isActive = 1;
-            $client->doneBy = 1;
+            $client->doneBy =  Auth::User()->id;
             
 
             // if he/she heard about from someone
@@ -251,7 +251,7 @@ class ClientController extends Controller
         $account->productNumber = $serialNumber->solarPanelSerialNumber;
         $account->clientNames = $request->firstname;
         $account->loan = $request->price;
-        $account->doneBy = 1;
+        $account->doneBy =  Auth::User()->id;
 
         /*------- check if this number does not exist in account table*/
         $chec_account = Account::where('beneficiary', $request->clientIdentification)

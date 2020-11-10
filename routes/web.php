@@ -50,6 +50,7 @@ Route::prefix('stock')->group(function(){
     Route::post('/update/type', 'StockController@updateType')->name('UpdateType');
 
     Route::get('/list/panel/','StockController@listPanel');
+    Route::get('/panel/{serialNumber}/edit', 'StockController@editSolar');
 
 
 });
