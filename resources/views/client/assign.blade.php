@@ -49,6 +49,7 @@
                         </div>
                         <button class="btn  {{ ($btn == 1 ? 'btn-danger': 'btn-primary')}} "
                             {{ ($btn == 1 ? 'disabled': '')}} type="submit">Assign</button>
+                        <i class="text-danger">{{ ($btn == 1 ? 'Stock is empty!': '')}}</i>
                     </form>
                 </div>
             </div>

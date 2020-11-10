@@ -276,7 +276,8 @@ class ClientController extends Controller
                 /*---------- sending message -----*/
                     // get user
                     $user = Beneficiary::where('identification', $request->clientIdentification)->first();
-                $this->sendBulk($user->primaryPhone,$serialNumber->solarPanelSerialNumber, $user->lastname);
+                    $phoneNu ='0'.$user->primaryPhone;
+                $this->sendBulk($phoneNu,$serialNumber->solarPanelSerialNumber, $user->lastname);
                 /*----------updating activity log--------------*/
                 $Get_account = Account::orderBy('id','DESC')->first();
                 $this->ActivityLogs('Creating new','Account',$Get_account->id);
