@@ -31,6 +31,12 @@ class ClientController extends Controller
      */
     public function index()
     {
+        $get_location = AdministrativeLocation::where('status', 1)
+                        ->get();
+        if(count($get_location) == 0){
+            alert()->warning('You should first add Operational area','done')->autoclose(4500);;
+            return redirect('stock/new/location');
+        }
         $Get_clients = DB::table('beneficiaries')
                         ->join('administrative_locations','administrative_locations.id','=','beneficiaries.location')
                         ->select(
@@ -46,8 +52,6 @@ class ClientController extends Controller
                             )
                         ->where('beneficiaries.isActive',1)
                         ->where('administrative_locations.status',1)
-                        ->get();
-        $get_location = AdministrativeLocation::where('status', 1)
                         ->get();
         return view('client.add',[
             'clients' => $Get_clients,
