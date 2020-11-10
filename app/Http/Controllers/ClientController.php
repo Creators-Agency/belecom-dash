@@ -61,7 +61,10 @@ class ClientController extends Controller
     
     public function actual()
     {
-        $get_actual = Beneficiary::where('isActive',3)->get();
+        $get_actual = DB::table('beneficiaries')
+                        ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
+                        ->where('beneficiaries.isActive',3)
+                        ->get();
         return view('client.actual',[
             'clients' => $get_actual
         ]);
@@ -69,12 +72,12 @@ class ClientController extends Controller
 
     public function perspective()
     {
-        $get_actual = DB::table('beneficiaries')
+        $new_client = DB::table('beneficiaries')
                         ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
                         ->where('beneficiaries.isActive',1)
                         ->get();
         return view('client.perspective',[
-            'clients' => $get_actual
+            'clients' => $new_client
         ]);
     }
 
