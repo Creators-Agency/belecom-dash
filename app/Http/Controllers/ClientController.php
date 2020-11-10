@@ -69,7 +69,10 @@ class ClientController extends Controller
 
     public function perspective()
     {
-        $get_actual = Beneficiary::where('isActive',1)->get();
+        $get_actual = DB::table('beneficiaries')
+                        ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
+                        ->where('beneficiaries.isActive',1)
+                        ->get();
         return view('client.perspective',[
             'clients' => $get_actual
         ]);
