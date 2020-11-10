@@ -211,8 +211,13 @@ class ClientController extends Controller
      */
     public function assign($id)
     {
-        $client = Beneficiary::where('id',$id)->first();
         $solarType = SolarPanelType::get();
+        if(count($solarType) == 0){
+            alert()->warning('No Solar Panel type available','Alert')->autoclose(4500);;
+            return redirect('stock/new/solar/type');
+        }
+        $client = Beneficiary::where('id',$id)->first();
+        
         return view('client.assign',[
             'client' => $client,
             'SolarTypes' => $solarType
