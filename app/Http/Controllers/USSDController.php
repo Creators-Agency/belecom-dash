@@ -82,8 +82,8 @@ class USSDController extends Controller
                 $content  = "Ikaze kuri Belecom, ".$check->clientNames." \n";
                 $content .= "Emeza: \n";
                 $content .= "1 mwishyure ifatabuguzi ry'ukwezi. \n";
-                $content .= "2 mwishyure ibirarane. \n";
-                $content .= "3 Kubona ubutumwa bw'ibyakozwe. \n";
+                // $content .= "2 mwishyure ibirarane. \n";
+                $content .= "2 Kubona ubutumwa bw'ibyakozwe. \n";
                 $this->proceed($content);
             } else {
 
@@ -172,13 +172,14 @@ class USSDController extends Controller
                             $content = 'this'.$new_payout;
                             $this->proceed($content);
                         }
-
-                    } else if($values[1] == "2") {
-                        $content  = "Mufite ikirarane cya: <b>".number_format(100)."Rwf.</b>! \n";
-                        $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
-                        $content .= "Murakoze!";
-                        $this->stop($content);
-                    } else if($values[1] == "3") {
+                    }
+                    //  else if($values[1] == "2") {
+                    //     $content  = "Mufite ikirarane cya: <b>".number_format(100)."Rwf.</b>! \n";
+                    //     $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
+                    //     $content .= "Murakoze!";
+                    //     $this->stop($content);
+                    // } 
+                    else if($values[1] == "2") {
                         $info = $this->query_db('payouts', ['solarSerialNumber', $values[0]],['status', 1]);
                         $content  = "Turaboherereza ubutumwa bugufi bukubiyemo incamake ku bwishyu bwose mwakoze. \n";
                         $content .= "Murakoze!";
@@ -217,8 +218,6 @@ class USSDController extends Controller
 
     public function payment_api($phone, $amount, $transactionID)
     {
-        // $content = $phone.' '.$amount.' '.$transactionID;
-        // $this->proceed($content);
             $url = "https://opay-api.oltranz.com/opay/paymentrequest";
             $content = '{
                 "telephoneNumber" : "'.$phone.'",
@@ -228,15 +227,6 @@ class USSDController extends Controller
                 "callbackUrl" : "http://197.243.14.87/ussd/callBack",
                 "transactionId" : "'.$transactionID.'"
             }';
-        // $url = "https://opay-api.oltranz.com/opay/paymentrequest";
-        // $content = "{
-        //     'telephoneNumber'   :   "''",
-        //     'amount'            :   "",
-        //     'organizationId'    :   'fa99567c-a2ab-4fbe-84c5-1d20093a3c8e',
-        //     'description'       :   'Payment of Solar Panel',
-        //     'callbackUrl'       :   '',
-        //     'transactionId'     :   '""'
-        // }";
 
         $curl = curl_init();
         curl_setopt_array($curl, array(

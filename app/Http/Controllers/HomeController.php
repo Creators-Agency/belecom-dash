@@ -86,7 +86,7 @@ class HomeController extends Controller {
 
     	/*infographics about all sold solar */
     	$data_loan = DB::table('accounts')
-            ->select(DB::raw('sum(loan) as `amount`'), DB::raw('MONTHNAME(created_at) month'))
+            ->select(DB::raw('sum(accounts.loan) as `amount`'), DB::raw('MONTHNAME(accounts.created_at) month'))
             ->groupby('month')
             ->orderBy('created_at', 'ASC')
             ->where('isActive',1)
