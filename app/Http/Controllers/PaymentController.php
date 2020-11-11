@@ -6,6 +6,7 @@ use Redirect;
 use Validator;
 use SweetAlert;
 use App\Models\Charge;
+use App\Models\Payout;
 use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use App\Models\SolarPanelType;
@@ -109,6 +110,14 @@ class PaymentController extends Controller
             alert()->warning('Charge Of This Solar Type is already set! you can edit', 'Oops!')->autoclose(3500);
             return Redirect::back()->withErrors($validator)->withInput();
         }
+    }
+
+    public function checkPayment()
+    {
+        $Payout = Payout::where('status', 1)->get();
+        return view('payment.checkpayment',[
+            'payments' => $Payout
+        ]);
     }
 
     /**
