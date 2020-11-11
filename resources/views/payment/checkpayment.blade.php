@@ -19,6 +19,7 @@
                                 <thead>
                                     <tr>
                                         <th>Clients Name</th>
+                                        <th>transactionID</th>
                                         <th>Phone Number</th>
                                         <th>Status</th>
                                     </tr>
@@ -36,6 +37,7 @@
                                 <tfoot>
                                     <tr>
                                         <th>Clients Name</th>
+                                        <th>transactionID</th>
                                         <th>Phone Number</th>
                                         <th>Status</th>
                                     </tr>
