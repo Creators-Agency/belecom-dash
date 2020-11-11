@@ -65,7 +65,7 @@
                             </div>
                             <div class="col-5">
                                 <h1 class="font-light text-right mb-0" style="font-size: 12px !important;">
-                                    {{ ($faulty) }}</h1>
+                                    {{ ($numberOfSolarReturned) }}</h1>
                             </div>
                         </div>
                     </div>
@@ -120,7 +120,7 @@
                             </div>
                             <div class="col-5">
                                 <h1 class="font-light text-right mb-0" style="font-size: 12px !important;">
-                                    {{ ($numberOfSolarAssigned) }}</h1>
+                                    {{ ($faulty) }}</h1>
                             </div>
                         </div>
                     </div>
