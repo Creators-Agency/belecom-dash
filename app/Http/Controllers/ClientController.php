@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Redirect;
 use Validator;
 use SweetAlert;
+use Auth;
 use DB;
 use App\Models\Referee;
 use App\Models\Account;
