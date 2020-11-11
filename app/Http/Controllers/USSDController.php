@@ -303,25 +303,33 @@ class USSDController extends Controller
     {
         /* if transaction is successfuly */
         if($request->status === 'SUCCESS'){
-            $get = Payout::where('transactionID', $request->transactionId)->first();
-            if(count($get) == 1){
-                $update = Payout::where('transactionID', $request->transactionId)
+            try {
+                $get = Payout::where('transactionID', $request->transactionId)->first();
+                if(isset($get) == 1){
+                    $update = Payout::where('transactionID', $request->transactionId)
                     ->update([
                         'status' => 1
                     ]);
-                $myObj = new \stdClass();
-                $myObj->message = 'Transaction succeeded!';
-                $myObj->success = 'true';
-                $myObj->request_id = $request->transactionId;
-                $myJSON = json_encode($myObj);
-                $com = Benefiaciary::where('identification', $$get ->clientID)->first();
-                $message = $com->firstname." turakumenyesha ko igikorwa cyo kwishura cyagenze neza \n Murakoze!";
-                $this->BulkSms($com->primaryPhone,$message);
+                    $myObj = new \stdClass();
+                    $myObj->message = 'Transaction succeeded!';
+                    $myObj->success = 'true';
+                    $myObj->request_id = $request->transactionId;
+                    $myJSON = json_encode($myObj);
+                    $com = Beneficiary::where('identification', $get->clientID)->first();
+                    $phone = '0'.$com->primaryPhone;
+                    $message = $com->firstname." turakumenyesha ko igikorwa cyo kwishura cyagenze neza \n Murakoze!";
+                    $this->BulkSms($phone,$message);
+                }
+            } catch (\Throwable $th) {
+                throw $th;
             }
-        }
-        else{
+        } else {
+            $get = Payout::where('transactionID', $request->transactionId)->first();
+            $com = Beneficiary::where('identification', $get->clientID)->first();
+            $phone = '0'.$com->primaryPhone;
             $message = 'Mukiriya mwiza kwishura ntibyagenze neza!';
-            $this->BulkSms($number,$message);
+            $this->BulkSms($phone,$message);
         }
+        return true;
     }
 }
