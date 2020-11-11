@@ -104,8 +104,9 @@ Route::prefix('/payment')->group(function(){
     Route::get('/{id}/edit', 'PaymentController@editClient');
     // Route::post('/{id}/update', 'PaymentController@updateClient')->name('UpdateClient');
     Route::get('/{id}/delete', 'PaymentController@deleteClient');
+    Route::get('/{id}/delete', 'PaymentController@deleteClient');
 
-    Route::get('/{id}/assign', 'PaymentController@assign');
+    Route::get('/list', 'PaymentController@checkPayment');
     // Route::post('/assign', 'PaymentController@assignClient')->name('assignClient');
  
 });

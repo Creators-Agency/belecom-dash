@@ -73,6 +73,21 @@
             </li>
         </ul>
     </li>
+    <li class="sidebar-item">
+        <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+            <i class="mdi mdi-crop-square"></i>
+            <span class="hide-menu">Payment Settings </span>
+        </a>
+        <ul aria-expanded="false" class="collapse  first-level">
+
+            <li class="sidebar-item">
+                <a href="{{ URL::to('/payment/list') }}" class="sidebar-link">
+                    <i class="mdi mdi-format-align-left"></i>
+                    <span class="hide-menu"> Payment Status </span>
+                </a>
+            </li>
+        </ul>
+    </li>
     <hr>
     <li class="sidebar-item">
         <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
