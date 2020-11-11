@@ -27,7 +27,7 @@
                                     @foreach($payments as $payment)
                                     <tr>
                                         <td>{{ ($payment->clientNames) }}</td>
-                                        <td>{{ ($panel->clientPhone) }}</td>
+                                        <td>{{ ($payment->clientPhone) }}</td>
                                         <td>{{ ($payment->status == 1 ? 'success':'fail') }}</td>
                                     </tr>
                                     @endforeach
