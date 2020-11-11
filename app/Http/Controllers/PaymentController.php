@@ -114,7 +114,7 @@ class PaymentController extends Controller
 
     public function checkPayment()
     {
-        $Payout = Payout::where('status', 1)->get();
+        $Payout = Payout::get();
         return view('payment.checkpayment',[
             'payments' => $Payout
         ]);
