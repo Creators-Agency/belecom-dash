@@ -12,7 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        'ussd', '/ussd/callBack'
+        'ussd', '/ussd/callback'
     ];
 
 

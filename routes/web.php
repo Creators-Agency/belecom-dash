@@ -175,4 +175,13 @@ Route::post('/ussd','USSDController@index');
  * *********************************************************
  */
 
-Route::post('/ussd/callBack', 'USSDController@paymentCallBack');
+Route::post('/ussd/callback', 'USSDController@paymentCallBack');
+// Route::post('/ussd/callBack', function (Request $request) {
+    
+//     $ = $request->input('name');
+//     $message = $request->input('message');
+    
+//     $output = "$name says: $message";
+
+//     return $output;
+// });
