@@ -120,17 +120,18 @@ class USSDController extends Controller
                         // if YES
                         if (!empty($check_payout)) {
                             $transactionID = sha1(md5(time())).'-'.rand(102,0);
-                            $payment_fee = str_replace(',', '',$check_payout->payment);
+                            $payment_fee = $check_payout->payment;
+                            // $payment_fee = str_replace(',',(',', '',$check_payout->payment);
+                            $new = date('m-Y', strtotime(strtotime($check_payout->monthYear).' +1 month'));
                             $new_payout = new Payout();
                             $new_payout->solarSerialNumber = $values[0];
                             $new_payout->clientNames = $check_payout->clientNames;
                             $new_payout->clientID = $check_payout->clientID;
                             $new_payout->clientPhone = $phoneNumber;
-                            $new_payout->monthYear = $check_payout->monthYear;
+                            $new_payout->monthYear = $new;
                             $new_payout->payment = $check_payout->payment;
                             $new_payout->transactionID = $transactionID;
                             $new_payout->status = 0;
-                            $new = date('m-Y', strtotime(strtotime($check_payout->monthYear).' +2 month'));
 
                             /*
                              *                      to be done
@@ -143,6 +144,14 @@ class USSDController extends Controller
                              *
                              * *********************************************************
                              */
+                            if($new_payout->save()){
+                                // $this->payment_api($phoneNumber,str_replace(',', '',number_format($check->loan/36)),$transactionID);
+                                $this->payment_api($phoneNumber, $payment_fee, $transactionID);
+                                $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
+                            } else {
+                                $content  = "Ibyo musabye nibikunze mwogere mukanya \n Murakoze!.";
+                                $this->stop($content);
+                            }
                             $content  = "Mugiye kwishyura: <b>".$payment_fee." Rwf</b>! \n";
                             $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
                             $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe. \n";
@@ -163,13 +172,16 @@ class USSDController extends Controller
                             $new_payout->transactionID = $transactionID;
                             $new_payout->status = 0;
                             if($new_payout->save()){
-                                $this->payment_api($phoneNumber,str_replace(',', '',number_format($check->loan/36)),$transactionID);
+                                // $this->payment_api($phoneNumber,$check->loan/36,$transactionID);
                                 $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
                             } else {
                                 $content  = "Ibyo musabye nibikunze mwogere mukanya \n Murakoze!.";
                                 $this->stop($content);
                             }
-                            $content = 'this'.$new_payout;
+                            $content  = "Mugiye kwishyura: <b>".$payment_fee." Rwf</b>! \n";
+                            $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
+                            $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe. \n";
+                            $content .= "Murakoze!";
                             $this->proceed($content);
                         }
                     }
