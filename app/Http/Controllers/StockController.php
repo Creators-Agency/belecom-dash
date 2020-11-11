@@ -38,7 +38,13 @@ class StockController extends Controller
                                 ->get();
         $assigned = SolarPanel::where('status', 1)
                                 ->get();
-        $returned = SolarPanel::where('status', 3)
+        $returned = SolarPanel::where('status', 2)
+                                ->get();
+        $faulty = SolarPanel::where('status', 3)
+                                ->get();
+        $undermaintenance = SolarPanel::where('status', 4)
+                                ->get();
+        $Stolen = SolarPanel::where('status', 5)
                                 ->get();
         $branchs = AdministrativeLocation::where('status',1)->get();
         $data = [];
@@ -69,6 +75,9 @@ class StockController extends Controller
             'numberOfSolarAssigned' =>number_format(count($assigned)),
             'numberOfSolarUnAssigned' =>number_format(count($unassigned)),
             'numberOfSolarReturned' =>number_format(count($returned)),
+            'faulty' =>number_format(count($faulty)),
+            'undermaintenance' =>number_format(count($undermaintenance)),
+            'Stolen' =>number_format(count($Stolen)),
             'amount' => number_format($amount),
             'location_data' => $data
         ]);
@@ -425,10 +434,13 @@ class StockController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function editSolar($serialNumber)
     {
-        //
+        return $data = SolarPanel::where('solarPanelSerialNumber', $serialNumber)->first();
+        return view('stock.edit-product');
     }
+
+    
 
 
 

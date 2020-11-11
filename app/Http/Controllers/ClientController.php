@@ -61,7 +61,10 @@ class ClientController extends Controller
     
     public function actual()
     {
-        $get_actual = Beneficiary::where('isActive',3)->get();
+        $get_actual = DB::table('beneficiaries')
+                        ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
+                        ->where('beneficiaries.isActive',3)
+                        ->get();
         return view('client.actual',[
             'clients' => $get_actual
         ]);
@@ -69,9 +72,12 @@ class ClientController extends Controller
 
     public function perspective()
     {
-        $get_actual = Beneficiary::where('isActive',1)->get();
+        $new_client = DB::table('beneficiaries')
+                        ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
+                        ->where('beneficiaries.isActive',1)
+                        ->get();
         return view('client.perspective',[
-            'clients' => $get_actual
+            'clients' => $new_client
         ]);
     }
 
@@ -148,7 +154,7 @@ class ClientController extends Controller
             $client->employmentStatus = 0;
             $client->referredby = $request->referredby;
             $client->isActive = 1;
-            $client->doneBy = 1;
+            $client->doneBy =  Auth::User()->id;
             
 
             // if he/she heard about from someone
@@ -251,7 +257,7 @@ class ClientController extends Controller
         $account->productNumber = $serialNumber->solarPanelSerialNumber;
         $account->clientNames = $request->firstname;
         $account->loan = $request->price;
-        $account->doneBy = 1;
+        $account->doneBy =  Auth::User()->id;
 
         /*------- check if this number does not exist in account table*/
         $chec_account = Account::where('beneficiary', $request->clientIdentification)

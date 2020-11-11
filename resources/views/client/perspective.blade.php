@@ -33,8 +33,8 @@
                                         <td>{{ ($client->identification) }}</td>
                                         <td>{{ ($client->firstname) }}</td>
                                         <td>{{ ($client->lastname) }}</td>
-                                        <td>{{ ($client->gender) }}</td>
-                                        <td>{{ ($client->location) }}</td>
+                                        <td>{{ ($client->gender == 1 ? 'Male':'Female') }}</td>
+                                        <td>{{ ($client->locationName) }}</td>
                                         <td>{{ ($client->primaryPhone) }}</td>
                                         <td class="text-center">
                                             <a href="{{ URL::to('/client/'.$client->id.'/assign') }}"

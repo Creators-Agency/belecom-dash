@@ -65,13 +65,68 @@
                             </div>
                             <div class="col-5">
                                 <h1 class="font-light text-right mb-0" style="font-size: 12px !important;">
-                                    {{ ($numberOfSolarReturned) }}</h1>
+                                    {{ ($faulty) }}</h1>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-7">
+                                <!-- <i class="mdi mdi-currency-eur font-20 text-purple"></i> -->
+                                <p class="font-16 m-b-5" style="font-size: 12px !important;padding: 3px">
+                                    undermaintenance
+                                </p>
+                            </div>
+                            <div class="col-5">
+                                <h1 class="font-light text-right mb-0" style="font-size: 12px !important;">
+                                    {{ ($undermaintenance) }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-7">
+                                <!-- <i class="mdi mdi-currency-eur font-20 text-purple"></i> -->
+                                <p class="font-16 m-b-5" style="font-size: 12px !important;padding: 3px">
+                                    Stolen
+                                    Item
+                                </p>
+                            </div>
+                            <div class="col-5">
+                                <h1 class="font-light text-right mb-0" style="font-size: 12px !important;">
+                                    {{ ($Stolen) }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class=" col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-7">
+                                <!-- <i class="mdi mdi-image font-20 text-success"></i> -->
+                                <p class="font-16 m-b-5" style="font-size: 12px !important;padding: 3px">Faulty
+                                    item
+                                </p>
+                            </div>
+                            <div class="col-5">
+                                <h1 class="font-light text-right mb-0" style="font-size: 12px !important;">
+                                    {{ ($numberOfSolarAssigned) }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
                 <div class="card">
                     <div class="card-body">
                         <div class="row align-items-center">
