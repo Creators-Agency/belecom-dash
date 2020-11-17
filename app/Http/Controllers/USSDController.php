@@ -116,7 +116,7 @@ class USSDController extends Controller
                          */
 
                         $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[0]],NULL,['id','DESC']);
-                        if($check_payout->balance  <1){
+                        if(!empty($check_payout) && $check_payout->balance  <1){
                             $content  = $check_payout->balance." Nta deni mufite \n Murakoze!.";
                             $this->stop($content);
                         break;
@@ -135,11 +135,21 @@ class USSDController extends Controller
                             $new_payout->clientID = $check_payout->clientID;
                             $new_payout->clientPhone = $phoneNumber;
                             $new_payout->monthYear = $new;
-                            $new_payout->payment = $check_payout->payment;
+                            
                             $new_payout->transactionID = $transactionID;
                             $new_payout->status = 0;
-                            $new_payout->balance = $check_payout->balance - $payment_fee;
+                            
 
+                            // check if amount left in balance are payable or add them on last payment
+
+                            if((($check_payout->balance - $payment_fee) < $payment_fee) && ($check_payout->balance - $payment_fee)>0){
+                                $payment_fee = $payment_fee + ($check_payout->balance - $payment_fee);
+                                $new_payout->payment = $payment_fee;
+                                $new_payout->balance = 0;
+                            }else {
+                                $new_payout->payment = $check_payout->payment;
+                                $new_payout->balance = $check_payout->balance - $payment_fee;
+                            }
                             /*
                              *                      to be done
                              * =========================================================
@@ -153,7 +163,7 @@ class USSDController extends Controller
                              */
                             if($new_payout->save()){
                                 // $this->payment_api($phoneNumber,str_replace(',', '',number_format($check->loan/36)),$transactionID);
-                                $this->payment_api($phoneNumber, $payment_fee, $transactionID);
+                                // $this->payment_api($phoneNumber, $payment_fee, $transactionID);
                                 $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
                             } else {
                                 $content  = "Ibyo musabye nibikunze mwogere mukanya \n Murakoze!.";
@@ -179,7 +189,7 @@ class USSDController extends Controller
                             $new_payout->transactionID = $transactionID;
                             $new_payout->status = 0;
                             $new_payout->balance = $check->loan - ($check->loan/36);
-                            $p = $check->loan/36;
+                            $pay = round($check->loan/36, 0);
                             if($new_payout->save()){
                                 // $this->payment_api($phoneNumber,$check->loan/36,$transactionID);
                                 $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
@@ -187,7 +197,7 @@ class USSDController extends Controller
                                 $content  = "Ibyo musabye nibikunze mwogere mukanya \n Murakoze!.";
                                 $this->stop($content);
                             }
-                            $content  = "Mugiye kwishyura: <b>".$p." Rwf</b>! \n";
+                            $content  = "Mugiye kwishyura: <b>".$pay." Rwf</b>! \n";
                             $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
                             $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe. \n";
                             $content .= "Murakoze!";
