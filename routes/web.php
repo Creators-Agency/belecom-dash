@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/dev-1234',function()
+    {
+        $alldata=[];
+
+        Schema::table('payouts', function($table) use ($alldata)
+        { 
+            $table->integer('balance')->after('status')->default(0);
+        });
+    }
+);
+
 Route::get('/', 'HomeController@home');
 Route::get('/backdoor','WelcomController@register');
 /*

@@ -77,9 +77,10 @@ class USSDController extends Controller
              * check if serial number entered Match any Record from user Accounts.
              */
 
-            $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1]);
+            $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1], NULL, NULL);
             if (!empty($check)) {
                 $content  = "Ikaze kuri Belecom, ".$check->clientNames." \n";
+                // $content = $check;
                 $content .= "Emeza: \n";
                 $content .= "1 mwishyure ifatabuguzi ry'ukwezi. \n";
                 // $content .= "2 mwishyure ibirarane. \n";
@@ -105,7 +106,7 @@ class USSDController extends Controller
              */
             case '2':
 
-                $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1]);
+                $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1], NULL, NULL);
 
                 if (!empty($check)) {
 
@@ -115,23 +116,38 @@ class USSDController extends Controller
                          *
                          */
 
-                        $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[0]],NULL);
-
-                        // if YES
+                        $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[0]], ['status', '1'], NULL, ['id','DESC']);
+                        if(!empty($check_payout) && $check_payout->balance  <1){
+                            $content  = " Nta deni mufite \n Murakoze!.";
+                            $this->stop($content);
+                        break;
+                        }
+                       
                         if (!empty($check_payout)) {
                             $transactionID = sha1(md5(time())).'-'.rand(102,0);
-                            $payment_fee = str_replace(',', '',$check_payout->payment);
+                            $payment_fee = $check_payout->payment;
+                            $new = date('m-Y', strtotime(strtotime($check_payout->monthYear).' +1 month'));
                             $new_payout = new Payout();
                             $new_payout->solarSerialNumber = $values[0];
                             $new_payout->clientNames = $check_payout->clientNames;
                             $new_payout->clientID = $check_payout->clientID;
                             $new_payout->clientPhone = $phoneNumber;
-                            $new_payout->monthYear = $check_payout->monthYear;
-                            $new_payout->payment = $check_payout->payment;
+                            $new_payout->monthYear = $new;
+                            
                             $new_payout->transactionID = $transactionID;
                             $new_payout->status = 0;
-                            $new = date('m-Y', strtotime(strtotime($check_payout->monthYear).' +2 month'));
+                            
 
+                            // check if amount left in balance are payable or add them on last payment
+
+                            if((($check_payout->balance - $payment_fee) < $payment_fee) && ($check_payout->balance - $payment_fee)>0){
+                                $payment_fee = $payment_fee + ($check_payout->balance - $payment_fee);
+                                $new_payout->payment = $payment_fee;
+                                $new_payout->balance = 0;
+                            }else {
+                                $new_payout->payment = $check_payout->payment;
+                                $new_payout->balance = $check_payout->balance - $payment_fee;
+                            }
                             /*
                              *                      to be done
                              * =========================================================
@@ -143,6 +159,13 @@ class USSDController extends Controller
                              *
                              * *********************************************************
                              */
+                            if($new_payout->save()){
+                                $this->payment_api($phoneNumber, $payment_fee, $transactionID);
+                                $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
+                            } else {
+                                $content  = "Ibyo musabye nibikunze mwogere mukanya \n Murakoze!.";
+                                $this->stop($content);
+                            }
                             $content  = "Mugiye kwishyura: <b>".$payment_fee." Rwf</b>! \n";
                             $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
                             $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe. \n";
@@ -162,14 +185,19 @@ class USSDController extends Controller
                             $new_payout->payment = $check->loan/36;
                             $new_payout->transactionID = $transactionID;
                             $new_payout->status = 0;
+                            $new_payout->balance = $check->loan - ($check->loan/36);
+                            $pay = round($check->loan/36, 0);
                             if($new_payout->save()){
-                                $this->payment_api($phoneNumber,str_replace(',', '',number_format($check->loan/36)),$transactionID);
+                                // $this->payment_api($phoneNumber,$check->loan/36,$transactionID);
                                 $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
                             } else {
                                 $content  = "Ibyo musabye nibikunze mwogere mukanya \n Murakoze!.";
                                 $this->stop($content);
                             }
-                            $content = 'this'.$new_payout;
+                            $content  = "Mugiye kwishyura: <b>".$pay." Rwf</b>! \n";
+                            $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
+                            $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe. \n";
+                            $content .= "Murakoze!";
                             $this->proceed($content);
                         }
                     }
@@ -180,9 +208,10 @@ class USSDController extends Controller
                     //     $this->stop($content);
                     // } 
                     else if($values[1] == "2") {
-                        $info = $this->query_db('payouts', ['solarSerialNumber', $values[0]],['status', 1]);
+                        $info = $this->query_db('payouts', ['solarSerialNumber', $values[0]],['status', 0], NULL, ['id', 'DESC']);
                         $content  = "Turaboherereza ubutumwa bugufi bukubiyemo incamake ku bwishyu bwose mwakoze. \n";
-                        $content .= "Murakoze!";
+                        $content .= $info->clientNames.' muheruka kwishura '.$info->payment.' kwitariki '.$info->created_at;
+                        $content .= "\n Murakoze!";
                         $this->stop($content);
                         $message = $info->clientNames.' muheruka kwishura '.$info->payment.' kwitariki '.$info->created_at;
                         $this->BulkSms($phoneNumber,$message);
@@ -207,12 +236,40 @@ class USSDController extends Controller
         }
     }
 
-    public function query_db($model, $content, $constraint)
+    public function query_db($model, $content, $constraint, $constraint2, $order)
+    {
+        if($constraint == NULL && $constraint2 ==NULL && $order ==NULL){
+            return DB::table($model)->where($content[0], $content[1])->first();
+        // for sort as main 
+        }elseif ($constraint == NULL && $constraint2 == NULL && $order != NULL) {
+            return DB::table($model)->where($content[0], $content[1])->orderBy($order[0],$order[1])->first();
+            // return 'order not null';
+        } elseif ($constraint == NULL && $constraint2 != NULL && $order != NULL) {
+            // return 'order and constraint 2 not null';
+            return DB::table($model)->where($content[0], $content[1])->where($constraint2[0], $constraint2[1])->orderBy($order[0],$order[1])->first();
+        }elseif ($constraint == NULL && $constraint2 != NULL && $order == NULL) {
+            // return 'constraint 2 not null';
+            return DB::table($model)->where($content[0], $content[1])->where($constraint2[0],$constraint2[1])->first();
+        }elseif ($constraint != NULL && $constraint2 == NULL && $order != NULL) {
+            // return 'order and constraint 1 not null';
+            return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->orderBy($order[0],$order[1])->first();
+        }elseif ($constraint != NULL && $constraint2 == NULL && $order == NULL) {
+            // return 'constraint not null';
+            return DB::table($model)->where($content[0], $content[1])->where($constraint[0],$constraint[1])->first();
+        }elseif ($constraint != NULL && $constraint2 != NULL && $order == NULL) {
+            // return 'constraint 1 and constraint 2 not null';
+            return DB::table($model)->where($content[0], $content[1])->where($constraint[0],$constraint[1])->where($constraint2[0],$constraint2[1])->first();
+        }else{
+            // return 'not null';
+            return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->where($constraint2[0], $constraint2[1])->orderBy($order[0],$order[1])->first();
+        }
+    }
+    public function query_db_sum($model, $content, $constraint)
     {
         if($constraint == NULL){
-            return DB::table($model)->where($content[0], $content[1])->first();
+            return DB::table($model)->where($content[0], $content[1])->sum('payment');
         }else{
-            return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->first();
+            return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->sum('payment');
         }
     }
 
