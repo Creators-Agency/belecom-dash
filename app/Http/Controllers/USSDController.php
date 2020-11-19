@@ -116,19 +116,16 @@ class USSDController extends Controller
                          *
                          */
 
-                        $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[0]], NULL, NULL, ['id','DESC']);
+                        $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[0]], ['status', '1'], NULL, ['id','DESC']);
                         if(!empty($check_payout) && $check_payout->balance  <1){
-                            $content  = $check_payout->balance." Nta deni mufite \n Murakoze!.";
+                            $content  = " Nta deni mufite \n Murakoze!.";
                             $this->stop($content);
                         break;
                         }
-                        // $sum = $this->query_db_sum('payouts',['solarSerialNumber', $values[0]],['status', 1]);
-                        // $this->stop($sum);
-                        // if YES
+                       
                         if (!empty($check_payout)) {
                             $transactionID = sha1(md5(time())).'-'.rand(102,0);
                             $payment_fee = $check_payout->payment;
-                            // $payment_fee = str_replace(',',(',', '',$check_payout->payment);
                             $new = date('m-Y', strtotime(strtotime($check_payout->monthYear).' +1 month'));
                             $new_payout = new Payout();
                             $new_payout->solarSerialNumber = $values[0];
@@ -163,8 +160,7 @@ class USSDController extends Controller
                              * *********************************************************
                              */
                             if($new_payout->save()){
-                                // $this->payment_api($phoneNumber,str_replace(',', '',number_format($check->loan/36)),$transactionID);
-                                // $this->payment_api($phoneNumber, $payment_fee, $transactionID);
+                                $this->payment_api($phoneNumber, $payment_fee, $transactionID);
                                 $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
                             } else {
                                 $content  = "Ibyo musabye nibikunze mwogere mukanya \n Murakoze!.";
@@ -174,7 +170,7 @@ class USSDController extends Controller
                             $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
                             $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe. \n";
                             $content .= "Murakoze!";
-                            // $this->payment_api($phoneNumber, $payment_fee, $transactionID);
+                            $this->payment_api($phoneNumber, $payment_fee, $transactionID);
                             $this->stop($content);
                         } else {
                         // if NO insert  new Record!
@@ -212,9 +208,10 @@ class USSDController extends Controller
                     //     $this->stop($content);
                     // } 
                     else if($values[1] == "2") {
-                        $info = $this->query_db('payouts', ['solarSerialNumber', $values[0]],['status', 1], NULL, NULL);
+                        $info = $this->query_db('payouts', ['solarSerialNumber', $values[0]],['status', 0], NULL, ['id', 'DESC']);
                         $content  = "Turaboherereza ubutumwa bugufi bukubiyemo incamake ku bwishyu bwose mwakoze. \n";
-                        $content .= "Murakoze!";
+                        $content .= $info->clientNames.' muheruka kwishura '.$info->payment.' kwitariki '.$info->created_at;
+                        $content .= "\n Murakoze!";
                         $this->stop($content);
                         $message = $info->clientNames.' muheruka kwishura '.$info->payment.' kwitariki '.$info->created_at;
                         $this->BulkSms($phoneNumber,$message);
@@ -245,27 +242,26 @@ class USSDController extends Controller
             return DB::table($model)->where($content[0], $content[1])->first();
         // for sort as main 
         }elseif ($constraint == NULL && $constraint2 == NULL && $order != NULL) {
-            // return DB::table($model)->where($content[0], $content[1])->orderBy($order[0],$order[1])->first();
-            return 'order not null';
+            return DB::table($model)->where($content[0], $content[1])->orderBy($order[0],$order[1])->first();
+            // return 'order not null';
         } elseif ($constraint == NULL && $constraint2 != NULL && $order != NULL) {
-            return 'order and constraint 2 not null';
-            // return DB::table($model)->where($content[0], $content[1])->where($constraint2[0], $constraint2[1])->orderBy($order[0],$order[1])->first();
+            // return 'order and constraint 2 not null';
+            return DB::table($model)->where($content[0], $content[1])->where($constraint2[0], $constraint2[1])->orderBy($order[0],$order[1])->first();
         }elseif ($constraint == NULL && $constraint2 != NULL && $order == NULL) {
-            return 'constraint 2 not null';
-            // return DB::table($model)->where($content[0], $content[1])->where($constraint2[0],$constraint2[1])->first();
+            // return 'constraint 2 not null';
+            return DB::table($model)->where($content[0], $content[1])->where($constraint2[0],$constraint2[1])->first();
         }elseif ($constraint != NULL && $constraint2 == NULL && $order != NULL) {
-            return 'order and constraint 1 not null';
-            // return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->orderBy($order[0],$order[1])->first();
+            // return 'order and constraint 1 not null';
+            return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->orderBy($order[0],$order[1])->first();
         }elseif ($constraint != NULL && $constraint2 == NULL && $order == NULL) {
             // return 'constraint not null';
             return DB::table($model)->where($content[0], $content[1])->where($constraint[0],$constraint[1])->first();
         }elseif ($constraint != NULL && $constraint2 != NULL && $order == NULL) {
-            return 'constraint 1 and constraint 2 not null';
-            // return DB::table($model)->where($content[0], $content[1])->where($constraint[0],$constraint[1])->where($constraint2[0],$constraint2[1])->first();
+            // return 'constraint 1 and constraint 2 not null';
+            return DB::table($model)->where($content[0], $content[1])->where($constraint[0],$constraint[1])->where($constraint2[0],$constraint2[1])->first();
         }else{
-            return 'not null';
-
-            // return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->where($constraint2[0], $constraint2[1])->orderBy($order[0],$order[1])->first();
+            // return 'not null';
+            return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->where($constraint2[0], $constraint2[1])->orderBy($order[0],$order[1])->first();
         }
     }
     public function query_db_sum($model, $content, $constraint)
