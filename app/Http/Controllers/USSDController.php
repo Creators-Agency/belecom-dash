@@ -77,9 +77,10 @@ class USSDController extends Controller
              * check if serial number entered Match any Record from user Accounts.
              */
 
-            $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1],NULL);
+            $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1], NULL, NULL);
             if (!empty($check)) {
                 $content  = "Ikaze kuri Belecom, ".$check->clientNames." \n";
+                // $content = $check;
                 $content .= "Emeza: \n";
                 $content .= "1 mwishyure ifatabuguzi ry'ukwezi. \n";
                 // $content .= "2 mwishyure ibirarane. \n";
@@ -105,7 +106,7 @@ class USSDController extends Controller
              */
             case '2':
 
-                $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1],NULL);
+                $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1], NULL, NULL);
 
                 if (!empty($check)) {
 
@@ -115,7 +116,7 @@ class USSDController extends Controller
                          *
                          */
 
-                        $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[0]],NULL,['id','DESC']);
+                        $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[0]], NULL, NULL, ['id','DESC']);
                         if(!empty($check_payout) && $check_payout->balance  <1){
                             $content  = $check_payout->balance." Nta deni mufite \n Murakoze!.";
                             $this->stop($content);
@@ -211,7 +212,7 @@ class USSDController extends Controller
                     //     $this->stop($content);
                     // } 
                     else if($values[1] == "2") {
-                        $info = $this->query_db('payouts', ['solarSerialNumber', $values[0]],['status', 1],NULL);
+                        $info = $this->query_db('payouts', ['solarSerialNumber', $values[0]],['status', 1], NULL, NULL);
                         $content  = "Turaboherereza ubutumwa bugufi bukubiyemo incamake ku bwishyu bwose mwakoze. \n";
                         $content .= "Murakoze!";
                         $this->stop($content);
@@ -238,16 +239,33 @@ class USSDController extends Controller
         }
     }
 
-    public function query_db($model, $content, $constraint,$order)
+    public function query_db($model, $content, $constraint, $constraint2, $order)
     {
-        if($constraint == NULL && $order ==NULL){
+        if($constraint == NULL && $constraint2 ==NULL && $order ==NULL){
             return DB::table($model)->where($content[0], $content[1])->first();
-        }elseif ($order != NULL) {
-            return DB::table($model)->where($content[0], $content[1])->orderBy($order[0],$order[1])->first();
-        }elseif($constraint != NULL)
-            return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->first();
-        else{
-            return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->orderBy($order[0],$order[1])->first();
+        // for sort as main 
+        }elseif ($constraint == NULL && $constraint2 == NULL && $order != NULL) {
+            // return DB::table($model)->where($content[0], $content[1])->orderBy($order[0],$order[1])->first();
+            return 'order not null';
+        } elseif ($constraint == NULL && $constraint2 != NULL && $order != NULL) {
+            return 'order and constraint 2 not null';
+            // return DB::table($model)->where($content[0], $content[1])->where($constraint2[0], $constraint2[1])->orderBy($order[0],$order[1])->first();
+        }elseif ($constraint == NULL && $constraint2 != NULL && $order == NULL) {
+            return 'constraint 2 not null';
+            // return DB::table($model)->where($content[0], $content[1])->where($constraint2[0],$constraint2[1])->first();
+        }elseif ($constraint != NULL && $constraint2 == NULL && $order != NULL) {
+            return 'order and constraint 1 not null';
+            // return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->orderBy($order[0],$order[1])->first();
+        }elseif ($constraint != NULL && $constraint2 == NULL && $order == NULL) {
+            // return 'constraint not null';
+            return DB::table($model)->where($content[0], $content[1])->where($constraint[0],$constraint[1])->first();
+        }elseif ($constraint != NULL && $constraint2 != NULL && $order == NULL) {
+            return 'constraint 1 and constraint 2 not null';
+            // return DB::table($model)->where($content[0], $content[1])->where($constraint[0],$constraint[1])->where($constraint2[0],$constraint2[1])->first();
+        }else{
+            return 'not null';
+
+            // return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->where($constraint2[0], $constraint2[1])->orderBy($order[0],$order[1])->first();
         }
     }
     public function query_db_sum($model, $content, $constraint)
