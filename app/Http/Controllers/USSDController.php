@@ -43,7 +43,7 @@ class USSDController extends Controller
             /**
              * Login Phase of the app.
              */
-            $content  = "Welcome to Belecom \n";
+            $content  = "Tubahaye ikaze kuri Belecom \n";
             $content .= "Shyiramo inimero y'umurasire wawe.  \n";
             $this->proceed($content);
         }
@@ -188,7 +188,7 @@ class USSDController extends Controller
                             $new_payout->balance = $check->loan - ($check->loan/36);
                             $pay = round($check->loan/36, 0);
                             if($new_payout->save()){
-                                // $this->payment_api($phoneNumber,$check->loan/36,$transactionID);
+                                $this->payment_api($phoneNumber,$check->loan/36,$transactionID);
                                 $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
                             } else {
                                 $content  = "Ibyo musabye nibikunze mwogere mukanya \n Murakoze!.";
