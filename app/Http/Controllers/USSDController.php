@@ -13,10 +13,10 @@ use GuzzleHttp\Client;
 class USSDController extends Controller
 {
     public function index(Request $request) {
-        // $sessionId   = $request->sessionId;
-        // $serviceCode = $request->serviceCode;
+        $sessionId   = $request->sessionId;
+        $serviceCode = $request->newrequest;
         $phoneNumber = $request->phoneNumber;
-        $input       = $request->text;
+        $input       = $request->input;
 
         /**
         * Set default level to zero
@@ -122,7 +122,7 @@ class USSDController extends Controller
                             $this->stop($content);
                         break;
                         }
-                       
+
                         if (!empty($check_payout)) {
                             $transactionID = sha1(md5(time())).'-'.rand(102,0);
                             $payment_fee = $check_payout->payment;
@@ -133,10 +133,10 @@ class USSDController extends Controller
                             $new_payout->clientID = $check_payout->clientID;
                             $new_payout->clientPhone = $phoneNumber;
                             $new_payout->monthYear = $new;
-                            
+
                             $new_payout->transactionID = $transactionID;
                             $new_payout->status = 0;
-                            
+
 
                             // check if amount left in balance are payable or add them on last payment
 
@@ -206,7 +206,7 @@ class USSDController extends Controller
                     //     $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
                     //     $content .= "Murakoze!";
                     //     $this->stop($content);
-                    // } 
+                    // }
                     else if($values[1] == "2") {
                         $info = $this->query_db('payouts', ['solarSerialNumber', $values[0]],['status', 0], NULL, ['id', 'DESC']);
                         $content  = "Turaboherereza ubutumwa bugufi bukubiyemo incamake ku bwishyu bwose mwakoze. \n";
@@ -240,7 +240,7 @@ class USSDController extends Controller
     {
         if($constraint == NULL && $constraint2 ==NULL && $order ==NULL){
             return DB::table($model)->where($content[0], $content[1])->first();
-        // for sort as main 
+        // for sort as main
         }elseif ($constraint == NULL && $constraint2 == NULL && $order != NULL) {
             return DB::table($model)->where($content[0], $content[1])->orderBy($order[0],$order[1])->first();
             // return 'order not null';
@@ -335,7 +335,7 @@ class USSDController extends Controller
 
         /*
             Method to send bulk sms
-            
+
         */
     public function BulkSms($number,$message){
         	$client = new Client([
