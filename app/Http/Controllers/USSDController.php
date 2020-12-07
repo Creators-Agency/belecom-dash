@@ -13,9 +13,9 @@ use GuzzleHttp\Client;
 class USSDController extends Controller
 {
     public function index(Request $request) {
-        $sessionId   = $request->sessionId;
-        $serviceCode = $request->newrequest;
-        $phoneNumber = $request->phoneNumber;
+        $sessionId   = $request->sessionid;
+        $serviceCode = $request->newRequest;
+        $phoneNumber = $request->msisdn;
         $input       = $request->input;
 
         /**
