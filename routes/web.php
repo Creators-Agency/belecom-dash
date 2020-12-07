@@ -18,7 +18,7 @@ Route::get('/dev-1234',function()
         $alldata=[];
 
         Schema::table('payouts', function($table) use ($alldata)
-        { 
+        {
             $table->integer('balance')->after('status')->default(0);
         });
     }
@@ -29,7 +29,7 @@ Route::get('/backdoor','WelcomController@register');
 /*
  *                      	Stock
  * =========================================================
- *      				CRUD Operations 
+ *      				CRUD Operations
  * ---------------------------------------------------------
  *  Model: Stock, SolarPanel, ActivityLog, SolarPanelType,
  *	User, AdministrativeLocation
@@ -69,10 +69,10 @@ Route::prefix('stock')->group(function(){
 /*
  *                      	Client
  * =========================================================
- *      				CRUD Operations 
+ *      				CRUD Operations
  * ---------------------------------------------------------
- *  Model:Referee, Account, SolarPanel, ActivityLog, 
- *	Beneficiary, Payout, SolarPanelType, 
+ *  Model:Referee, Account, SolarPanel, ActivityLog,
+ *	Beneficiary, Payout, SolarPanelType,
  *	AdministrativeLocation
  * ---------------------------------------------------------
  *	Addtional info:
@@ -97,10 +97,10 @@ Route::prefix('client')->group(function(){
 /*
  *                      	Payment
  * =========================================================
- *      				CRUD Operations 
+ *      				CRUD Operations
  * ---------------------------------------------------------
- *  Model:Referee, Account, SolarPanel, ActivityLog, 
- *	Beneficiary, Payout, SolarPanelType, 
+ *  Model:Referee, Account, SolarPanel, ActivityLog,
+ *	Beneficiary, Payout, SolarPanelType,
  *	AdministrativeLocation
  * ---------------------------------------------------------
  *	Addtional info:
@@ -119,13 +119,13 @@ Route::prefix('/payment')->group(function(){
 
     Route::get('/list', 'PaymentController@checkPayment');
     // Route::post('/assign', 'PaymentController@assignClient')->name('assignClient');
- 
+
 });
 
 /*
  *                      	Staff
  * =========================================================
- *      				CRUD Operations 
+ *      				CRUD Operations
  * ---------------------------------------------------------
  *  Model: User, AdministrativeLocation
  * ---------------------------------------------------------
@@ -144,7 +144,7 @@ Route::prefix('/staff')->group(function(){
 /*
  *                      	Permission
  * =========================================================
- *      				CRUD Operations 
+ *      				CRUD Operations
  * ---------------------------------------------------------
  *  Model: Permission, UserPermission
  * ---------------------------------------------------------
@@ -166,19 +166,19 @@ Route::post('/backdoor','WelcomController@staffSave')->name('createBack');
 /*
  *                      	USSD
  * =========================================================
- *      				CRUD Operations 
+ *      				CRUD Operations
  * ---------------------------------------------------------
  *  Model: Payout, Account, Solarpanel, Beneficiary
  * ---------------------------------------------------------
  *	Addtional info:
  * *********************************************************
  */
-Route::post('/ussd','USSDController@index');
+Route::get('/ussd','USSDController@index');
 
 /*
 *                    Callback API For Payment
  * =========================================================
- *      				CRUD Operations 
+ *      				CRUD Operations
  * ---------------------------------------------------------
  *  Model: Payout
  * ---------------------------------------------------------
@@ -188,10 +188,10 @@ Route::post('/ussd','USSDController@index');
 
 Route::post('/ussd/callback', 'USSDController@paymentCallBack');
 // Route::post('/ussd/callBack', function (Request $request) {
-    
+
 //     $ = $request->input('name');
 //     $message = $request->input('message');
-    
+
 //     $output = "$name says: $message";
 
 //     return $output;
