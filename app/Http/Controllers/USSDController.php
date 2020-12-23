@@ -7,17 +7,34 @@ use Illuminate\Http\Request;
 use App\Models\Beneficiary;
 use App\Models\ActivityLog;
 use App\Models\Payout;
+use App\Models\Session;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
 
+
 class USSDController extends Controller
 {
-    public function index(Request $request) {
-        $sessionId   = $request->sessionid;
-        $serviceCode = $request->newRequest;
-        $phoneNumber = $request->msisdn;
-        $input       = $request->input;
+    public function welcome(Request $request){
+        $input          = $request->input;
+        $msisdn         = $request->msisdn;
+        $sessionId      = $request->sessionid;
+        $newRequest     = $request->newRequest;
 
+        if($newRequest == 1) {
+            // $session = new Payout();
+            // $session->msisdn = $msisdn;
+            // $session->sessionId = $sessionId;
+            // $session->input = $input;
+            // $session->newRequest = $newRequest;
+            // $session->save();
+
+            $this->index("652", $msisdn);
+        } else {
+            $this->index("652*10101010", $msisdn);
+        }
+    }
+
+    public function index($input, $msisdn) {
         /**
         * Set default level to zero
         */
@@ -37,15 +54,15 @@ class USSDController extends Controller
         /**
          * Fire up the app passing the level of application and content from input
          */
-        if($input_exploded[0] != "") {
-            $this->run_app($level, $input_exploded, $phoneNumber);
-        } else {
+        if($level <= 1) {
             /**
              * Login Phase of the app.
              */
-            $content  = "Tubahaye ikaze kuri Belecom \n";
+            $content  = "Ikaze kuri Belecom \n";
             $content .= "Shyiramo inimero y'umurasire wawe.  \n";
             $this->proceed($content);
+        } else {
+            $this->run_app($level, $input_exploded, $msisdn);
         }
     }
 
