@@ -21,16 +21,18 @@ class USSDController extends Controller
         $newRequest     = $request->newRequest;
 
         if($newRequest == 1) {
-            // $session = new Payout();
-            // $session->msisdn = $msisdn;
-            // $session->sessionId = $sessionId;
-            // $session->input = $input;
-            // $session->newRequest = $newRequest;
-            // $session->save();
+            $session = new Session();
+            $session->msisdn = $msisdn;
+            $session->sessionId = $sessionId;
+            $session->input = $input;
+            $session->newRequest = $newRequest;
+            $session->save();
 
             $this->index("652", $msisdn);
         } else {
-            $this->index("652*10101010", $msisdn);
+
+            return "S H I T";
+            // $this->index("652*10101010", $msisdn);
         }
     }
 
