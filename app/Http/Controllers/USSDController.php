@@ -24,15 +24,23 @@ class USSDController extends Controller
             $session = new Session();
             $session->msisdn = $msisdn;
             $session->sessionId = $sessionId;
-            $session->input = $input;
+            $session->input = "652";
             $session->newRequest = $newRequest;
             $session->save();
 
             $this->index("652", $msisdn);
         } else {
+            $session = Session::where("sessionId", $sessionId)->orderBy("created_at", "DESC")->first();
+            $code = $session->input."*".$input;
 
-            return "S H I T";
-            // $this->index("652*10101010", $msisdn);
+            $session = new Session();
+            $session->msisdn = $msisdn;
+            $session->sessionId = $sessionId;
+            $session->input = $code;
+            $session->newRequest = $newRequest;
+            $session->save();
+
+            $this->index($code, $msisdn);
         }
     }
 
