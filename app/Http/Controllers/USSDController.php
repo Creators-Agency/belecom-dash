@@ -30,17 +30,21 @@ class USSDController extends Controller
 
             $this->index("652", $msisdn);
         } else {
-            $session = Session::where("sessionId", $sessionId)->orderBy("created_at", "DESC")->first();
-            $code = $session->input."*".$input;
+            if(isset($sessionId)){
+                $session = Session::where("sessionId", $sessionId)->orderBy("created_at", "DESC")->first();
+                $code = $session->input."*".$input;
 
-            $session = new Session();
-            $session->msisdn = $msisdn;
-            $session->sessionId = $sessionId;
-            $session->input = $code;
-            $session->newRequest = $newRequest;
-            $session->save();
+                $session = new Session();
+                $session->msisdn = $msisdn;
+                $session->sessionId = $sessionId;
+                $session->input = $code;
+                $session->newRequest = $newRequest;
+                $session->save();
 
-            $this->index($code, $msisdn);
+                $this->index($code, $msisdn);
+            } else {
+                $this->stop("Something wrong happened!");
+            }
         }
     }
 
