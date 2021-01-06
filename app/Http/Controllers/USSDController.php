@@ -7,17 +7,67 @@ use Illuminate\Http\Request;
 use App\Models\Beneficiary;
 use App\Models\ActivityLog;
 use App\Models\Payout;
+use App\Models\Session;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
 
+
 class USSDController extends Controller
 {
-    public function index(Request $request) {
-        $sessionId   = $request->sessionid;
-        $serviceCode = $request->newRequest;
-        $phoneNumber = $request->msisdn;
-        $input       = $request->input;
+    public function welcome(Request $request){
+        $input          = $request->input;
+        $msisdn         = $request->msisdn;
+        $sessionId      = $request->sessionid;
+        $newRequest     = $request->newRequest;
 
+        // if($newRequest == 1) {
+        //     $session = new Session();
+        //     $session->msisdn = $msisdn;
+        //     $session->sessionId = $sessionId;
+        //     $session->input = "652";
+        //     $session->newRequest = $newRequest;
+        //     $session->save();
+
+        //     $this->index("652", $msisdn);
+        // } else {
+        //     if(isset($sessionId)){
+        //         $session = Session::where("sessionId", $sessionId)->orderBy("created_at", "DESC")->first();
+        //         $code = $session->input."*".$input;
+
+        //         $session = new Session();
+        //         $session->msisdn = $msisdn;
+        //         $session->sessionId = $sessionId;
+        //         $session->input = $code;
+        //         $session->newRequest = $newRequest;
+        //         $session->save();
+
+        //         $this->index($code, $msisdn);
+        //     } else {
+        //         $data = [
+        //             'msisdn' => '0781547202',
+        //             'sessionId' => '1',
+        //             'statusCode' => '200',
+        //         ];
+        //         $this->stop($data);
+        //     }
+        // }
+        $data = [
+            'msisdn' => '0781547202',
+            'applicationResponse' => 'Welcome to Belecom.',
+            'appDrivenMenuCode' => 'menuCode',
+            'freeflow' => [
+                'freeflowState' => 'FC',
+                'freeflowCharging' => 'N',
+                'freeflowChargingAmount' => '0',
+                'parameters' => [
+                    'param' => '1'
+                ]
+            ]
+        ];
+        $this->stop($data);
+    }
+
+    public function index($input, $msisdn) {
         /**
         * Set default level to zero
         */
@@ -37,15 +87,15 @@ class USSDController extends Controller
         /**
          * Fire up the app passing the level of application and content from input
          */
-        if($input_exploded[0] != "") {
-            $this->run_app($level, $input_exploded, $phoneNumber);
-        } else {
+        if($level <= 1) {
             /**
              * Login Phase of the app.
              */
-            $content  = "Tubahaye ikaze kuri Belecom \n";
+            $content  = "Ikaze kuri Belecom \n";
             $content .= "Shyiramo inimero y'umurasire wawe.  \n";
             $this->proceed($content);
+        } else {
+            $this->run_app($level, $input_exploded, $msisdn);
         }
     }
 
@@ -54,7 +104,7 @@ class USSDController extends Controller
      * This informs the USSD API gateway that the USSD session is still in session and should still continue.
      */
     public function proceed($value){
-        echo "CON $value";
+        echo response()->xml($value);
     }
 
     /**
@@ -62,7 +112,8 @@ class USSDController extends Controller
      * This informs the USSD API gateway that the USSD session is terminated and should stop the app.
      */
     public function stop($value) {
-        echo "END $value";
+        echo response()->xml($value);
+        // , $status = 200, $headers = ["Content-Type" => "application/xml"], $xmlRoot = "request", $encoding = null)
     }
 
     public function run_app($level, $values, $phoneNumber) {
