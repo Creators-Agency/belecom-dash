@@ -20,37 +20,43 @@ class USSDController extends Controller
         $sessionId      = $request->sessionid;
         $newRequest     = $request->newRequest;
 
-        if($newRequest == 1) {
-            $session = new Session();
-            $session->msisdn = $msisdn;
-            $session->sessionId = $sessionId;
-            $session->input = "652";
-            $session->newRequest = $newRequest;
-            $session->save();
+        // if($newRequest == 1) {
+        //     $session = new Session();
+        //     $session->msisdn = $msisdn;
+        //     $session->sessionId = $sessionId;
+        //     $session->input = "652";
+        //     $session->newRequest = $newRequest;
+        //     $session->save();
 
-            $this->index("652", $msisdn);
-        } else {
-            if(isset($sessionId)){
-                $session = Session::where("sessionId", $sessionId)->orderBy("created_at", "DESC")->first();
-                $code = $session->input."*".$input;
+        //     $this->index("652", $msisdn);
+        // } else {
+        //     if(isset($sessionId)){
+        //         $session = Session::where("sessionId", $sessionId)->orderBy("created_at", "DESC")->first();
+        //         $code = $session->input."*".$input;
 
-                $session = new Session();
-                $session->msisdn = $msisdn;
-                $session->sessionId = $sessionId;
-                $session->input = $code;
-                $session->newRequest = $newRequest;
-                $session->save();
+        //         $session = new Session();
+        //         $session->msisdn = $msisdn;
+        //         $session->sessionId = $sessionId;
+        //         $session->input = $code;
+        //         $session->newRequest = $newRequest;
+        //         $session->save();
 
-                $this->index($code, $msisdn);
-            } else {
-                $data = [
-                    'msisdn' => '0781547202',
-                    'sessionId' => '1',
-                    'statusCode' => '200',
-                ];
-                $this->stop($data);
-            }
-        }
+        //         $this->index($code, $msisdn);
+        //     } else {
+        //         $data = [
+        //             'msisdn' => '0781547202',
+        //             'sessionId' => '1',
+        //             'statusCode' => '200',
+        //         ];
+        //         $this->stop($data);
+        //     }
+        // }
+        $data = [
+            'msisdn' => '0781547202',
+            'sessionId' => '1',
+            'statusCode' => '200',
+        ];
+        $this->stop($data);
     }
 
     public function index($input, $msisdn) {
