@@ -43,7 +43,12 @@ class USSDController extends Controller
 
                 $this->index($code, $msisdn);
             } else {
-                $this->stop("Something wrong happened!");
+                $data = [
+                    'msisdn' => '0781547202',
+                    'sessionId' => '1',
+                    'statusCode' => '200',
+                ];
+                $this->stop($data);
             }
         }
     }
@@ -85,7 +90,7 @@ class USSDController extends Controller
      * This informs the USSD API gateway that the USSD session is still in session and should still continue.
      */
     public function proceed($value){
-        echo "CON $value";
+        echo response()->xml($value);
     }
 
     /**
@@ -93,7 +98,7 @@ class USSDController extends Controller
      * This informs the USSD API gateway that the USSD session is terminated and should stop the app.
      */
     public function stop($value) {
-        echo "END $value";
+        echo response()->xml($value, $status = 200, $headers = ["Content-Type" => "application/xml"], $xmlRoot = "request", $encoding = null);
     }
 
     public function run_app($level, $values, $phoneNumber) {
