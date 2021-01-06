@@ -53,8 +53,16 @@ class USSDController extends Controller
         // }
         $data = [
             'msisdn' => '0781547202',
-            'sessionId' => '1',
-            'statusCode' => '200',
+            'applicationResponse' => 'Welcome to Belecom.',
+            'appDrivenMenuCode' => 'menuCode',
+            'freeflow' => [
+                'freeflowState' => 'FC',
+                'freeflowCharging' => 'N',
+                'freeflowChargingAmount' => '0',
+                'parameters' => [
+                    'param' => '1'
+                ]
+            ]
         ];
         $this->stop($data);
     }
@@ -104,7 +112,8 @@ class USSDController extends Controller
      * This informs the USSD API gateway that the USSD session is terminated and should stop the app.
      */
     public function stop($value) {
-        echo response()->xml($value, $status = 200, $headers = ["Content-Type" => "application/xml"], $xmlRoot = "request", $encoding = null);
+        echo response()->xml($value);
+        // , $status = 200, $headers = ["Content-Type" => "application/xml"], $xmlRoot = "request", $encoding = null)
     }
 
     public function run_app($level, $values, $phoneNumber) {
