@@ -50,7 +50,7 @@ class USSDController extends Controller
         //         $this->stop($data);
         //     }
         // }
-        $data = "Welcome to Belecom. \nInput: ".$input."\nNumber: ".$msisdn."\nSession: ".$sessionId;
+        $data = "Welcome to Belecom. \nRequest: ".$request->fullUrl();
         $this->stop($data);
     }
 
