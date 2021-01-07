@@ -43,7 +43,7 @@ class USSDController extends Controller {
             $this->proceed($data, $sessionId);
         } else {
             $data = "Goodbye!";
-            $this->proceed($data, $sessionId);
+            $this->stop($data, $sessionId);
         }
 
         // if($input == "652") {
