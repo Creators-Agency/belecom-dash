@@ -99,7 +99,7 @@ class USSDController extends Controller
      * This informs the USSD API gateway that the USSD session is terminated and should stop the app.
      */
     public function stop($value) {
-        echo $value;
+        echo "CON $value";
     }
 
     public function run_app($level, $values, $phoneNumber) {
