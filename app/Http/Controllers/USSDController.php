@@ -78,8 +78,8 @@ class USSDController extends Controller {
             /**
              * Login Phase of the app.
              */
-            $content  = "Ikaze kuri Belecom \n";
-            $content .= "Shyiramo inimero y'umurasire wawe.  \n";
+            $content  = "Ikaze kuri Belecom.\n";
+            $content .= "Shyiramo inimero y'umurasire wawe.\n";
             $this->proceed($content, $sessionId);
         } else {
             $this->run_app($level, $input_exploded, $msisdn, $sessionId);
@@ -92,51 +92,48 @@ class USSDController extends Controller {
              * Menu Phase of the app.
              */
             case '1':
-            /**
-             * check if serial number entered Match any Record from user Accounts.
-             */
-            $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1], NULL, NULL);
-            if (!empty($check)) {
-                $content  = "Ikaze kuri Belecom, ".$check->clientNames." \n";
-                // $content = $check;
-                $content .= "Emeza: \n";
-                $content .= "1 mwishyure ifatabuguzi ry'ukwezi. \n";
-                // $content .= "2 mwishyure ibirarane. \n";
-                $content .= "2 Kubona ubutumwa bw'ibyakozwe. \n";
-                $this->proceed($content, $sessionId);
-            } else {
                 /**
-                 * ending session because this serial number doesn't exist
-                 * or it hasn't assigned yet to anyone.
-                **/
-                $content  = "Nimero mwashyizemo ntiyandikishije! \n";
-                $content .= "Gana ibiro bikwegereye bya Belecom bagufashe. \n";
-                $content .= "Murakoze!";
-                $this->stop($content, $sessionId);
-            }
-
-            break;
+                 * check if serial number entered Match any Record from user Accounts.
+                 */
+                $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1], NULL, NULL);
+                if (!empty($check)) {
+                    $content  = "Ikaze kuri Belecom, ".$check->clientNames."\n";
+                    // $content = $check;
+                    $content .= "Emeza:\n";
+                    $content .= "1: Kwishyura ifatabuguzi ry'ukwezi.\n";
+                    // $content .= "2 mwishyure ibirarane. \n";
+                    $content .= "2: Kubona ubutumwa bw'ibyakozwe.\n";
+                    $this->proceed($content, $sessionId);
+                } else {
+                    /**
+                     * Ending session because this serial number doesn't exist
+                     * or it hasn't assigned yet to anyone.
+                    **/
+                    $content  = "Nimero mushyizemo ntibaruye.\n";
+                    $content .= "Gana ibiro bikwegereye bya Belecom bagufashe.\n";
+                    $content .= "Murakoze!";
+                    $this->stop($content, $sessionId);
+                }
+                break;
 
             /**
              * Payment Phase of the app
              */
             case '2':
-
+                /**
+                 * check if serial number entered Match any Record from user Accounts.
+                 */
                 $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1], NULL, NULL);
-
                 if (!empty($check)) {
-
                     if($values[1] == "1") {
                         /**
                          * Check if entered Serial number exist in payout table.
-                         *
                          */
-
                         $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[0]], ['status', '1'], NULL, ['id','DESC']);
-                        if(!empty($check_payout) && $check_payout->balance  <1) {
-                            $content  = " Nta deni mufite \n Murakoze!.";
+                        if(!empty($check_payout) && $check_payout->balance  < 1) {
+                            $content  = "Nta deni mufite\n";
+                            $content .= "Murakoze!";
                             $this->stop($content, $sessionId);
-                        break;
                         }
 
                         if (!empty($check_payout)) {
@@ -154,43 +151,44 @@ class USSDController extends Controller {
                             $new_payout->status = 0;
 
 
-                            // check if amount left in balance are payable or add them on last payment
-
+                            /**
+                             * Check if amount left in balance are payable or add them on last payment.
+                             */
                             if((($check_payout->balance - $payment_fee) < $payment_fee) && ($check_payout->balance - $payment_fee)>0) {
                                 $payment_fee = $payment_fee + ($check_payout->balance - $payment_fee);
                                 $new_payout->payment = $payment_fee;
                                 $new_payout->balance = 0;
-                            }else {
+                            } else {
                                 $new_payout->payment = $check_payout->payment;
                                 $new_payout->balance = $check_payout->balance - $payment_fee;
                             }
-                            /*
-                             *                      to be done
+                            /**
+                             * TODO:
                              * =========================================================
-                             *      insert a new record with existing month + 1
-                             * ---------------------------------------------------------
-                             *  solarSerialNumber, clientNames, clientID
-                             *  clientPhone, monthYear, payment, transactionID, status
-                             *
-                             *
-                             * *********************************************************
+                             * Insert a new record with existing month + 1
+                             * solarSerialNumber, clientNames, clientID
+                             * clientPhone, monthYear, payment, transactionID, status
+                             * =========================================================
                              */
                             if($new_payout->save()) {
                                 $this->payment_api($phoneNumber, $payment_fee, $transactionID);
                                 $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
                             } else {
-                                $content  = "Ibyo musabye nibikunze mwogere mukanya \n Murakoze!.";
+                                $content  = "Ibyo musabye ntibikunze.\n";
+                                $content .= "Mwihangane mwogere mukanya.\n";
+                                $content .= "Murakoze!";
                                 $this->stop($content, $sessionId);
                             }
-                            $content  = "Mugiye kwishyura: <b>".$payment_fee." Rwf</b>! \n";
-                            $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
-                            $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe. \n";
+                            $content  = "Mugiye kwishyura: ".$payment_fee." Rwf.\n";
+                            $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo.\n";
+                            $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe.\n";
                             $content .= "Murakoze!";
                             $this->payment_api($phoneNumber, $payment_fee, $transactionID);
                             $this->stop($content, $sessionId);
                         } else {
-                        // if NO insert  new Record!
-
+                            /**
+                             * Insert New Record if we can't find any payment.
+                             */
                             $transactionID = sha1(md5(time())).'-'.rand(102,0);
                             $new_payout = new Payout();
                             $new_payout->solarSerialNumber = $check->productNumber;
@@ -207,46 +205,49 @@ class USSDController extends Controller {
                                 $this->payment_api($phoneNumber,$check->loan/36,$transactionID);
                                 $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
                             } else {
-                                $content  = "Ibyo musabye nibikunze mwogere mukanya \n Murakoze!.";
+                                $content  = "Ibyo musabye ntibikunze.\n";
+                                $content .= "Mwihangane mwogere mukanya.\n";
+                                $content .= "Murakoze!";
                                 $this->stop($content, $sessionId);
                             }
-                            $content  = "Mugiye kwishyura: <b>".$pay." Rwf</b>! \n";
-                            $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
-                            $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe. \n";
+                            $content  = "Mugiye kwishyura: ".$pay." Rwf.\n";
+                            $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo.\n";
+                            $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe.\n";
                             $content .= "Murakoze!";
-                            $this->proceed($content, $sessionId);
+                            $this->stop($content, $sessionId);
                         }
-                    }
-                    //  else if($values[1] == "2") {
-                    //     $content  = "Mufite ikirarane cya: <b>".number_format(100)."Rwf.</b>! \n";
-                    //     $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
-                    //     $content .= "Murakoze!";
-                    //     $this->stop($content, $sessionId);
-                    // }
-                    else if($values[1] == "2") {
+                    } else if($values[1] == "2") {
                         $info = $this->query_db('payouts', ['solarSerialNumber', $values[0]],['status', 0], NULL, ['id', 'DESC']);
-                        $content  = "Turaboherereza ubutumwa bugufi bukubiyemo incamake ku bwishyu bwose mwakoze. \n";
-                        $content .= $info->clientNames.' muheruka kwishura '.$info->payment.' kwitariki '.$info->created_at;
-                        $content .= "\n Murakoze!";
-                        $this->stop($content, $sessionId);
+
                         $message = $info->clientNames.' muheruka kwishura '.$info->payment.' kwitariki '.$info->created_at;
                         $this->BulkSms($phoneNumber,$message);
+
+                        $content  = "Turaboherereza ubutumwa bugufi bukubiyemo incamake ku bwishyu bwose mwakoze.\n";
+                        $content .= "Murakoze!";
+                        $this->stop($content, $sessionId);
                     } else {
-                        $content  = "Mwahisemo nabi! \n";
+                        $content  = "Mwahisemo nabi!\n";
                         $content .= "Mwongere mugerageze nanone.";
                         $this->stop($content, $sessionId);
                     }
-                 } else {
-                    $content  = "inimero mwashizemo nago ibaho! \n Gana ibiro bikwegereye bya belecom bagufashe \n Murakoze!.";
+                } else {
+                    /**
+                     * Ending session because this serial number doesn't exist
+                     * or it hasn't assigned yet to anyone.
+                    **/
+                    $content  = "Nimero mushyizemo ntibaruye.\n";
+                    $content .= "Gana ibiro bikwegereye bya Belecom bagufashe.\n";
+                    $content .= "Murakoze!";
                     $this->stop($content, $sessionId);
-                 }
-            break;
+                }
+                break;
 
             /**
              * Default Phase of the app
              */
             default:
-                $content = "Mwahisemo nabi! \n Mwongere mugerageze nanone.";
+                $content  = "SHIT Mwahisemo nabi!\n";
+                $content .= "Mwongere mugerageze nanone.";
                 $this->stop($content, $sessionId);
                 break;
         }
