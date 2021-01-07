@@ -16,7 +16,7 @@ class USSDController extends Controller
 {
     public function welcome(Request $request){
         $input          = $request->input;
-        $msisdn         = $request->MSISDN;
+        $msisdn         = $request->MSC;
         $sessionId      = $request->sessionId;
 
         // if($newRequest == 1) {
