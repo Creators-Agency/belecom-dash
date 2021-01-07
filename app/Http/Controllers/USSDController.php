@@ -51,9 +51,8 @@ class USSDController extends Controller
         //         $this->stop($data);
         //     }
         // }
-        $data = "Welcome to Belecom.";
-        // $this->stop($data);
-        return $data;
+        $data = "Welcome to Belecom.".$input;
+        $this->stop($data);
     }
 
     public function index($input, $msisdn) {
@@ -93,7 +92,7 @@ class USSDController extends Controller
      * This informs the USSD API gateway that the USSD session is still in session and should still continue.
      */
     public function proceed($value){
-        echo response()->xml($value);
+        echo $value;
     }
 
     /**
@@ -101,8 +100,7 @@ class USSDController extends Controller
      * This informs the USSD API gateway that the USSD session is terminated and should stop the app.
      */
     public function stop($value) {
-        echo response()->json($value);
-        // , $status = 200, $headers = ["Content-Type" => "application/xml"], $xmlRoot = "request", $encoding = null)
+        echo $value;
     }
 
     public function run_app($level, $values, $phoneNumber) {
