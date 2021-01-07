@@ -51,7 +51,7 @@ class USSDController extends Controller
         //     }
         // }
         $data = "Welcome to Belecom. \nInput: ".$input."\nNumber: ".$msisdn."\nSession: ".$sessionId;
-        $this->stop($data);
+        $this->stop($data, $sessionId);
     }
 
     public function index($input, $msisdn) {
@@ -98,8 +98,10 @@ class USSDController extends Controller
      * stop() is used to append END on every USSD response message.
      * This informs the USSD API gateway that the USSD session is terminated and should stop the app.
      */
-    public function stop($value) {
-        echo "CON $value";
+    public function stop($value, $sessionId) {
+        header('Freeflow: FC');
+        header('cpRefId: '.$sessionId);
+        echo $value;
     }
 
     public function run_app($level, $values, $phoneNumber) {
