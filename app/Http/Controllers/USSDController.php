@@ -12,14 +12,41 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
 
 
-class USSDController extends Controller
-{
-    public function welcome(Request $request){
+class USSDController extends Controller {
+    /**
+     * proceed() is used to append CON on every USSD response message.
+     * This informs the USSD API gateway that the USSD session is still in session and should still continue.
+     */
+    public function proceed($value, $sessionId) {
+        header('Freeflow: FC');
+        header('cpRefId: '.$sessionId);
+        echo $value;
+    }
+
+    /**
+     * stop() is used to append END on every USSD response message.
+     * This informs the USSD API gateway that the USSD session is terminated and should stop the app.
+     */
+    public function stop($value, $sessionId) {
+        header('Freeflow: FB');
+        header('cpRefId: '.$sessionId);
+        echo $value;
+    }
+
+    public function welcome(Request $request) {
         $input          = $request->get('input');
         $msisdn         = $request->get('MSISDN');
         $sessionId      = $request->get('sessionId');
 
-        // if($newRequest == 1) {
+        if($input == "652") {
+            $data = "Welcome to Belecom.\nNumber: ".$msisdn;
+            $this->proceed($data, $sessionId);
+        } else {
+            $data = "Goodbye!";
+            $this->proceed($data, $sessionId);
+        }
+
+        // if($input == "652") {
         //     $session = new Session();
         //     $session->msisdn = $msisdn;
         //     $session->sessionId = $sessionId;
@@ -27,9 +54,9 @@ class USSDController extends Controller
         //     $session->newRequest = $newRequest;
         //     $session->save();
 
-        //     $this->index("652", $msisdn);
+        //     $this->index($input, $msisdn);
         // } else {
-        //     if(isset($sessionId)){
+        //     if(isset($sessionId)) {
         //         $session = Session::where("sessionId", $sessionId)->orderBy("created_at", "DESC")->first();
         //         $code = $session->input."*".$input;
 
@@ -50,8 +77,6 @@ class USSDController extends Controller
         //         $this->stop($data);
         //     }
         // }
-        $data = "Welcome to Belecom. \nInput: ".$input."\nNumber: ".$msisdn."\nSession: ".$sessionId;
-        $this->stop($data, $sessionId);
     }
 
     public function index($input, $msisdn) {
@@ -80,34 +105,14 @@ class USSDController extends Controller
              */
             $content  = "Ikaze kuri Belecom \n";
             $content .= "Shyiramo inimero y'umurasire wawe.  \n";
-            $this->proceed($content);
+            $this->proceed($content, $sessionId);
         } else {
-            $this->run_app($level, $input_exploded, $msisdn);
+            $this->run_app($level, $input_exploded, $msisdn, $sessionId);
         }
     }
 
-    /**
-     * proceed() is used to append CON on every USSD response message.
-     * This informs the USSD API gateway that the USSD session is still in session and should still continue.
-     */
-    public function proceed($value){
-        echo $value;
-    }
-
-    /**
-     * stop() is used to append END on every USSD response message.
-     * This informs the USSD API gateway that the USSD session is terminated and should stop the app.
-     */
-    public function stop($value, $sessionId) {
-        header('Freeflow: FC');
-        header('cpRefId: '.$sessionId);
-        echo $value;
-    }
-
-    public function run_app($level, $values, $phoneNumber) {
-
+    public function run_app($level, $values, $phoneNumber, $sessionId) {
         switch ($level) {
-
             /**
              * Menu Phase of the app.
              */
@@ -115,7 +120,6 @@ class USSDController extends Controller
             /**
              * check if serial number entered Match any Record from user Accounts.
              */
-
             $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1], NULL, NULL);
             if (!empty($check)) {
                 $content  = "Ikaze kuri Belecom, ".$check->clientNames." \n";
@@ -124,18 +128,16 @@ class USSDController extends Controller
                 $content .= "1 mwishyure ifatabuguzi ry'ukwezi. \n";
                 // $content .= "2 mwishyure ibirarane. \n";
                 $content .= "2 Kubona ubutumwa bw'ibyakozwe. \n";
-                $this->proceed($content);
+                $this->proceed($content, $sessionId);
             } else {
-
                 /**
                  * ending session because this serial number doesn't exist
                  * or it hasn't assigned yet to anyone.
                 **/
-
                 $content  = "Nimero mwashyizemo ntiyandikishije! \n";
                 $content .= "Gana ibiro bikwegereye bya Belecom bagufashe. \n";
                 $content .= "Murakoze!";
-                $this->stop($content);
+                $this->stop($content, $sessionId);
             }
 
             break;
@@ -156,9 +158,9 @@ class USSDController extends Controller
                          */
 
                         $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[0]], ['status', '1'], NULL, ['id','DESC']);
-                        if(!empty($check_payout) && $check_payout->balance  <1){
+                        if(!empty($check_payout) && $check_payout->balance  <1) {
                             $content  = " Nta deni mufite \n Murakoze!.";
-                            $this->stop($content);
+                            $this->stop($content, $sessionId);
                         break;
                         }
 
@@ -179,7 +181,7 @@ class USSDController extends Controller
 
                             // check if amount left in balance are payable or add them on last payment
 
-                            if((($check_payout->balance - $payment_fee) < $payment_fee) && ($check_payout->balance - $payment_fee)>0){
+                            if((($check_payout->balance - $payment_fee) < $payment_fee) && ($check_payout->balance - $payment_fee)>0) {
                                 $payment_fee = $payment_fee + ($check_payout->balance - $payment_fee);
                                 $new_payout->payment = $payment_fee;
                                 $new_payout->balance = 0;
@@ -198,19 +200,19 @@ class USSDController extends Controller
                              *
                              * *********************************************************
                              */
-                            if($new_payout->save()){
+                            if($new_payout->save()) {
                                 $this->payment_api($phoneNumber, $payment_fee, $transactionID);
                                 $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
                             } else {
                                 $content  = "Ibyo musabye nibikunze mwogere mukanya \n Murakoze!.";
-                                $this->stop($content);
+                                $this->stop($content, $sessionId);
                             }
                             $content  = "Mugiye kwishyura: <b>".$payment_fee." Rwf</b>! \n";
                             $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
                             $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe. \n";
                             $content .= "Murakoze!";
                             $this->payment_api($phoneNumber, $payment_fee, $transactionID);
-                            $this->stop($content);
+                            $this->stop($content, $sessionId);
                         } else {
                         // if NO insert  new Record!
 
@@ -226,42 +228,42 @@ class USSDController extends Controller
                             $new_payout->status = 0;
                             $new_payout->balance = $check->loan - ($check->loan/36);
                             $pay = round($check->loan/36, 0);
-                            if($new_payout->save()){
+                            if($new_payout->save()) {
                                 $this->payment_api($phoneNumber,$check->loan/36,$transactionID);
                                 $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
                             } else {
                                 $content  = "Ibyo musabye nibikunze mwogere mukanya \n Murakoze!.";
-                                $this->stop($content);
+                                $this->stop($content, $sessionId);
                             }
                             $content  = "Mugiye kwishyura: <b>".$pay." Rwf</b>! \n";
                             $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
                             $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe. \n";
                             $content .= "Murakoze!";
-                            $this->proceed($content);
+                            $this->proceed($content, $sessionId);
                         }
                     }
                     //  else if($values[1] == "2") {
                     //     $content  = "Mufite ikirarane cya: <b>".number_format(100)."Rwf.</b>! \n";
                     //     $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo. \n";
                     //     $content .= "Murakoze!";
-                    //     $this->stop($content);
+                    //     $this->stop($content, $sessionId);
                     // }
                     else if($values[1] == "2") {
                         $info = $this->query_db('payouts', ['solarSerialNumber', $values[0]],['status', 0], NULL, ['id', 'DESC']);
                         $content  = "Turaboherereza ubutumwa bugufi bukubiyemo incamake ku bwishyu bwose mwakoze. \n";
                         $content .= $info->clientNames.' muheruka kwishura '.$info->payment.' kwitariki '.$info->created_at;
                         $content .= "\n Murakoze!";
-                        $this->stop($content);
+                        $this->stop($content, $sessionId);
                         $message = $info->clientNames.' muheruka kwishura '.$info->payment.' kwitariki '.$info->created_at;
                         $this->BulkSms($phoneNumber,$message);
                     } else {
                         $content  = "Mwahisemo nabi! \n";
                         $content .= "Mwongere mugerageze nanone.";
-                        $this->stop($content);
+                        $this->stop($content, $sessionId);
                     }
                  } else {
                     $content  = "inimero mwashizemo nago ibaho! \n Gana ibiro bikwegereye bya belecom bagufashe \n Murakoze!.";
-                    $this->stop($content);
+                    $this->stop($content, $sessionId);
                  }
             break;
 
@@ -270,50 +272,48 @@ class USSDController extends Controller
              */
             default:
                 $content = "Mwahisemo nabi! \n Mwongere mugerageze nanone.";
-                $this->stop($content);
+                $this->stop($content, $sessionId);
                 break;
         }
     }
 
-    public function query_db($model, $content, $constraint, $constraint2, $order)
-    {
-        if($constraint == NULL && $constraint2 ==NULL && $order ==NULL){
+    public function query_db($model, $content, $constraint, $constraint2, $order) {
+        if($constraint == NULL && $constraint2 ==NULL && $order ==NULL) {
             return DB::table($model)->where($content[0], $content[1])->first();
         // for sort as main
-        }elseif ($constraint == NULL && $constraint2 == NULL && $order != NULL) {
+        } elseif ($constraint == NULL && $constraint2 == NULL && $order != NULL) {
             return DB::table($model)->where($content[0], $content[1])->orderBy($order[0],$order[1])->first();
             // return 'order not null';
         } elseif ($constraint == NULL && $constraint2 != NULL && $order != NULL) {
             // return 'order and constraint 2 not null';
             return DB::table($model)->where($content[0], $content[1])->where($constraint2[0], $constraint2[1])->orderBy($order[0],$order[1])->first();
-        }elseif ($constraint == NULL && $constraint2 != NULL && $order == NULL) {
+        } elseif ($constraint == NULL && $constraint2 != NULL && $order == NULL) {
             // return 'constraint 2 not null';
             return DB::table($model)->where($content[0], $content[1])->where($constraint2[0],$constraint2[1])->first();
-        }elseif ($constraint != NULL && $constraint2 == NULL && $order != NULL) {
+        } elseif ($constraint != NULL && $constraint2 == NULL && $order != NULL) {
             // return 'order and constraint 1 not null';
             return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->orderBy($order[0],$order[1])->first();
-        }elseif ($constraint != NULL && $constraint2 == NULL && $order == NULL) {
+        } elseif ($constraint != NULL && $constraint2 == NULL && $order == NULL) {
             // return 'constraint not null';
             return DB::table($model)->where($content[0], $content[1])->where($constraint[0],$constraint[1])->first();
-        }elseif ($constraint != NULL && $constraint2 != NULL && $order == NULL) {
+        } elseif ($constraint != NULL && $constraint2 != NULL && $order == NULL) {
             // return 'constraint 1 and constraint 2 not null';
             return DB::table($model)->where($content[0], $content[1])->where($constraint[0],$constraint[1])->where($constraint2[0],$constraint2[1])->first();
-        }else{
+        } else {
             // return 'not null';
             return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->where($constraint2[0], $constraint2[1])->orderBy($order[0],$order[1])->first();
         }
     }
-    public function query_db_sum($model, $content, $constraint)
-    {
-        if($constraint == NULL){
+
+    public function query_db_sum($model, $content, $constraint) {
+        if($constraint == NULL) {
             return DB::table($model)->where($content[0], $content[1])->sum('payment');
-        }else{
+        } else {
             return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->sum('payment');
         }
     }
 
-    public function payment_api($phone, $amount, $transactionID)
-    {
+    public function payment_api($phone, $amount, $transactionID) {
             $url = "https://opay-api.oltranz.com/opay/paymentrequest";
             $content = '{
                 "telephoneNumber" : "'.$phone.'",
@@ -349,8 +349,7 @@ class USSDController extends Controller
         }
     }
 
-    public function ActivityLogs($actionName,$modelName,$modelPrimaryKey)
-    {
+    public function ActivityLogs($actionName,$modelName,$modelPrimaryKey) {
         /*
             Sometimes it might failed to save, but we gotta give it a try!
             this method will repeat atleast 1 time if it fail,
@@ -372,15 +371,15 @@ class USSDController extends Controller
         }
     }
 
-        /*
-            Method to send bulk sms
-
-        */
-    public function BulkSms($number,$message){
-        	$client = new Client([
-    		'base_uri'=>'https://www.intouchsms.co.rw',
-    		'timeout'=>'900.0'
-    	]); //GuzzleHttp\Client
+    /*
+        Method to send bulk sms
+    */
+    public function BulkSms($number,$message) {
+        // GuzzleHttp\Client
+        $client = new Client([
+            'base_uri'=>'https://www.intouchsms.co.rw',
+            'timeout'=>'900.0'
+        ]);
 
 		$result = $client->request('POST','api/sendsms/.json', [
 		    'form_params' => [
@@ -395,13 +394,12 @@ class USSDController extends Controller
 
     /*------------------- callBack ------------------*/
 
-    public function paymentCallBack(Request $request)
-    {
+    public function paymentCallBack(Request $request) {
         /* if transaction is successfuly */
-        if($request->status === 'SUCCESS'){
+        if($request->status === 'SUCCESS') {
             try {
                 $get = Payout::where('transactionID', $request->transactionId)->first();
-                if(isset($get) == 1){
+                if(isset($get) == 1) {
                     $update = Payout::where('transactionID', $request->transactionId)
                     ->update([
                         'status' => 1
