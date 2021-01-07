@@ -16,7 +16,7 @@ class USSDController extends Controller
 {
     public function welcome(Request $request){
         $input          = $request->input;
-        $msisdn         = $request->MSC;
+        $msisdn         = $request->userid;
         $sessionId      = $request->sessionId;
 
         // if($newRequest == 1) {
@@ -50,7 +50,7 @@ class USSDController extends Controller
         //         $this->stop($data);
         //     }
         // }
-        $data = "Welcome to Belecom. \nRequest: ".$request->fullUrl();
+        $data = "Welcome to Belecom. \nInput: ".$input."\nNumber: ".$msisdn."\nSession: ".$sessionId;
         $this->stop($data);
     }
 
