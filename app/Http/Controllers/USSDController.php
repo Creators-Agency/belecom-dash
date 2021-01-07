@@ -15,9 +15,9 @@ use GuzzleHttp\Client;
 class USSDController extends Controller
 {
     public function welcome(Request $request){
-        $input          = $request->input;
-        $msisdn         = $request->userid;
-        $sessionId      = $request->sessionId;
+        $input          = $request->get('input');
+        $msisdn         = $request->get('MSISDN');
+        $sessionId      = $request->get('sessionId');
 
         // if($newRequest == 1) {
         //     $session = new Session();
