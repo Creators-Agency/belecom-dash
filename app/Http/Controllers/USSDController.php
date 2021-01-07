@@ -51,14 +51,7 @@ class USSDController extends Controller
         //         $this->stop($data);
         //     }
         // }
-        $data = [
-            'msisdn' => $msisdn,
-            'response' => 'Welcome to Belecom.',
-            'freeflow' => 'FC',
-            'charge' => 'N',
-            'amount' => '0',
-            'cpRefId' => $sessionId
-        ];
+        $data = ['Welcome to Belecom.'];
         // $this->stop($data);
         return $data;
     }
