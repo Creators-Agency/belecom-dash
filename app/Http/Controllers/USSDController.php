@@ -17,7 +17,7 @@ class USSDController extends Controller
     public function welcome(Request $request){
         $input          = $request->input;
         $msisdn         = $request->msisdn;
-        $sessionId      = $request->sessionid;
+        $sessionId      = $request->sessionId;
         $newRequest     = $request->newRequest;
 
         // if($newRequest == 1) {
@@ -53,16 +53,11 @@ class USSDController extends Controller
         // }
         $data = [
             'msisdn' => $msisdn,
-            'applicationResponse' => 'Welcome to Belecom.'.$input,
-            'appDrivenMenuCode' => 'menuCode',
-            'freeflow' => [
-                'freeflowState' => 'FC',
-                'freeflowCharging' => 'N',
-                'freeflowChargingAmount' => '0',
-                'parameters' => [
-                    'param' => '1'
-                ]
-            ]
+            'response' => 'Welcome to Belecom.',
+            'freeflow' => 'FC',
+            'charge' => 'N',
+            'amount' => '0',
+            'cpRefId' => $sessionId
         ];
         // $this->stop($data);
         return $data;
