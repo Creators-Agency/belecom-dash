@@ -24,7 +24,7 @@ class ClientController extends Controller
     public function __construct() {
         $this->middleware('auth');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -59,11 +59,13 @@ class ClientController extends Controller
             'locations' => $get_location
         ]);
     }
-    
+
     public function actual()
     {
+        return SolarPanel::get();
         $get_actual = DB::table('beneficiaries')
                         ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
+                        ->join('accounts',)
                         ->where('beneficiaries.isActive',3)
                         ->get();
         return view('client.actual',[
@@ -129,7 +131,7 @@ class ClientController extends Controller
                                     ->orWhere('primaryPhone', $request->primaryNumber)
                                     ->count();
         if ($check_user == 0) {
-            
+
             $client = new Beneficiary();
             $client->firstname = $request->firstName;
             $client->lastname =$request->lastName;
@@ -156,7 +158,7 @@ class ClientController extends Controller
             $client->referredby = $request->referredby;
             $client->isActive = 1;
             $client->doneBy =  Auth::User()->id;
-            
+
 
             // if he/she heard about from someone
             if ($request->refer = 1) {
@@ -172,7 +174,7 @@ class ClientController extends Controller
 
                     #save client
                     if ($client->save()) {
-                        
+
                         /*============== Updating Activity Logs =========*/
                         $Get_beneficiary = Beneficiary::orderBy('id','DESC')->first();
                         $this->ActivityLogs('Registration','Beneficiary', $Get_beneficiary->id);
@@ -191,13 +193,13 @@ class ClientController extends Controller
 
                 #save client
                 if ($client->save()) {
-                    
+
                     /*============== Updating Activity Logs =========*/
                     $Get_beneficiary = Beneficiary::orderBy('id','DESC')->first();
                     $this->ActivityLogs('Registration','Beneficiary', $Get_beneficiary->id);
                     alert()->success('yes','done');
                     return Redirect('/client');
-                }            
+                }
 
             }
         }else{
@@ -232,7 +234,7 @@ class ClientController extends Controller
             // return redirect('stock/new/solar/type');
         }
         $client = Beneficiary::where('id',$id)->first();
-        
+
         return view('client.assign',[
             'client' => $client,
             'SolarTypes' => $solarType,
@@ -265,7 +267,7 @@ class ClientController extends Controller
                                 ->orWhere('productNumber', $serialNumber->solarPanelSerialNumber)
                                 ->count();
         if ($chec_account == 0) {
-             
+
             /*---------------- save and check if succed ------------*/
             if ($account->save()) {
 
@@ -279,7 +281,7 @@ class ClientController extends Controller
                  solarPanel::where('solarPanelSerialNumber', $serialNumber->solarPanelSerialNumber)
                     ->update([
                         'status' => 1
-                    ]); 
+                    ]);
                 /*---------- sending message -----*/
                     // get user
                     $user = Beneficiary::where('identification', $request->clientIdentification)->first();
@@ -353,20 +355,20 @@ class ClientController extends Controller
     {
         /*
             Sometimes it might failed to save, but we gotta give it a try!
-            this method will repeat atleast 1 time if it fail, 
-            else it will break to loop 
+            this method will repeat atleast 1 time if it fail,
+            else it will break to loop
         */
-        for ($i=0; $i <1 ; $i++) { 
+        for ($i=0; $i <1 ; $i++) {
 
             $activityLog = new ActivityLog();
             $activityLog->userID = 1; //Authenticated user
             $activityLog->actionName = $actionName;
             $activityLog->modelName = $modelName;
             $activityLog->modelPrimaryKey = $modelPrimaryKey;
-            
+
             // if sucess
             if ($activityLog->save()) {
-                // break the loop                
+                // break the loop
                 break;
             }
         }
@@ -397,13 +399,13 @@ class ClientController extends Controller
 		// if ($result) {
 		// 	return redirect()->back()->with('message','<script type="text/javascript">alert("message sent!!");</script>');
 		// 	// return '';
-             	
+
 
 
 		// }
 		// else{
 		// 	return '<script type="text/javascript">alert("message not sent!!");</script>';
-        //     return redirect()->back()->with('message',''); 	
+        //     return redirect()->back()->with('message','');
 
 
 		// }
