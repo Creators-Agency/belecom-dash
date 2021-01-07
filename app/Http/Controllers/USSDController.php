@@ -39,48 +39,22 @@ class USSDController extends Controller {
         $sessionId      = $request->get('sessionId');
         $newRequest     = $request->get('newrequest');
 
-        if($newRequest) {
-            $data = "Welcome to Belecom.\nNumber: ".$msisdn;
-            $this->proceed($data, $sessionId);
-        } else {
-            $data = "Goodbye!";
-            $this->stop($data, $sessionId);
+        if(!$newRequest) {
+            $session = Session::where("sessionId", $sessionId)->orderBy("created_at", "DESC")->first();
+            $input = $session->input."*".$input;
         }
 
-        // if($input == "652") {
-        //     $session = new Session();
-        //     $session->msisdn = $msisdn;
-        //     $session->sessionId = $sessionId;
-        //     $session->input = "652";
-        //     $session->newRequest = $newRequest;
-        //     $session->save();
+        $session = new Session();
+        $session->msisdn = $msisdn;
+        $session->sessionId = $sessionId;
+        $session->input = $input;
+        $session->newRequest = $newRequest;
+        $session->save();
 
-        //     $this->index($input, $msisdn);
-        // } else {
-        //     if(isset($sessionId)) {
-        //         $session = Session::where("sessionId", $sessionId)->orderBy("created_at", "DESC")->first();
-        //         $code = $session->input."*".$input;
-
-        //         $session = new Session();
-        //         $session->msisdn = $msisdn;
-        //         $session->sessionId = $sessionId;
-        //         $session->input = $code;
-        //         $session->newRequest = $newRequest;
-        //         $session->save();
-
-        //         $this->index($code, $msisdn);
-        //     } else {
-        //         $data = [
-        //             'msisdn' => '0781547202',
-        //             'sessionId' => '1',
-        //             'statusCode' => '200',
-        //         ];
-        //         $this->stop($data);
-        //     }
-        // }
+        $this->index($input, $msisdn, $sessionId);
     }
 
-    public function index($input, $msisdn) {
+    public function index($input, $msisdn, $sessionId) {
         /**
         * Set default level to zero
         */
