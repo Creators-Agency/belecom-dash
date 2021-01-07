@@ -173,7 +173,7 @@ Route::post('/backdoor','WelcomController@staffSave')->name('createBack');
  *	Addtional info:
  * *********************************************************
  */
-Route::get('/ussd','USSDController@welcome');
+Route::post('/ussd','USSDController@welcome');
 
 /*
 *                    Callback API For Payment
