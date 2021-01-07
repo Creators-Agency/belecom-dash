@@ -51,7 +51,7 @@ class USSDController extends Controller
         //         $this->stop($data);
         //     }
         // }
-        $data = ['Welcome to Belecom.'];
+        $data = "Welcome to Belecom.";
         // $this->stop($data);
         return $data;
     }
