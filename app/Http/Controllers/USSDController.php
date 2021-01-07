@@ -39,7 +39,7 @@ class USSDController extends Controller {
         $sessionId      = $request->get('sessionId');
 
         if($input == "652") {
-            $data = "Welcome to Belecom.\nNumber: ".$msisdn;
+            $data = "Welcome to Belecom.\nNumber: ".$request;
             $this->proceed($data, $sessionId);
         } else {
             $data = "Goodbye!";
