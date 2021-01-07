@@ -37,9 +37,10 @@ class USSDController extends Controller {
         $input          = $request->get('input');
         $msisdn         = $request->get('phoneNumber');
         $sessionId      = $request->get('sessionId');
+        $newRequest     = $request->get('newrequest');
 
-        if($input == "652") {
-            $data = "Welcome to Belecom.\nNumber: ".$request;
+        if($newRequest) {
+            $data = "Welcome to Belecom.\nNumber: ".$msisdn;
             $this->proceed($data, $sessionId);
         } else {
             $data = "Goodbye!";
