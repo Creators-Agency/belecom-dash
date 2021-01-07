@@ -51,7 +51,7 @@ class USSDController extends Controller
         //         $this->stop($data);
         //     }
         // }
-        $data = "Welcome to Belecom.".$input;
+        $data = "Welcome to Belecom.".$input." ".$msisdn." ".$sessionId." ".$newRequest;
         $this->stop($data);
     }
 
