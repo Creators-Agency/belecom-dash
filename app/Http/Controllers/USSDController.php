@@ -98,10 +98,8 @@ class USSDController extends Controller {
                 $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1], NULL, NULL);
                 if (!empty($check)) {
                     $content  = "Ikaze kuri Belecom, ".$check->clientNames."\n";
-                    // $content = $check;
                     $content .= "Emeza:\n";
                     $content .= "1: Kwishyura ifatabuguzi ry'ukwezi.\n";
-                    // $content .= "2 mwishyure ibirarane. \n";
                     $content .= "2: Kubona ubutumwa bw'ibyakozwe.\n";
                     $this->proceed($content, $sessionId);
                 } else {
