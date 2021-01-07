@@ -35,7 +35,7 @@ class USSDController extends Controller {
 
     public function welcome(Request $request) {
         $input          = $request->get('input');
-        $msisdn         = $request->get('TransactionTime');
+        $msisdn         = $request->get('userId');
         $sessionId      = $request->get('sessionId');
 
         if($input == "652") {
