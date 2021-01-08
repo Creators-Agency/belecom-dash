@@ -92,6 +92,8 @@ class USSDController extends Controller {
              * Menu Phase of the app.
              */
             case '1':
+                    $content .= $level;
+                    $this->stop($content, $sessionId);
                 /**
                  * check if serial number entered Match any Record from user Accounts.
                  */
