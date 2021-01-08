@@ -95,7 +95,7 @@ class USSDController extends Controller {
                 /**
                  * check if serial number entered Match any Record from user Accounts.
                  */
-                $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1], NULL, NULL);
+                $check = $this->query_db('accounts', ['productNumber', $values[1]], ['isActive', 1], NULL, NULL);
                 if (!empty($check)) {
                     $content  = "Ikaze kuri Belecom, ".$check->clientNames."\n";
                     $content .= "Emeza:\n";
