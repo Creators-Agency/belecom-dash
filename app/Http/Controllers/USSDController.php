@@ -233,7 +233,7 @@ class USSDController extends Controller {
                      * Ending session because this serial number doesn't exist
                      * or it hasn't assigned yet to anyone.
                     **/
-                    $content  = "Nimero mushyizemo ntibaruye.".$values[0]."\n";
+                    $content  = "Nimero mushyizemo ntibaruye.".$values[1]."\n";
                     $content .= "Gana ibiro bikwegereye bya Belecom bagufashe.\n";
                     $content .= "Murakoze!";
                     $this->stop($content, $sessionId);
