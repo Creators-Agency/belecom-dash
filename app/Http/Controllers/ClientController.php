@@ -62,10 +62,8 @@ class ClientController extends Controller
 
     public function actual()
     {
-        //  $check = Account::where('productNumber', '1609977600196')->where('isActive',1)->first();
-        //  if (!empty($check)) {
-        //      return 'say';
-        //  }
+        return Account::where('productNumber', '1609977600196')->where('isActive',1)->first();
+
         $get_actual = DB::table('beneficiaries')
                         ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
                         ->join('accounts',)
