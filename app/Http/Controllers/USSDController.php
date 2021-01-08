@@ -35,10 +35,10 @@ class USSDController extends Controller {
 
     public function welcome(Request $request) {
         $input          = $request->get('input');
-        $msisdn         = $request->get('phoneNumber');
+        $number         = $request->get('phoneNumber');
         $sessionId      = $request->get('sessionId');
         $newRequest     = $request->get('newrequest');
-
+        $msisdn = substr($number, 0, -1);
         if(!$newRequest) {
             $session = Session::where("sessionId", $sessionId)->orderBy("created_at", "DESC")->first();
             $input = $session->input."*".$input;
