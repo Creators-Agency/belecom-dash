@@ -127,7 +127,7 @@ class USSDController extends Controller {
                         /**
                          * Check if entered Serial number exist in payout table.
                          */
-                        $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[0]], ['status', '1'], NULL, ['id','DESC']);
+                        $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[1]], ['status', '1'], NULL, ['id','DESC']);
                         if(!empty($check_payout) && $check_payout->balance  < 1) {
                             $content  = "Nta deni mufite\n";
                             $content .= "Murakoze!";
@@ -214,7 +214,7 @@ class USSDController extends Controller {
                             $content .= "Murakoze!";
                             $this->stop($content, $sessionId);
                         }
-                    } else if($values[1] == "2") {
+                    } else if($values[2] == "2") {
                         $info = $this->query_db('payouts', ['solarSerialNumber', $values[0]],['status', 0], NULL, ['id', 'DESC']);
 
                         $message = $info->clientNames.' muheruka kwishura '.$info->payment.' kwitariki '.$info->created_at;
@@ -233,7 +233,7 @@ class USSDController extends Controller {
                      * Ending session because this serial number doesn't exist
                      * or it hasn't assigned yet to anyone.
                     **/
-                    $content  = "Nimero mushyizemo ntibaruye.".$values[1]."\n";
+                    $content  = "Nimero mushyizemo ntibaruye.\n";
                     $content .= "Gana ibiro bikwegereye bya Belecom bagufashe.\n";
                     $content .= "Murakoze!";
                     $this->stop($content, $sessionId);
@@ -244,7 +244,7 @@ class USSDController extends Controller {
              * Default Phase of the app
              */
             default:
-                $content  = "SHIT Mwahisemo nabi!\n";
+                $content  = "Mwahisemo nabi!\n";
                 $content .= "Mwongere mugerageze nanone.";
                 $this->stop($content, $sessionId);
                 break;
@@ -269,7 +269,6 @@ class USSDController extends Controller {
             return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->orderBy($order[0],$order[1])->first();
         } elseif ($constraint != NULL && $constraint2 == NULL && $order == NULL) {
             // return 'constraint not null';
-            // Account::where('productNumber', '1609977600196')->where('isActive',1)->first();
             return DB::table($model)->where($content[0], $content[1])->where($constraint[0],$constraint[1])->first();
         } elseif ($constraint != NULL && $constraint2 != NULL && $order == NULL) {
             // return 'constraint 1 and constraint 2 not null';
