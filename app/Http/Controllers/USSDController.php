@@ -107,7 +107,7 @@ class USSDController extends Controller {
                      * Ending session because this serial number doesn't exist
                      * or it hasn't assigned yet to anyone.
                     **/
-                    $content  = "Nimero mushyizemo ntibaruye. test\n";
+                    $content  = "Nimero mushyizemo ntibaruye.\n";
                     $content .= "Gana ibiro bikwegereye bya Belecom bagufashe.\n";
                     $content .= "Murakoze!";
                     $this->stop($content, $sessionId);
@@ -121,9 +121,9 @@ class USSDController extends Controller {
                 /**
                  * check if serial number entered Match any Record from user Accounts.
                  */
-                $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1], NULL, NULL);
+                $check = $this->query_db('accounts', ['productNumber', $values[1]], ['isActive', 1], NULL, NULL);
                 if (!empty($check)) {
-                    if($values[1] == "1") {
+                    if($values[2] == "1") {
                         /**
                          * Check if entered Serial number exist in payout table.
                          */
