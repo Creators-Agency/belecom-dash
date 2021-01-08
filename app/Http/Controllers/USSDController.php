@@ -107,7 +107,7 @@ class USSDController extends Controller {
                      * Ending session because this serial number doesn't exist
                      * or it hasn't assigned yet to anyone.
                     **/
-                    $content  = "Nimero mushyizemo ntibaruye.".$values[0]." test\n";
+                    $content  = "Nimero mushyizemo ntibaruye. test\n";
                     $content .= "Gana ibiro bikwegereye bya Belecom bagufashe.\n";
                     $content .= "Murakoze!";
                     $this->stop($content, $sessionId);
@@ -121,9 +121,9 @@ class USSDController extends Controller {
                 /**
                  * check if serial number entered Match any Record from user Accounts.
                  */
-                $check = $this->query_db('accounts', ['productNumber', $values[1]], ['isActive', 1], NULL, NULL);
+                $check = $this->query_db('accounts', ['productNumber', $values[0]], ['isActive', 1], NULL, NULL);
                 if (!empty($check)) {
-                    if($values[2] == "1") {
+                    if($values[1] == "1") {
                         /**
                          * Check if entered Serial number exist in payout table.
                          */
@@ -270,7 +270,7 @@ class USSDController extends Controller {
         } elseif ($constraint != NULL && $constraint2 == NULL && $order == NULL) {
             // return 'constraint not null';
             // Account::where('productNumber', '1609977600196')->where('isActive',1)->first();
-            return DB::table('accounts')->where($content[0], $content[1])->where($constraint[0],$constraint[1])->first();
+            return DB::table($model)->where($content[0], $content[1])->where($constraint[0],$constraint[1])->first();
         } elseif ($constraint != NULL && $constraint2 != NULL && $order == NULL) {
             // return 'constraint 1 and constraint 2 not null';
             return DB::table($model)->where($content[0], $content[1])->where($constraint[0],$constraint[1])->where($constraint2[0],$constraint2[1])->first();
