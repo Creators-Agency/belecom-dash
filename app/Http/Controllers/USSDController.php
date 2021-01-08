@@ -91,7 +91,7 @@ class USSDController extends Controller {
             /**
              * Menu Phase of the app.
              */
-            case '1':
+            case '2':
                     $content .= $level;
                     $this->stop($content, $sessionId);
                 /**
@@ -119,7 +119,7 @@ class USSDController extends Controller {
             /**
              * Payment Phase of the app
              */
-            case '2':
+            case '3':
                 /**
                  * check if serial number entered Match any Record from user Accounts.
                  */
