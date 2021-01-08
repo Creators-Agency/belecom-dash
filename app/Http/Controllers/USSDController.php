@@ -269,7 +269,7 @@ class USSDController extends Controller {
             return DB::table($model)->where($content[0], $content[1])->where($constraint[0], $constraint[1])->orderBy($order[0],$order[1])->first();
         } elseif ($constraint != NULL && $constraint2 == NULL && $order == NULL) {
             // return 'constraint not null';
-            return DB::table($model)->where($content[0], $content[1])->where($constraint[0],$constraint[1])->first();
+            return DB::table($model)->where($content[0], $content[1])->first();
         } elseif ($constraint != NULL && $constraint2 != NULL && $order == NULL) {
             // return 'constraint 1 and constraint 2 not null';
             return DB::table($model)->where($content[0], $content[1])->where($constraint[0],$constraint[1])->where($constraint2[0],$constraint2[1])->first();
