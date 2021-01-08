@@ -38,7 +38,7 @@ class USSDController extends Controller {
         $number         = $request->get('phoneNumber');
         $sessionId      = $request->get('sessionId');
         $newRequest     = $request->get('newrequest');
-        $msisdn = substr($number, 1);
+        $msisdn = substr($number, 2);
         if(!$newRequest) {
             $session = Session::where("sessionId", $sessionId)->orderBy("created_at", "DESC")->first();
             $input = $session->input."*".$input;
