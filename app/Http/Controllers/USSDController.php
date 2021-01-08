@@ -78,7 +78,7 @@ class USSDController extends Controller {
             /**
              * Login Phase of the app.
              */
-            $content  = "Ikaze kuri Belecom.\n";
+            $content  = "Ikaze kuri Belecom.".$level."\n";
             $content .= "Shyiramo inimero y'umurasire wawe.\n";
             $this->proceed($content, $sessionId);
         } else {
