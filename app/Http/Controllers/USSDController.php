@@ -107,7 +107,7 @@ class USSDController extends Controller {
                      * Ending session because this serial number doesn't exist
                      * or it hasn't assigned yet to anyone.
                     **/
-                    $content  = "Nimero mushyizemo ntibaruye.\n";
+                    $content  = "Nimero mushyizemo ntibaruye.".$values[0]."\n";
                     $content .= "Gana ibiro bikwegereye bya Belecom bagufashe.\n";
                     $content .= "Murakoze!";
                     $this->stop($content, $sessionId);
@@ -270,7 +270,7 @@ class USSDController extends Controller {
         } elseif ($constraint != NULL && $constraint2 == NULL && $order == NULL) {
             // return 'constraint not null';
             // Account::where('productNumber', '1609977600196')->where('isActive',1)->first();
-            return DB::table('accounts')->where('productNumber', '1609977600196')->where('isActive',1)->first();
+            return DB::table('accounts')->where($content[0], $content[1])->where($constraint[0],$constraint[1])->first();
         } elseif ($constraint != NULL && $constraint2 != NULL && $order == NULL) {
             // return 'constraint 1 and constraint 2 not null';
             return DB::table($model)->where($content[0], $content[1])->where($constraint[0],$constraint[1])->where($constraint2[0],$constraint2[1])->first();
