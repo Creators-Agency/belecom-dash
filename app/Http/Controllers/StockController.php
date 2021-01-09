@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use Redirect;
 use Validator;
 use SweetAlert;
@@ -70,7 +71,7 @@ class StockController extends Controller
             $amount = $amount + $price;
 
         }
-        
+
         return view('stock.stock',[
             'numberOfSolarAssigned' =>number_format(count($assigned)),
             'numberOfSolarUnAssigned' =>number_format(count($unassigned)),
@@ -91,7 +92,7 @@ class StockController extends Controller
                         ->get();
         $Get_solarType = SolarPanelType::orderBy('id','DESC')
                         ->where('isActive',1)
-                        ->get();   
+                        ->get();
         return view('stock.add-item',[
             'Locations' => $Get_location,
             'SolarTypes' => $Get_solarType
@@ -120,7 +121,7 @@ class StockController extends Controller
     {
         $Get_solarType = SolarPanelType::orderBy('id','DESC')
                         ->where('isActive',1)
-                        ->get();   
+                        ->get();
         return view('stock.add-solar-type', [
             'SolarTypes' => $Get_solarType,
             'ifRecord' => count($Get_solarType)
@@ -135,14 +136,19 @@ class StockController extends Controller
     public function listPanel()
     {
         $solarPanel = DB::table('solar_panels')
-                        ->join('solar_panel_types','solar_panel_types.id','=','solar_panels.solarPanelType')
-                        // ->select('solar_panel_types.solarTypeName')
-                        // ->where('')
+                        ->join('solar_panel_types','solar_panel_types.id','solar_panels.solarPanelType')
                         ->get();
         // return $solarPanel;
         return view('stock.product',[
             'panels' => $solarPanel
         ]);
+    }
+
+    public function viewOwner($Product)
+    {
+        return DB::table('accounts')
+                    ->join('beneficiaries','beneficiaries.identification','Accounts.beneficiary')
+                    ->get();
     }
 
     /**
@@ -186,13 +192,13 @@ class StockController extends Controller
                 $status = 1;
             }
 
-            // check and alert if succed 
+            // check and alert if succed
             if ($status === 1) {
                alert()->success('Success', 'New Solar panel type has been added!');
                return Redirect()->back();
             }
             else{
-                // failed 
+                // failed
                 alert()->error('Oops', 'Something Wrong!');
                 return Redirect()->back()->withErrors($validator)->withInput();
             }
@@ -244,13 +250,13 @@ class StockController extends Controller
                 $status = 1;
             }
 
-            // check and alert if succed 
+            // check and alert if succed
             if ($status === 1) {
                alert()->success('Success', 'New Location has been added!');
                return Redirect()->back();
             }
             else{
-                // failed 
+                // failed
                 alert()->error('Oops', 'Something Wrong!');
                 return Redirect::back()->withErrors($validator)->withInput();
             }
@@ -288,7 +294,7 @@ class StockController extends Controller
             $solar->solarPanelType = $request->solarPanelType;
             $solar->location = $request->location;
             $solar->doneBy = Auth::User()->id;
-         
+
             // generating serial nuber
             $solar->solarPanelSerialNumber = strtotime(date('Y-m-d')).rand(100,999);
             if ($solar->save()) {
@@ -301,13 +307,13 @@ class StockController extends Controller
             }
         }
 
-        // check and alert if succe 
+        // check and alert if succe
         if ($status === 1) {
            alert()->success('Success', 'Operation is successful!');
            return Redirect('/stock');
         }
         else{
-            // failed 
+            // failed
             alert()->error('Oops', 'Something Wrong!');
             return Redirect::back()->withErrors($validator)->withInput();
         }
@@ -440,7 +446,7 @@ class StockController extends Controller
         return view('stock.edit-product');
     }
 
-    
+
 
 
 
@@ -448,20 +454,20 @@ class StockController extends Controller
     {
         /*
             Sometimes it might failed to save, but we gotta give it a try!
-            this method will repeat atleast 1 time if it fail, 
-            else it will break to loop 
+            this method will repeat atleast 1 time if it fail,
+            else it will break to loop
         */
-        for ($i=0; $i <1 ; $i++) { 
+        for ($i=0; $i <1 ; $i++) {
 
             $activityLog = new ActivityLog();
             $activityLog->userID = 1; //Authenticated user
             $activityLog->actionName = $actionName;
             $activityLog->modelName = $modelName;
             $activityLog->modelPrimaryKey = $modelPrimaryKey;
-            
+
             // if sucess
             if ($activityLog->save()) {
-                // break the loop                
+                // break the loop
                 break;
             }
         }

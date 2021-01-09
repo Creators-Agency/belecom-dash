@@ -62,7 +62,7 @@ Route::prefix('stock')->group(function(){
 
     Route::get('/list/panel/','StockController@listPanel');
     Route::get('/panel/{serialNumber}/edit', 'StockController@editSolar');
-
+    ROute::get('/view/owner/{product}', 'StockController@viewOwner');
 
 });
 
@@ -196,3 +196,6 @@ Route::post('/ussd/callback', 'USSDController@paymentCallBack');
 
 //     return $output;
 // });
+// Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])
+//                 ->middleware('auth')
+//                 ->name('logout');

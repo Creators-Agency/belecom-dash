@@ -41,7 +41,7 @@
                                     {{ URL::asset('assets/images/default.png') }}
                                 @endif
                                 " alt="user" class="rounded-circle" width="40">
-                                <span class="m-l-5 font-medium d-none d-sm-inline-block">Keza Majyambere <i
+                                <span class="m-l-5 font-medium d-none d-sm-inline-block">{{ Auth::user()->firstname }}<i
                                         class="mdi mdi-chevron-down"></i></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">

@@ -48,9 +48,19 @@
                                             @endif
                                         </td>
                                         <td class=" text-center">
+                                            @if ($panel->status != 1)
                                             <a href="{{ URL::to('/stock/panel/'.$panel->solarPanelSerialNumber.'/edit') }}"
-                                                class="btn btn-primary">Edit
+                                                class="btn btn-primary">
+
+                                                Edit
                                             </a>
+                                            @else
+                                            <a href="{{ URL::to('/stock/view/owner/'.$panel->solarPanelSerialNumber) }}"
+                                                class="btn btn-primary">
+
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach

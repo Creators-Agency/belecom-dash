@@ -38,6 +38,7 @@ class USSDController extends Controller {
         $number         = $request->get('phoneNumber');
         $sessionId      = $request->get('sessionId');
         $newRequest     = $request->get('newrequest');
+        // trim country code
         $msisdn = substr($number, 2);
         if(!$newRequest) {
             $session = Session::where("sessionId", $sessionId)->orderBy("created_at", "DESC")->first();
@@ -78,7 +79,7 @@ class USSDController extends Controller {
             /**
              * Login Phase of the app.
              */
-            $content  = "Ikaze kuri Belecom.".$msisdn."\n";
+            $content  = "Ikaze kuri Belecom.\n";
             $content .= "Shyiramo inimero y'umurasire wawe.\n";
             $this->proceed($content, $sessionId);
         } else {
@@ -139,7 +140,7 @@ class USSDController extends Controller {
                             $payment_fee = $check_payout->payment;
                             $new = date('m-Y', strtotime(strtotime($check_payout->monthYear).' +1 month'));
                             $new_payout = new Payout();
-                            $new_payout->solarSerialNumber = $values[0];
+                            $new_payout->solarSerialNumber = $values[1];
                             $new_payout->clientNames = $check_payout->clientNames;
                             $new_payout->clientID = $check_payout->clientID;
                             $new_payout->clientPhone = $phoneNumber;
