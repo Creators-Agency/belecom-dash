@@ -146,9 +146,14 @@ class StockController extends Controller
 
     public function viewOwner($Product)
     {
-        return DB::table('accounts')
-                    ->join('beneficiaries','beneficiaries.identification','Accounts.beneficiary')
-                    ->get();
+        $productData = DB::table('accounts')
+                ->join('beneficiaries','beneficiaries.identification','Accounts.beneficiary')
+                ->where('accounts.productNumber',$Product)
+                ->first();
+        return view('stock.product-owner',[
+            'info' => $productData
+        ]);
+
     }
 
     /**
