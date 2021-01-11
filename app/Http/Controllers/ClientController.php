@@ -35,7 +35,7 @@ class ClientController extends Controller
         $get_location = AdministrativeLocation::where('status', 1)
                         ->get();
         if(count($get_location) == 0){
-            alert()->warning('You should first add Operational area','done')->autoclose(4500);;
+            alert()->warning('You should first add Operational area','Operational Area not found')->autoclose(4500);
             return redirect('stock/new/location');
         }
         $Get_clients = DB::table('beneficiaries')
@@ -176,13 +176,13 @@ class ClientController extends Controller
                         /*============== Updating Activity Logs =========*/
                         $Get_beneficiary = Beneficiary::orderBy('id','DESC')->first();
                         $this->ActivityLogs('Registration','Beneficiary', $Get_beneficiary->id);
-                        alert()->success('yes','done');
+                        alert()->success('Operation has been successful','User Has been Registered!');
                         return Redirect('/client');
                     }
-                    alert()->error('alert','dumb');
+                    alert()->error('Something Goes Wrong Try again if issues persist contact system admin','Oops')->autoclose(5500);
                     return Redirect::back()->withErrors($validator)->withInput();
                 }
-                alert()->warning('Oops','Error occured');
+                alert()->warning('Something went wrong during operation!','Oops');
                 return Redirect::back()->withErrors($validator)->withInput();
 
             }
@@ -204,7 +204,7 @@ class ClientController extends Controller
             /**
              * redirect back to the previous page with inputs!.
              */
-            alert()->error('User exist, try with different identification','Operation Failed!');
+            alert()->error('Identification Exist in our database, use different!','User exist!');
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
@@ -377,14 +377,7 @@ class ClientController extends Controller
         	$client = new Client([
     		'base_uri'=>'https://www.intouchsms.co.rw',
     		'timeout'=>'900.0'
-    	]); //GuzzleHttp\Client
-
-		// $result = $client->post('', [
-		//     'form_params' => [
-		//         'sample-form-data' => 'value'
-		//     ]
-		// ]);
-		// $number = '0784101221';
+    	]); 
 		$result = $client->request('POST','api/sendsms/.json', [
 		    'form_params' => [
 		        'username' => 'Wilson',
@@ -394,19 +387,6 @@ class ClientController extends Controller
 		        'message' => $names.' Tuguhaye Ikaze mubafatabuguzi ba Belecom, inomero iranga umurasire ni:'.$solarPanel.', Kanda *652*'.$solarPanel.'# wishure, Murakoze!',
 		    ]
 		]);
-		// if ($result) {
-		// 	return redirect()->back()->with('message','<script type="text/javascript">alert("message sent!!");</script>');
-		// 	// return '';
-
-
-
-		// }
-		// else{
-		// 	return '<script type="text/javascript">alert("message not sent!!");</script>';
-        //     return redirect()->back()->with('message','');
-
-
-		// }
-		// return $result;
+		
     }
 }
