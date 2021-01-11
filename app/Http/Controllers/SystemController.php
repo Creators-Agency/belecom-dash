@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use Redirect;
+use DB;
 class SystemController extends Controller
 {
     /**
@@ -17,37 +18,65 @@ class SystemController extends Controller
         return view('system.import');
     }
     
-    public function import(Request $request, $delimiter = ',')
+    public function import(Request $request)
+{
+    $file = $request->file;
+
+    $customerArr = $this->csvToArray($file);
+    $data = [];
+    for ($i = 0; $i < count($customerArr); $i ++)
     {
-        $rules = array (
-            // 'file' => 'required|mimes:csv|max:20480',
-        );
-        $validator = Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            // alert()->error('check your inputs', 'Error')->autoclose(3500);
-            return Redirect::back()->withErrors($validator)->withInput();
-        }
-        if(isset($request->file)){
-        $csvData = file_get_contents($request->file);
-        $file = fopen($request->file, "r");
+          $customerArr;
+        // foreach($customerArr as $da)
+        // {
+            // return $da;
+            // $data['firstname'] = $da;
+            // $data = [
+            //         'firstname' => $customerArr[$i]['Username'],
+            //         // 'lastname'=>,
+            //         // 'identification'=>,
+            //         // 'gender'=>,
+            //         // 'DOB'=>,
+            //         // 'primaryPhone'=>,
+            // ];
 
-        $header = null;
-        $data = array();
-        if ($file !== false)
+    
+    
+// }
+
+    }
+    try {
+        DB::table('beneficiaries')->insert($customerArr);
+        alert()->success('user importing returned with success','Success!');
+        return Redirect::back(); 
+    } catch (\Throwable $th) {
+        alert()->error('unable to import data from file','Error!');
+        return Redirect::back();
+    }
+       
+}
+    public function csvToArray($filename = '', $delimiter = ';')
+{
+    if (!file_exists($filename) || !is_readable($filename))
+        return false;
+
+    $header = null;
+    $data = array();
+    if (($handle = fopen($filename, 'r')) !== false)
+    {
+        while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
         {
-            while (($row = fgetcsv($file, 1000, $delimiter)) !== false)
-            {
-                if (!$header)
-                    $header = $row;
-                else
-                    $data[] = array_combine($header, $row);
-            }
-            fclose($file);
+            if (!$header)
+                $header = $row;
+            else
+                // array_push($data,$row);
+                $data[] = array_combine($header, $row);
         }
+        fclose($handle);
+    }
 
-        return $data;
-    }
-    }
+    return $data;
+}
 
     /**
      * Show the form for creating a new resource.
