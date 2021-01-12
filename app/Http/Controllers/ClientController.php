@@ -165,7 +165,7 @@ class ClientController extends Controller
             $client->U18Female =$request->majorF;
             $client->U17Female =$request->minorF;
             $client->employmentStatus = 0;
-            $client->referredby = $request->referredby;
+            // $client->referredby = $request->referredby;
             $client->isActive = 1;
             $client->doneBy =  Auth::User()->id;
 
@@ -317,17 +317,6 @@ class ClientController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function updateClient(Request $request, $id)
-    {
-        //
-    }
 
 
     /**
@@ -350,6 +339,15 @@ class ClientController extends Controller
         ]);
     }
 
+    public function updateClient(Request $request)
+    {
+        return $request;
+        Beneficiary::where('id', $request->KeyToEdit)
+                ->update([
+                    'solarTypeName' => $request->SolarTypeName,
+                    'price' => $request->SolarTypePrice,
+                ]);
+    }
 
 
     /**
