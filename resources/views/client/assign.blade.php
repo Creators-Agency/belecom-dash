@@ -12,7 +12,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-5 pb-2">Update Stock</h4>
+                    <h4 class="card-title mb-5 pb-2">Product Distribution</h4>
                     <form class="needs-validation" method="POST" action="{{ route('assignClient') }}" novalidate>
                         @csrf
                         <div class="form-row">
@@ -32,11 +32,21 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
+                                    <label for="TotalPrice">Loans Period</label>
+                                    <input type="number"  class="form-control" name="loansPeriod" placeholder="0"
+                                        required>
+                                    <div class="invalid-tooltip">
+                                        Please provide a valid data.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <div class="col-md-12 mb-3">
                                     <label for="TotalPrice">Total Price</label>
                                     <input type="text" disabled class="form-control" id="TotalPrice" placeholder="0"
                                         required>
                                     <div class="invalid-tooltip">
-                                        Please provide a valid state.
+                                        Please provide a valid data.
                                     </div>
                                 </div>
                             </div>

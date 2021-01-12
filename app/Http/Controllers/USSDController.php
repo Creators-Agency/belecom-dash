@@ -195,13 +195,13 @@ class USSDController extends Controller {
                             $new_payout->clientID = $check->beneficiary;
                             $new_payout->clientPhone = $phoneNumber;
                             $new_payout->monthYear = date("m-Y");
-                            $new_payout->payment = $check->loan/36;
+                            $new_payout->payment = $check->loan/$check->loanPeriod;
                             $new_payout->transactionID = $transactionID;
                             $new_payout->status = 0;
-                            $new_payout->balance = $check->loan - ($check->loan/36);
-                            $pay = round($check->loan/36, 0);
+                            $new_payout->balance = $check->loan - ($check->loan/$check->loanPeriod);
+                            $pay = round($check->loan/$check->loanPeriod, 0);
                             if($new_payout->save()) {
-                                $this->payment_api($phoneNumber,$check->loan/36,$transactionID);
+                                $this->payment_api($phoneNumber,$check->loan/$check->loanPeriod,$transactionID);
                                 $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
                             } else {
                                 $content  = "Ibyo musabye ntibikunze.\n";

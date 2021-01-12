@@ -13,7 +13,7 @@
             <div class="card">
             @include('message')
                 <div class="card-body">
-                    <h4 class="card-title mb-5 pb-2">Register staff</h4>
+                    <h4 class="card-title mb-5 pb-2">Import Data</h4>
                     <form class="needs-validation" method="POST" action="{{ route('import') }}" enctype="multipart/form-data" novalidate>
                         @csrf
                         <div class="form-row">

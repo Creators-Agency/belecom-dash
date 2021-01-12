@@ -22,6 +22,7 @@ class CreateAccountsTable extends Migration
             $table->integer('loan')->default(0)->comment="Total Amount of Loan he/she has";
             $table->String('monthleft')->default(0)->comment="Amount left to be paid";
             $table->String('isActive')->default(1)->comment="0: Inactive, 1: Active, 2: Deleted";
+            $table->biginteger('loanPeriod')->default(36)->comment="charges to be added for late payments";
             $table->biginteger('charges')->default(0)->comment="charges to be added for late payments";
             $table->integer('doneBy');
             $table->timestamps(); 

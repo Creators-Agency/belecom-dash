@@ -73,12 +73,24 @@ class ClientController extends Controller
 
     public function perspective()
     {
-        $new_client = DB::table('beneficiaries')
-                        ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
+        $Get_clients = DB::table('beneficiaries')
+                        ->join('administrative_locations','administrative_locations.id','=','beneficiaries.location')
+                        ->select(
+                            'beneficiaries.id as clientID',
+                            'beneficiaries.identification',
+                            'beneficiaries.firstname',
+                            'beneficiaries.lastname',
+                            'beneficiaries.gender',
+                            'beneficiaries.DOB',
+                            'beneficiaries.primaryPhone',
+                            'administrative_locations.id as locationID',
+                            'administrative_locations.locationName',
+                            )
                         ->where('beneficiaries.isActive',1)
+                        ->where('administrative_locations.status',1)
                         ->get();
         return view('client.perspective',[
-            'clients' => $new_client
+            'clients' => $Get_clients
         ]);
     }
 
@@ -254,6 +266,7 @@ class ClientController extends Controller
                                 ->where('status',0)
                                 ->first();
         $account = new Account();
+        $account->loanPeriod = $request->loansPeriod;
         $account->beneficiary = $request->clientIdentification;
         $account->productNumber = $serialNumber->solarPanelSerialNumber;
         $account->clientNames = $request->firstname;
@@ -262,8 +275,8 @@ class ClientController extends Controller
 
         /*------- check if this number does not exist in account table*/
         $chec_account = Account::where('beneficiary', $request->clientIdentification)
-                                ->orWhere('productNumber', $serialNumber->solarPanelSerialNumber)
-                                ->count();
+                    ->orWhere('productNumber', $serialNumber->solarPanelSerialNumber)
+                    ->count();
         if ($chec_account == 0) {
 
             /*---------------- save and check if succed ------------*/

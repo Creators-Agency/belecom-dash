@@ -27,22 +27,6 @@ class SystemController extends Controller
     for ($i = 0; $i < count($customerArr); $i ++)
     {
           $customerArr;
-        // foreach($customerArr as $da)
-        // {
-            // return $da;
-            // $data['firstname'] = $da;
-            // $data = [
-            //         'firstname' => $customerArr[$i]['Username'],
-            //         // 'lastname'=>,
-            //         // 'identification'=>,
-            //         // 'gender'=>,
-            //         // 'DOB'=>,
-            //         // 'primaryPhone'=>,
-            // ];
-
-    
-    
-// }
 
     }
     try {
