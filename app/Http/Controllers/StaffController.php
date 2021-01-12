@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Permission;
 use App\Models\UserPermission;
 
+use Auth;
 use DB;
 use Redirect;
 use Validator;
@@ -92,7 +93,7 @@ class StaffController extends Controller
             $staff->password = Hash::make($request->password);
             $staff->status = 1;
             $staff->type = 0;
-            $staff->doneBy =  Auth::User()->id;
+            // $staff->doneBy =  Auth::User()->id;
             if($staff->save()){
                 alert()->success('New User is registered successfuly', 'Done');
                 return Redirect('/staff');

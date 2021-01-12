@@ -103,7 +103,7 @@ class StockController extends Controller
     {
         $staff = User::where('type',0)->where('status', 1)->get();
         if(count($staff) == 0){
-            alert()->warning('No Supervisor available','Alert')->autoclose(4500);;
+            alert()->warning('no coordinator available','Alert')->autoclose(4500);;
             return redirect('/staff/register');
         }
         $Get_location = AdministrativeLocation::orderBy('id','DESC')

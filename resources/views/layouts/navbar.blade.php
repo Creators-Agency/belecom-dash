@@ -2,7 +2,7 @@
     <li class="sidebar-item">
         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/">
             <i class="fa fa-home"></i>
-            <span class="hide-menu">Home</span>
+            <span class="hide-menu">Dashboard</span>
         </a>
     </li>
     <li class="sidebar-item">
@@ -105,6 +105,20 @@
                 <a href="{{ URL::to('/staff/register') }}" class="sidebar-link">
                     <i class="mdi mdi-format-align-left"></i>
                     <span class="hide-menu"> Add Staff </span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="sidebar-item">
+        <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+            <i class="mdi mdi-crop-square"></i>
+            <span class="hide-menu">System Admin </span>
+        </a>
+        <ul aria-expanded="false" class="collapse  first-level">
+            <li class="sidebar-item">
+                <a href="{{ URL::to('/system/import') }}" class="sidebar-link">
+                    <i class="mdi mdi-format-align-left"></i>
+                    <span class="hide-menu"> Import data </span>
                 </a>
             </li>
         </ul>

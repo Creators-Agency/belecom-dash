@@ -199,3 +199,21 @@ Route::post('/ussd/callback', 'USSDController@paymentCallBack');
 // Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])
 //                 ->middleware('auth')
 //                 ->name('logout');
+
+
+/*
+ *                      	import
+ * =========================================================
+ *      				CRUD Operations
+ * ---------------------------------------------------------
+ *  Model:Referee, Account, SolarPanel, ActivityLog,
+ *	Beneficiary, Payout, SolarPanelType,
+ *	AdministrativeLocation
+ * ---------------------------------------------------------
+ *	Addtional info:
+ * *********************************************************
+ */
+Route::prefix('/system')->group(function(){
+    Route::post('/import','SystemController@import')->name('import');
+    Route::get('/import','SystemController@index');
+});
