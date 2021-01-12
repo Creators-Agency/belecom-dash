@@ -341,11 +341,12 @@ class ClientController extends Controller
 
     public function editClient($id, $dob)
     {
+        // return $id;
         $Get_clients = Beneficiary::where('isActive',1)
-                                    ->where('id', $id)
-                                    ->get();
+                                    ->where('identification', $id)
+                                    ->first();
         return view('client.edit', [
-            '$clients' => $Get_clients
+            'client' => $Get_clients
         ]);
     }
 
