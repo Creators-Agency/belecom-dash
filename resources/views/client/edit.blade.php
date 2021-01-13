@@ -109,7 +109,7 @@
                                 <div class="col-md-12 mb-3">
                                     <label for="VillageName">Village Name {{ $client->villageName }}</label>
                                     <input type="text" name="villageName" class="form-control"
-                                        value="{{ $client->villageName }}" id="VillageName" placeholder="Village Name"
+                                        value="{{ $client->village }}" id="VillageName" placeholder="Village Name"
                                         required />
                                     <div class="invalid-tooltip">
                                         This field shouldn't be empty
@@ -401,7 +401,7 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" value="{{$client->identification}}">
+                        <input type="hidden" name="id" value="{{$client->id}}">
                         <button class="btn btn-primary ml-3" type="submit">
                             Update Client
                         </button>

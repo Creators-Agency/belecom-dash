@@ -171,7 +171,7 @@ class ClientController extends Controller
 
 
             // if he/she heard about from someone
-            if ($request->refer = 1) {
+            if ($request->refer == 1) {
                 $refer = new Referee();
                 $refer->refereeName = $request->names;
                 $refer->refereeID = $request->identityReferee;
@@ -330,9 +330,7 @@ class ClientController extends Controller
 
     public function editClient($id, $dob)
     {
-        // return $id;
-        $Get_clients = Beneficiary::where('isActive',1)
-                                    ->where('identification', $id)
+        $Get_clients = Beneficiary::where('identification', $id)
                                     ->first();
         return view('client.edit', [
             'client' => $Get_clients
@@ -341,12 +339,64 @@ class ClientController extends Controller
 
     public function updateClient(Request $request)
     {
-        return $request;
-        Beneficiary::where('id', $request->KeyToEdit)
+        // return $request;
+        if ($request->refer == 1) {
+        /**
+         * check if referee existing in our db
+         */
+        $request->identityReferee;
+        $check = Referee::where('refereeID',$request->identityReferee)->first();
+        if (!Empty($check)) {
+            $refer = $check->id;
+        }
+            $refer = new Referee();
+            $refer->refereeName = $request->names;
+            $refer->refereeID = $request->identityReferee;
+            $refer->referrePhone = $request->refereeNumber;
+            $refer->relationship = $request->relationship;
+            if($refer->save()){
+                $get_refer = Referee::orderBy('id','DESC')->first();
+                $refer = $get_refer->id;
+            }
+
+        }
+        else {
+            $refer = 0;
+        }
+        try {
+            Beneficiary::where('id', $request->id)
                 ->update([
-                    'solarTypeName' => $request->SolarTypeName,
-                    'price' => $request->SolarTypePrice,
+                    'firstname'=>$request->firstName,
+                    'lastname'=>$request->lastName,
+                    'identification'=>$request->identification,
+                    'gender'=>$request->gender,
+                    'DOB'=>$request->age,
+                    'primaryPhone'=>$request->primaryNumber,
+                    'secondaryPhone'=>$request->secondaryNumber,
+                    'educationLevel'=>$request->education,
+                    'incomeSource'=>$request,
+                    'sourceOfEnergy'=>$request,
+                    'location'=>$request->location,
+                    'village'=>$request->villageName,
+                    'quarterName'=>$request->quarterName,
+                    'houseNumber'=>$request->houseNumber,
+                    'buildingMaterial'=>$request->roofMaterial,
+                    'familyMember'=>$request->numberOfPeopleSchool,
+                    'membersInSchool'=>$request->memberInSchool,
+                    'U18Male' =>$request->majorM,
+                    'U17Male' =>$request->minorM,
+                    'U18Female' =>$request->majorF,
+                    'U17Female' =>$request->minorF,
+                    'employmentStatus'=>$request->employmentStatus,
+                    'referredby'=>$refer,
                 ]);
+            alert()->success('User has been updated','Success!');
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            alert()->error('System countered errors during operation, try or contact system admin!','Oops something wrong!');
+            return Redirect::back()->withInput(); 
+        }
+
     }
 
 
@@ -356,9 +406,21 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function deleteClient($id)
     {
-        //
+        try {
+            alert()->success('User has been deleted','Success!')->persistent('are you sure?')->autoclose(3500);
+            Beneficiary::where('id', $id)
+                ->update([
+                    'isActive' => '0'
+                ]);
+            alert()->success('User has been deleted','Success!')->persistent('Close');
+            return Redirect('/client');
+        } catch (\Throwable $th) {
+            alert()->error('System countered errors during operation, try or contact system admin!','Oops something wrong!');
+            return Redirect::back();
+        }
+        
     }
 
     public function ActivityLogs($actionName,$modelName,$modelPrimaryKey)

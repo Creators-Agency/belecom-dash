@@ -216,4 +216,6 @@ Route::post('/ussd/callback', 'USSDController@paymentCallBack');
 Route::prefix('/system')->group(function(){
     Route::post('/import','SystemController@import')->name('import');
     Route::get('/import','SystemController@index');
+    Route::get('/clients','SystemController@clients');
+    Route::get('/clients/{id}/restore','SystemController@restore');
 });

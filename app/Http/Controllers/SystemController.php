@@ -67,9 +67,27 @@ class SystemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function clients()
     {
-        //
+        $Get_clients = DB::table('beneficiaries')
+                        ->join('administrative_locations','administrative_locations.id','=','beneficiaries.location')
+                        ->select(
+                            'beneficiaries.id as clientID',
+                            'beneficiaries.identification',
+                            'beneficiaries.firstname',
+                            'beneficiaries.lastname',
+                            'beneficiaries.gender',
+                            'beneficiaries.DOB',
+                            'beneficiaries.primaryPhone',
+                            'administrative_locations.id as locationID',
+                            'administrative_locations.locationName',
+                            )
+                        ->where('beneficiaries.isActive', 0)
+                        ->where('administrative_locations.status',1)
+                        ->get();
+        return view('system.clients',[
+            'clients' => $Get_clients
+        ]);
     }
 
     /**
