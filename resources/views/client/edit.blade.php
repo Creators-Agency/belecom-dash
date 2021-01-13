@@ -41,7 +41,7 @@
                             <div class="form-group col-md-12">
                                 <div class="col-md-12 mb-3">
                                     <label for="Identification">Identification</label>
-                                    <input type="number" name="identification" class="form-control"
+                                    <input type="text" name="identification" class="form-control"
                                         value="{{ $client->identification }}" id="Identification"
                                         placeholder="Identification" required />
                                     <div class="invalid-tooltip">
@@ -173,7 +173,7 @@
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" class="custom-control-input change-ref"
                                                     data-selector="show-form-ref" id="RefYes" name="refer" value="1"
-                                                    required {{ $client->referredby != '0' ? 'checked' : '' }}>
+                                                    required {{ $client->referredby != NULL ? 'checked' : '' }}>
                                                 <label class="custom-control-label" for="RefYes">Yes</label>
                                             </div>
                                         </div>
@@ -181,7 +181,7 @@
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" class="custom-control-input change-ref"
                                                     data-selector="hide-form-ref" id="RefNo" name="refer" value="0"
-                                                    required {{ $client->referredby == '0' ? 'checked' : '' }}>
+                                                    required {{ $client->referredby == NULL ? 'checked' : '' }}>
                                                 <label class="custom-control-label" for="RefNo">No</label>
                                             </div>
                                         </div>

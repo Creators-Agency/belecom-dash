@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Beneficiary;
 use Illuminate\Http\Request;
 use Validator;
 use Redirect;
 use DB;
 class SystemController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -22,23 +26,24 @@ class SystemController extends Controller
 {
     $file = $request->file;
 
-    $customerArr = $this->csvToArray($file);
+     $customerArr = $this->csvToArray($file);
     $data = [];
     for ($i = 0; $i < count($customerArr); $i ++)
     {
           $customerArr;
 
     }
+    // DB::table('beneficiaries')->insert($customerArr);
     try {
         DB::table('beneficiaries')->insert($customerArr);
         alert()->success('user importing returned with success','Success!');
         return Redirect::back(); 
-    } catch (\Throwable $th) {
-        alert()->error('unable to import data from file','Error!');
-        return Redirect::back();
+        } catch (\Throwable $th) {
+            alert()->error('unable to import data from file','Error!');
+            return Redirect::back();
+        }
+        
     }
-       
-}
     public function csvToArray($filename = '', $delimiter = ';')
 {
     if (!file_exists($filename) || !is_readable($filename))
@@ -69,6 +74,7 @@ class SystemController extends Controller
      */
     public function clients()
     {
+        // return Beneficiary::get();
         $Get_clients = DB::table('beneficiaries')
                         ->join('administrative_locations','administrative_locations.id','=','beneficiaries.location')
                         ->select(
@@ -82,7 +88,7 @@ class SystemController extends Controller
                             'administrative_locations.id as locationID',
                             'administrative_locations.locationName',
                             )
-                        ->where('beneficiaries.isActive', 0)
+                        ->where('beneficiaries.isActive', 1)
                         ->where('administrative_locations.status',1)
                         ->get();
         return view('system.clients',[

@@ -199,7 +199,7 @@ class ClientController extends Controller
 
             }
             else{
-                $client->referredby = 0;
+                $client->referredby = NULL;
 
                 #save client
                 if ($client->save()) {

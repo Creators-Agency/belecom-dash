@@ -219,3 +219,18 @@ Route::prefix('/system')->group(function(){
     Route::get('/clients','SystemController@clients');
     Route::get('/clients/{id}/restore','SystemController@restore');
 });
+
+Route::get('/dev-1234',function()
+    {
+        $alldata=[];
+
+        Schema::table('beneficiaries', function($table) use ($alldata)
+        { 
+            // $table->biginteger('primaryPhone')->unique(false)->default(0)->change();
+            // $table->dropUnique('primaryPhone');
+            $table->dropUnique(['primaryPhone'])->unique(false)->default(0)->change();
+        });
+
+        // insert system pref
+    }
+);
