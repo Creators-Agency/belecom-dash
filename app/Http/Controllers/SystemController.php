@@ -74,7 +74,6 @@ class SystemController extends Controller
      */
     public function clients()
     {
-        // return Beneficiary::get();
         $Get_clients = DB::table('beneficiaries')
                         ->join('administrative_locations','administrative_locations.id','=','beneficiaries.location')
                         ->select(

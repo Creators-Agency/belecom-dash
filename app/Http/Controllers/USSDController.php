@@ -179,8 +179,8 @@ class USSDController extends Controller {
                                 $this->stop($content, $sessionId);
                             }
                             $content  = "Mugiye kwishyura: ".$payment_fee." Rwf.\n";
-                            $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo.\n";
-                            $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe.\n";
+                            $content .= "Kanda *182*7*1# Mwemeze ubwishyu mukoresheje MTN MoMo.\n";
+                            $content .= "Murabona ubutumwa bugufi bwemeza ibyakozwe.\n";
                             $content .= "Murakoze!";
                             $this->payment_api($phoneNumber, $payment_fee, $transactionID);
                             $this->stop($content, $sessionId);
@@ -287,7 +287,7 @@ class USSDController extends Controller {
                 "amount" : "'.$amount.'",
                 "organizationId" : "fa99567c-a2ab-4fbe-84c5-1d20093a3c8e",
                 "description" : "Payment of Solar Panel",
-                "callbackUrl" : "http://197.243.14.87/ussd/callBack",
+                "callbackUrl" : "http://197.243.14.87/ussd/callback",
                 "transactionId" : "'.$transactionID.'"
             }';
 
@@ -378,7 +378,7 @@ class USSDController extends Controller {
                     $myJSON = json_encode($myObj);
                     $com = Beneficiary::where('identification', $get->clientID)->first();
                     $phone = '0'.$com->primaryPhone;
-                    $message = $com->firstname." turakumenyesha ko igikorwa cyo kwishura cyagenze neza \n Murakoze!";
+                    $message = $com->firstname." turakumenyesha ko igikorwa cyo kwishura cyagenze neza \n umubare uranga ubwishu .$request->transactionId.\n Murakoze!";
                     $this->BulkSms($phone,$message);
                 }
             } catch (\Throwable $th) {
