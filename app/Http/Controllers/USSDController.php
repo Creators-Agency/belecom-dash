@@ -362,10 +362,11 @@ class USSDController extends Controller {
     /*------------------- callBack ------------------*/
 
     public function paymentCallBack(Request $request) {
+        // return $request;
         /* if transaction is successfuly */
         if($request->status === 'SUCCESS') {
             try {
-                $get = Payout::where('transactionID', $request->transactionId)->first();
+                return $get = Payout::where('transactionID', $request->transactionId)->first();
                 if(isset($get) == 1) {
                     Payout::where('transactionID', $request->transactionId)
                     ->update([
@@ -379,13 +380,13 @@ class USSDController extends Controller {
                     $com = Beneficiary::where('identification', $get->clientID)->first();
                     $phone = '0'.$com->primaryPhone;
                     $message = $com->firstname." turakumenyesha ko igikorwa cyo kwishura cyagenze neza \n umubare uranga ubwishu .$request->transactionId.\n Murakoze!";
-                    $this->BulkSms($phone,$message);
+                    // $this->BulkSms($phone,$message);
                 }
             } catch (\Throwable $th) {
                 throw $th;
             }
         } else {
-            $get = Payout::where('transactionID', $request->transactionId)->first();
+            return $get = Payout::where('transactionID', $request->transactionId)->first();
             $com = Beneficiary::where('identification', $get->clientID)->first();
             $phone = '0'.$com->primaryPhone;
             $message = 'Mukiriya mwiza kwishura ntibyagenze neza!';
