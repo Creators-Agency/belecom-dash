@@ -15,6 +15,8 @@ use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use App\Models\SolarPanelType;
 use App\Models\AdministrativeLocation;
+use App\Models\Beneficiary;
+
 class StockController extends Controller
 {
     public function __construct() {
@@ -146,10 +148,12 @@ class StockController extends Controller
 
     public function viewOwner($Product)
     {
-        $productData = DB::table('accounts')
-                ->join('beneficiaries','beneficiaries.identification','Accounts.beneficiary')
-                ->where('accounts.productNumber',$Product)
-                ->first();
+        // return $productData = DB::table('accounts')
+                // ->join('beneficiaries','beneficiaries.identification','accounts.beneficiary')
+                // ->where('accounts.productNumber',$Product)
+                // ->get();
+            //  $productData->beneficiary;
+            return Beneficiary::where('identification', '234546378995')->first();
         return view('stock.product-owner',[
             'info' => $productData
         ]);

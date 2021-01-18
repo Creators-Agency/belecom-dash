@@ -277,7 +277,12 @@
                                         <option value="">
                                             Select Educational Level
                                         </option>
-                                        <option value="1">one</option>
+                                        <option value="1">None</option>
+                                        <option value="2">Primary School</option>
+                                        <option value="3">Vocational Training school</option>
+                                        <option value="4">Secondary Diploma</option>
+                                        <option value="5">College Degree</option>
+                                        <option value="6">University Degree</option>
                                     </select>
                                     <div class="invalid-tooltip">
                                         You must select valid Location
@@ -292,7 +297,8 @@
                                         <option value="">
                                             Choose Employment Status
                                         </option>
-                                        <option value="1">one</option>
+                                        <option value="0">Unemployed</option>
+                                        <option value="1">Has Job</option>
                                     </select>
                                     <div class="invalid-tooltip">
                                         You must select valid Location
@@ -315,9 +321,14 @@
                                     <label for="SourceOfEnergy">Source Of Energy</label>
                                     <select class="custom-select" name="sourceOfEnergy" id="SourceOfEnergy">
                                         <option value="">
-                                            Choose Location
+                                            Source of energy
                                         </option>
-                                        <option value="1">one</option>
+                                        <option value="">Choose Of Energy</option>
+                                        <option value="1">Solar Energy</option>
+                                        <option value="2">Electric Energy</option>
+                                        <option value="3">Biogas Energy</option>
+                                        <option value="4">Wind Energy</option>
+
                                     </select>
                                     <div class="invalid-tooltip">
                                         You must select valid Location
