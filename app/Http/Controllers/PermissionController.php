@@ -51,7 +51,6 @@ class PermissionController extends Controller
      */
     public function stockUpdate(Request $request)
     {
-        // return $request->read == 'on' ? 1:0;
         /**
          * check if user exist in the table 
          */

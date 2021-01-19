@@ -143,7 +143,7 @@ class StaffController extends Controller
             }
             array_push($userPermission, $dataPermission);
         }
-        // return $userPermission;
+        return $userPermission;
         return view('staff.permission',[
             'staff' => $data,
             'permissions' => $userPermission

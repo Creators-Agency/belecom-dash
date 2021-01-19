@@ -260,7 +260,7 @@ class ClientController extends Controller
      */
     public function assignClient(Request $request)
     {
-        return $request;
+        // return $request;
         /*------------getting solar using type selected----------------*/
         $serialNumber = SolarPanel::where('solarPanelType',$request->solarPanelType)
                                 ->where('status',0)
