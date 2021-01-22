@@ -210,8 +210,7 @@ class USSDController extends Controller {
                                 $this->stop($content, $sessionId);
                             }
                             $content  = "Mugiye kwishyura: ".$pay." Rwf.\n";
-                            $content .= "Mwemeze ubwishyu mukoresheje Airtel Money / MTN MoMo.\n";
-                            $content .= "Nyuma yo kwishyura murabona ubutumwa bugufi bwemeza ibyakozwe.\n";
+                            $content .= "kanda *187*1# wemeze kwishura.\n";
                             $content .= "Murakoze!";
                             $this->stop($content, $sessionId);
                         }
