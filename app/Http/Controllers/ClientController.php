@@ -263,14 +263,17 @@ class ClientController extends Controller
         // return $request;
         if($request->price == 0){
             alert()->success('this session has expired retry again!','Oops');
+            return 'this session has expired retry again!';
                 return Redirect('/client/perspective');
         }
-        if($request->price > 36 ){
+        if($request->loansPeriod >'36' ){
             alert()->success('Time period should not exceed 36 months','Oops');
+            return 'Time period should not exceed 36 months';
                 return Redirect('/client/perspective');
         }
-        if($request->price < 1){
+        if($request->loansPeriod < 1){
             alert()->success('Minimum time Period is one month!','Oops');
+            return 'Minimum time Period is one month!';
                 return Redirect('/client/perspective');
         }
         /*------------getting solar using type selected----------------*/
@@ -290,7 +293,7 @@ class ClientController extends Controller
         } else {
             $amountLeft = $request->price;
         }
-        return $amountLeft/$request->loansPeriod;
+        // return $amountLeft/$request->loansPeriod;
         $account->loan = $amountLeft;
         $account->doneBy =  Auth::User()->id;
 
@@ -424,8 +427,8 @@ class ClientController extends Controller
     public function viewClient($id, $dob)
     {
         $userData = DB::table('beneficiaries')
-                    // ->join('adminidtrative_locations')
                     ->select(
+                        
                         'beneficiaries.firstname',
                         'beneficiaries.lastname',
                         'beneficiaries.identification',
@@ -437,6 +440,18 @@ class ClientController extends Controller
                         'beneficiaries.incomeSource',
                         'beneficiaries.sourceOfEnergy',
                         'beneficiaries.location',
+                        'beneficiaries.village',
+                        'beneficiaries.quarterName',
+                        'beneficiaries.houseNumber',
+                        'beneficiaries.buildingMaterial',
+                        'beneficiaries.familyMember',
+                        'beneficiaries.membersInSchool',
+                        'beneficiaries.U18Male',
+                        'beneficiaries.U17Male',
+                        'beneficiaries.U18Female',
+                        'beneficiaries.U17Female',
+                        'beneficiaries.employmentStatus',
+                        'beneficiaries.referredby',
                     )
                     ->where('identification',$id)
                     ->first();

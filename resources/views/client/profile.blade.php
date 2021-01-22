@@ -41,16 +41,17 @@
                         <div class="row text-center">
                             <div class="col-md-4 col-xs-6 b-r"> <strong>Village Name</strong>
                                 <br>
-                                <p class="text-muted">{{$userData->firstname.' '.$userData->lastname}}</p>
+                                <p class="text-muted">{{$userData->village}}</p>
                             </div>
                             <div class="col-md-4 col-xs-6 b-r"> <strong>Quarter Name</strong>
                                 <br>
                                 <p class="text-muted">
+                                    {{$userData->quarterName}}
                                 </p>
                             </div>
                             <div class="col-md-4 col-xs-6 b-r"> <strong>House Number</strong>
                                 <br>
-                                <p class="text-muted">{{$userData->identification}}</p>
+                                <p class="text-muted">{{$userData->houseNumber}}</p>
                             </div>
                         </div>
                         <hr>
@@ -59,12 +60,40 @@
                             <!-- Column -->
                             <div class="card">
                                 <div class="card-body text-center">
-                                    <h4 class="text-center text-cyan">Amount to be paid</h4>
-                                    <h2>1200</h2>
+                                    <h7 class="text-center text-cyan">Product Number</h7>
+                                    <?php
+
+                                        $productNumber = \App\Models\Account::where('beneficiary',$userData->identification)->first();
+                                        // print_r($productNumber->productNumber);
+                                        if ($productNumber->loanPeriod != 36) {
+                                            $toPayMonth = $productNumber->loan/$productNumber->loanPeriod;
+                                            $totalAmount = $toPayMonth *36;
+                                            $paid = $totalAmount-$productNumber->loan;
+                                            $perc = ($paid * 100)/$totalAmount;
+                                        }
+                                    ?>
+                                    <h1>
+                                        @if($productNumber)
+                                        {{$productNumber->productNumber}}
+                                        @else
+                                        <button type="button" class="btn btn-danger btn-circle">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                        @endif
+                                    </h1>
+                                    <h7 class="text-center text-cyan">Amount to be paid</h7>
+                                    <h2>@if($productNumber != NULL)
+                                        {{number_format($productNumber->loan)}} Frw
+                                        @else
+                                        <button type="button" class="btn btn-danger btn-circle">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                        @endif
+                                    </h2>
                                     <div class="row p-t-10 p-b-10">
                                         <!-- Column -->
                                         <div class="col text-center align-self-center">
-                                            <div data-label="80%" class="css-bar m-b-0 css-bar-success css-bar-80"><i
+                                            <div data-label="80%" class="css-bar m-b-0 css-bar-success css-bar-90"><i
                                                     class="display-6 mdi mdi-briefcase-check"></i></div>
                                         </div>
                                     </div>
