@@ -261,6 +261,18 @@ class ClientController extends Controller
     public function assignClient(Request $request)
     {
         // return $request;
+        if($request->price == 0){
+            alert()->success('this session has expired retry again!','Oops');
+                return Redirect('/client/perspective');
+        }
+        if($request->price > 36 ){
+            alert()->success('Time period should not exceed 36 months','Oops');
+                return Redirect('/client/perspective');
+        }
+        if($request->price < 1){
+            alert()->success('Minimum time Period is one month!','Oops');
+                return Redirect('/client/perspective');
+        }
         /*------------getting solar using type selected----------------*/
         $serialNumber = SolarPanel::where('solarPanelType',$request->solarPanelType)
                                 ->where('status',0)
@@ -270,7 +282,16 @@ class ClientController extends Controller
         $account->beneficiary = $request->clientIdentification;
         $account->productNumber = $serialNumber->solarPanelSerialNumber;
         $account->clientNames = $request->firstname;
-        $account->loan = $request->price;
+        if ($request->loansPeriod != 36) {
+            // calculate amount paid if he/she already paying with old-fashioned way
+            $monthPaid = 36 - $request->loansPeriod;
+            $amountPaid = ($request->price * $monthPaid)/36;
+            $amountLeft = $request->price - $amountPaid;
+        } else {
+            $amountLeft = $request->price;
+        }
+        return $amountLeft/$request->loansPeriod;
+        $account->loan = $amountLeft;
         $account->doneBy =  Auth::User()->id;
 
         /*------- check if this number does not exist in account table*/
@@ -397,6 +418,15 @@ class ClientController extends Controller
             return Redirect::back()->withInput(); 
         }
 
+    }
+
+
+    public function viewClient($id, $dob)
+    {
+        return DB::table('beneficiaries')
+                    ->where('identification',$id)
+                    ->get();
+        
     }
 
 

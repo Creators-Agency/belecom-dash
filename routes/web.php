@@ -86,6 +86,7 @@ Route::prefix('client')->group(function(){
     Route::post('/create/client','ClientController@saveClient')->name('CreateClient');
 
     Route::get('/{id}-{dob}/edit', 'ClientController@editClient');
+    Route::get('/{id}-{dob}/view', 'ClientController@viewClient');
     Route::post('/', 'ClientController@updateClient')->name('UpdateClient');
     Route::get('/{id}/delete', 'ClientController@deleteClient');
 
