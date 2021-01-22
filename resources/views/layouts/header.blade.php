@@ -7,6 +7,7 @@
 <link href="{{ URL::asset('assets/images/logo.jpg') }}" rel="icon" type="image/jpg" sizes="16x16" />
 <link href="{{ URL::asset('assets/libs/chartist/dist/chartist.min.css') }}" rel="stylesheet" />
 <link href="{{ URL::asset('assets/extra-libs/c3/c3.min.css') }}" rel="stylesheet" />
+<link href="{{ URL::asset('assets/extra-libs/css-chart/css-chart.css') }}" rel="stylesheet" />
 <link href="{{ URL::asset('assets/extra-libs/jvector/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet" />
 <link href="{{ URL::asset('dist/css/style.min.css') }}" rel="stylesheet">
 <!-- sweet alert -->

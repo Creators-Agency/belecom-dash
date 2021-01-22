@@ -423,9 +423,26 @@ class ClientController extends Controller
 
     public function viewClient($id, $dob)
     {
-        return DB::table('beneficiaries')
+        $userData = DB::table('beneficiaries')
+                    // ->join('adminidtrative_locations')
+                    ->select(
+                        'beneficiaries.firstname',
+                        'beneficiaries.lastname',
+                        'beneficiaries.identification',
+                        'beneficiaries.gender',
+                        'beneficiaries.DOB',
+                        'beneficiaries.primaryPhone',
+                        'beneficiaries.secondaryPhone',
+                        'beneficiaries.educationLevel',
+                        'beneficiaries.incomeSource',
+                        'beneficiaries.sourceOfEnergy',
+                        'beneficiaries.location',
+                    )
                     ->where('identification',$id)
-                    ->get();
+                    ->first();
+        return view('client.profile', [
+            'userData' => $userData,
+        ]);
         
     }
 
