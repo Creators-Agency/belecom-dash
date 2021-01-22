@@ -37,6 +37,22 @@
                                 <p class="text-muted">{{$location->locationName}}</p>
                             </div>
                         </div>
+                        <br>
+                        <div class="row text-center">
+                            <div class="col-md-4 col-xs-6 b-r"> <strong>Village Name</strong>
+                                <br>
+                                <p class="text-muted">{{$userData->firstname.' '.$userData->lastname}}</p>
+                            </div>
+                            <div class="col-md-4 col-xs-6 b-r"> <strong>Quarter Name</strong>
+                                <br>
+                                <p class="text-muted">
+                                </p>
+                            </div>
+                            <div class="col-md-4 col-xs-6 b-r"> <strong>House Number</strong>
+                                <br>
+                                <p class="text-muted">{{$userData->identification}}</p>
+                            </div>
+                        </div>
                         <hr>
                         <div class="card-group">
                             <!-- Column -->
@@ -106,53 +122,59 @@
                         <!-- Column -->
                         <hr>
                         <div class="row text-center">
-                            <div class="col-md-3 col-xs-6 b-r"> <strong>Full Name</strong>
+                            <div class="col-md-3 col-xs-6 b-r"> <strong>Educational Level</strong>
                                 <br>
-                                <p class="text-muted">{{$userData->firstname.' '.$userData->lastname}}</p>
-                            </div>
-                            <div class="col-md-3 col-xs-6 b-r"> <strong>Mobile</strong>
-                                <br>
-                                <p class="text-muted">{{$userData->primaryPhone}}
-                                    @if($userData->secondaryPhone)
-                                    / $userData->secondaryPhone
-                                    @endif
+                                <p class="text-muted">
+                                    sec
                                 </p>
                             </div>
-                            <div class="col-md-3 col-xs-6 b-r"> <strong>ID</strong>
+                            <div class="col-md-3 col-xs-6 b-r"> <strong>Employment Status</strong>
                                 <br>
-                                <p class="text-muted">{{$userData->identification}}</p>
+                                <p class="text-muted">Employment</p>
                             </div>
-                            <div class="col-md-3 col-xs-6"> <strong>Location</strong>
-                                <br><?php 
-                                        $location = \App\Models\AdministrativeLocation::where('id', $userData->location)->first();
-                                    ?>
-                                <p class="text-muted">{{$location->locationName}}</p>
+                            <div class="col-md-3 col-xs-6"> <strong>Source of Energy before</strong>
+                                <br>
+                                <p class="text-muted">energy</p>
+                            </div>
+                            <div class="col-md-3 col-xs-6"> <strong>Roof Material</strong>
+                                <br>
+                                <p class="text-muted">Iron</p>
                             </div>
                         </div>
                         <div class="row text-center">
-                            <div class="col-md-3 col-xs-6 b-r"> <strong>Full Name</strong>
-                                <br>
-                                <p class="text-muted">{{$userData->firstname.' '.$userData->lastname}}</p>
-                            </div>
-                            <div class="col-md-3 col-xs-6 b-r"> <strong>Mobile</strong>
-                                <br>
-                                <p class="text-muted">{{$userData->primaryPhone}}
-                                    @if($userData->secondaryPhone)
-                                    / $userData->secondaryPhone
-                                    @endif
-                                </p>
-                            </div>
-                            <div class="col-md-3 col-xs-6 b-r"> <strong>ID</strong>
-                                <br>
-                                <p class="text-muted">{{$userData->identification}}</p>
-                            </div>
-                            <div class="col-md-3 col-xs-6"> <strong>Location</strong>
-                                <br><?php 
-                                        $location = \App\Models\AdministrativeLocation::where('id', $userData->location)->first();
-                                    ?>
-                                <p class="text-muted">{{$location->locationName}}</p>
+                            <div class="col-sm-12">
+                                <h5 class="m-5">Family Background</h5>
                             </div>
                         </div>
+                        <div class="row text-center">
+                            <div class="col-md-4 col-xs-6 b-r"> <strong>Number of family Member</strong>
+                                <br>
+                                <p class="text-muted">3</p>
+                            </div>
+                            <div class="col-md-4 col-xs-6 b-r"> <strong>Family Member In School</strong>
+                                <br>
+                                <p class="text-muted">1</p>
+                            </div>
+                            <div class="col-md-4 col-xs-6 b-r"> <strong>Number of Female Under 17</strong>
+                                <br>
+                                <p class="text-muted">1</p>
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-md-4 col-xs-6"> <strong>Number of Female above 18</strong>
+                                <br>
+                                <p class="text-muted">7</p>
+                            </div>
+                            <div class="col-md-4 col-xs-6 b-r"> <strong>Number of Male Under 17</strong>
+                                <br>
+                                <p class="text-muted">3</p>
+                            </div>
+                            <div class="col-md-4 col-xs-6 b-r"> <strong>Number of Male above 18</strong>
+                                <br>
+                                <p class="text-muted">1</p>
+                            </div>
+                        </div>
+
                         <hr>
                     </div>
                 </div>
