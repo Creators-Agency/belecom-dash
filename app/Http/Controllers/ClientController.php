@@ -293,7 +293,6 @@ class ClientController extends Controller
         } else {
             $amountLeft = $request->price;
         }
-        // return $amountLeft/$request->loansPeriod;
         $account->loan = $amountLeft;
         $account->doneBy =  Auth::User()->id;
 
@@ -311,12 +310,31 @@ class ClientController extends Controller
                     ->update([
                         'isActive' => 3
                     ]);
+                $getClients = Beneficiary::where('identification', $request->clientIdentification)->first();
 
                 /* changing solar status*/
                  solarPanel::where('solarPanelSerialNumber', $serialNumber->solarPanelSerialNumber)
                     ->update([
                         'status' => 1
                     ]);
+
+                if ($request->loansPeriod != 36) {
+                    // insert month he already paid using old fashioned way
+                    for($i = 1; $i<=$monthPaid; $i++){
+                        $transactionID = sha1(md5(time())).'-'.rand(102,0);
+                        $new_payout = new Payout();
+                        $new_payout->solarSerialNumber = $serialNumber->solarPanelSerialNumber;
+                        $new_payout->clientNames = $request->firstname;
+                        $new_payout->clientID = $request->clientIdentification;
+                        $new_payout->clientPhone = $getClients->primaryPhone;
+                        $new_payout->monthYear = date("m-Y");
+                        $new_payout->payment = $amountLeft/$request->loansPeriod;
+                        $new_payout->transactionID = $transactionID;
+                        $new_payout->status = 1;
+                        $new_payout->balance = $amountLeft - ($amountLeft/$request->loansPeriod);
+                        $new_payout->save();
+                    }
+                }
                 /*---------- sending message -----*/
                     // get user
                     $user = Beneficiary::where('identification', $request->clientIdentification)->first();
@@ -325,7 +343,7 @@ class ClientController extends Controller
                 /*----------updating activity log--------------*/
                 $Get_account = Account::orderBy('id','DESC')->first();
                 $this->ActivityLogs('Creating new','Account',$Get_account->id);
-
+                return 'here';
                 alert()->success('yes','done');
                 return Redirect('/client');
 
@@ -336,6 +354,7 @@ class ClientController extends Controller
             }
         }else{
             /*-------------Catch error if account exist-----------------*/
+            return 'Account exist! Oops!!';
             alert()->warning('Account exist!','Oops!!');
             return Redirect('/client');
         }
@@ -356,6 +375,9 @@ class ClientController extends Controller
     {
         $Get_clients = Beneficiary::where('identification', $id)
                                     ->first();
+        if (empty($Get_clients)) {
+            alert()->warning('Encounted error with this record!','Oops!!');
+        }
         return view('client.edit', [
             'client' => $Get_clients
         ]);
@@ -427,6 +449,7 @@ class ClientController extends Controller
     public function viewClient($id, $dob)
     {
         $userData = DB::table('beneficiaries')
+                    // ->join('payouts','payouts.clientID','beneficiaries.identification')
                     ->select(
                         
                         'beneficiaries.firstname',

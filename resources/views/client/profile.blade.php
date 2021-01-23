@@ -64,10 +64,12 @@
                                     <?php
 
                                         $productNumber = \App\Models\Account::where('beneficiary',$userData->identification)->first();
-                                        // print_r($productNumber->productNumber);
                                         if ($productNumber->loanPeriod != 36) {
                                             $toPayMonth = $productNumber->loan/$productNumber->loanPeriod;
                                             $totalAmount = $toPayMonth *36;
+                                            $paid = $totalAmount-$productNumber->loan;
+                                            $perc = ($paid * 100)/$totalAmount;
+                                        }else{
                                             $paid = $totalAmount-$productNumber->loan;
                                             $perc = ($paid * 100)/$totalAmount;
                                         }
@@ -83,7 +85,7 @@
                                     </h1>
                                     <h7 class="text-center text-cyan">Amount to be paid</h7>
                                     <h2>@if($productNumber != NULL)
-                                        {{number_format($productNumber->loan)}} Frw
+                                        {{number_format($totalAmount)}} Frw
                                         @else
                                         <button type="button" class="btn btn-danger btn-circle">
                                             <i class="fa fa-times"></i>
