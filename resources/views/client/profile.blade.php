@@ -76,7 +76,7 @@
                                     ?>
                                     <h1>
                                         @if($productNumber)
-                                        {{$productNumber->productNumber}}
+                                        #{{$productNumber->productNumber}}
                                         @else
                                         <button type="button" class="btn btn-danger btn-circle">
                                             <i class="fa fa-times"></i>
@@ -102,11 +102,13 @@
                                     <div class="row">
                                         <div class="col-md-6 col-sm-12">
                                             <h4 class="font-medium m-b-0 text-success">Paid <br>
-                                                12465</h4>
+                                                {{number_format($paymentDone)}} Frw
+                                            </h4>
                                         </div>
                                         <div class="col-md-6 col-sm-12">
                                             <h4 class="font-medium m-b-0 text-danger">Due <br>
-                                                145</h4>
+                                                {{number_format($totalAmount-$paymentDone)}} Frw
+                                            </h4>
                                         </div>
                                     </div>
                                 </div>
@@ -120,7 +122,7 @@
                                 <br>
                                 <p class="text-muted">
                                     <br>
-                                <p>date</p>
+                                <p>{{$userData->created_at}}</p>
                                 <br>
                                 <button type="button" class="btn btn-success btn-circle ">
                                     <i class="fa fa-check"></i>
@@ -131,7 +133,7 @@
                                 <br>
                                 <p class="text-muted">
                                     <br>
-                                <p>date</p>
+                                <p>{{$activatedDate->created_at}}</p>
                                 <br>
                                 <button type="button" class="btn btn-success btn-circle">
                                     <i class="fa fa-check"></i>

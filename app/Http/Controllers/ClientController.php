@@ -331,7 +331,7 @@ class ClientController extends Controller
                         $new_payout->payment = $amountLeft/$request->loansPeriod;
                         $new_payout->transactionID = $transactionID;
                         $new_payout->status = 1;
-                        $new_payout->balance = $amountLeft - ($amountLeft/$request->loansPeriod);
+                        $new_payout->balance = round($amountLeft - ($amountLeft/$request->loansPeriod),0);
                         $new_payout->save();
                     }
                 }
@@ -377,6 +377,7 @@ class ClientController extends Controller
                                     ->first();
         if (empty($Get_clients)) {
             alert()->warning('Encounted error with this record!','Oops!!');
+            return Redirect::back();
         }
         return view('client.edit', [
             'client' => $Get_clients
@@ -449,9 +450,9 @@ class ClientController extends Controller
     public function viewClient($id, $dob)
     {
         $userData = DB::table('beneficiaries')
-                    // ->join('payouts','payouts.clientID','beneficiaries.identification')
+                    ->join('payouts','payouts.clientID','beneficiaries.identification')
                     ->select(
-                        
+                        'payouts.balance',
                         'beneficiaries.firstname',
                         'beneficiaries.lastname',
                         'beneficiaries.identification',
@@ -475,11 +476,20 @@ class ClientController extends Controller
                         'beneficiaries.U17Female',
                         'beneficiaries.employmentStatus',
                         'beneficiaries.referredby',
+                        'beneficiaries.created_at',
                     )
                     ->where('identification',$id)
                     ->first();
+        $payment = Payout::where('clientID',$id)->where('status', 1)->sum('payment');
+        $activated = Account::where('beneficiary',$id)->first();
+        if (empty($userData)) {
+            alert()->warning('Encounted error with this record!','Oops!!');
+            return Redirect::back();
+        }
         return view('client.profile', [
             'userData' => $userData,
+            'paymentDone'=>$payment,
+            'activatedDate' => $activated,
         ]);
         
     }
