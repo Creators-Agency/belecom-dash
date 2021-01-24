@@ -122,7 +122,7 @@ class HomeController extends Controller {
         } 
         $payments = new Analytics;
         $payments->labels($month_payment);
-        $payments->dataset('Loan Payments', 'line', $month_payment);
+        $payments->dataset('Loan Paid in Frw', 'line', $amount_payment);
 
         return view('dashboard', [
         	// Analytics Graph

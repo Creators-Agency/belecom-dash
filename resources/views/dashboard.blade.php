@@ -89,7 +89,7 @@
                             </div>
                             <div class="col-5">
                                 <h1 class="font-light text-right mb-0" style="font-size: 12px !important;">
-                                    {{ ($loanAmount) }}
+                                    {{ ($loanAmount) }} Frw
                                 </h1>
                             </div>
                         </div>
@@ -106,7 +106,9 @@
                                     Installment Amount</p>
                             </div>
                             <div class="col-5">
-                                <h1 class="font-light text-right mb-0">{{ ($latestSalesAmount) }}</h1>
+                                <h1 class="font-light text-right mb-0" style="font-size: 12px !important;">
+                                    {{ ($latestSalesAmount) }} frw
+                                </h1>
                             </div>
                         </div>
                     </div>
@@ -122,7 +124,9 @@
                                     Solar Panels</p>
                             </div>
                             <div class="col-5">
-                                <h1 class="font-light text-right mb-0">{{ ($panels) }}</h1>
+                                <h1 class="font-light text-right mb-0" style="font-size: 12px !important;">
+                                    {{ ($panels) }}
+                                </h1>
                             </div>
                         </div>
                     </div>
@@ -138,7 +142,9 @@
                                     Branch</p>
                             </div>
                             <div class="col-5">
-                                <h1 class="font-light text-right mb-0">{{ ($locations) }}</h1>
+                                <h1 class="font-light text-right mb-0" style="font-size: 12px !important;">
+                                    {{ ($locations) }}
+                                </h1>
                             </div>
                         </div>
                     </div>
@@ -146,12 +152,12 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-12 col-md-12">
+            <div class="col-lg-6 col-md-6">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
-                                <h4 class="card-title">Sales Analytics</h4>
+                                <h4 class="card-title">Product sales analytics</h4>
                             </div>
                         </div>
                         <div class="mt-5">
@@ -161,12 +167,12 @@
                     </div>
                 </div>
             </div>
-            {{-- <div class="col-lg-12 col-md-12">
+            <div class="col-lg-6 col-md-6">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
-                                <h4 class="card-title">Sales Analytics</h4>
+                                <h4 class="card-title">Loan payments analytics</h4>
                             </div>
                         </div>
                         <div class="mt-5">
@@ -175,7 +181,7 @@
                         </div>
                     </div>
                 </div>
-            </div>--}}
+            </div>
         </div>
     </div>
 </div>
