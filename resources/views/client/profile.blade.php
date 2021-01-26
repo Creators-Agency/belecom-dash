@@ -31,8 +31,11 @@
                                 <p class="text-muted">{{$userData->identification}}</p>
                             </div>
                             <div class="col-md-3 col-xs-6"> <strong>Location</strong>
-                                <br><?php 
-                                        $location = \App\Models\AdministrativeLocation::where('id', $userData->location)->first();
+                                <br><?php
+
+use App\Models\SolarPanel;
+
+$location = \App\Models\AdministrativeLocation::where('id', $userData->location)->first();
                                     ?>
                                 <p class="text-muted">{{$location->locationName}}</p>
                             </div>
@@ -64,6 +67,7 @@
                                     <?php
 
                                         $productNumber = \App\Models\Account::where('beneficiary',$userData->identification)->first();
+                                        $solarPanel = \App\Models\SolarPanel::where('solarPanelSerialNumber',$productNumber->productNumber)->first();
                                         if ($productNumber->loanPeriod != 36) {
                                             $toPayMonth = $productNumber->loan/$productNumber->loanPeriod;
                                             $totalAmount = $toPayMonth *36;
@@ -77,7 +81,17 @@
                                     <h1>
                                         @if($productNumber)
                                         #{{$productNumber->productNumber}}
+                                        {{$solarPanel->status}}
                                         <br>
+                                        @if($solarPanel->status == 3)
+                                        <form action="{{ route('fixed') }}" method="POST" class="inline">
+                                            @csrf
+                                            <input type="hidden" value="{{$productNumber->productNumber}}" name="solar">
+                                            <button type="submit" class="btn btn-warning">
+                                                Re-assign
+                                            </button>
+                                        </form>
+                                        @else
                                         <form action="{{ route('returnFix') }}" method="POST" class="inline">
                                             @csrf
                                             <input type="hidden" value="{{$productNumber->productNumber}}" name="solar">
@@ -85,6 +99,7 @@
                                                 Return Product for fix
                                             </button>
                                         </form>
+                                        @endif
                                         <form action="{{ route('deactivate') }}" method="POST" class="inline">
                                             @csrf
                                             <input type="hidden" value="{{$productNumber->productNumber}}" name="solar">

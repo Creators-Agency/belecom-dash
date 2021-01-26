@@ -526,16 +526,41 @@ class ClientController extends Controller
          * return solar panel for fix
          */
         try {
-            // solarPanel::where('solarPanelSerialNumber', $request->solar)
-            //         ->update([
-            //             'status' => 3
-            //         ]);
+            solarPanel::where('solarPanelSerialNumber', $request->solar)
+                    ->update([
+                        'status' => 3
+                    ]);
             $client = DB::table('accounts')
                     ->join('beneficiaries','beneficiaries.identification','accounts.beneficiary')
                     ->where('productNumber',$request->solar)->first();
                     $message = 'Ubusabe bwo gusubiza umurasire ufite numero: '.$client->productNumber.' bwagenze neza \n uzamenyeshwa igihe uzaba umaze gukorwa, \n Murakoze';
             $this->sendBulk($client->primaryPhone,$message);
             alert()->success('Solar Panel has reported back to belecom','Success');
+            return Redirect('/client/actual');
+
+        } catch (\Throwable $th) {
+            alert()->error('System countered errors during operation, try or contact system admin!','Oops something wrong!');
+            return Redirect::back();
+        }
+    }
+
+    public function fixed(Request $request)
+    {
+        // return $request;
+        /**
+         * return solar panel for fix
+         */
+        try {
+            solarPanel::where('solarPanelSerialNumber', $request->solar)
+                    ->update([
+                        'status' => 1
+                    ]);
+            $client = DB::table('accounts')
+                    ->join('beneficiaries','beneficiaries.identification','accounts.beneficiary')
+                    ->where('productNumber',$request->solar)->first();
+                    $message = 'Usubijwe umurasire ufite numero: '.$client->productNumber.'\n Murakoze';
+            $this->sendBulk($client->primaryPhone,$message);
+            alert()->success('Solar Panel has reported back to customer','Success');
             return Redirect('/client/actual');
 
         } catch (\Throwable $th) {

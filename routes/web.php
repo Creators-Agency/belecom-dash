@@ -81,6 +81,7 @@ Route::prefix('stock')->group(function(){
 
 Route::prefix('client')->group(function(){
 	Route::get('/','ClientController@index');
+	Route::get('/actual/fixed','ClientController@actual');
 	Route::get('/perspective','ClientController@perspective');
 	Route::get('/actual','ClientController@actual');
     Route::post('/create/client','ClientController@saveClient')->name('CreateClient');
@@ -95,6 +96,7 @@ Route::prefix('client')->group(function(){
 
     Route::post('/','ClientController@returnFix')->name('returnFix');
     Route::post('/actual','ClientController@deactivate')->name('deactivate');
+    Route::post('/actual/fixed','ClientController@fixed')->name('fixed');
 
 });
 
