@@ -93,6 +93,27 @@ Route::prefix('client')->group(function(){
     Route::get('/{id}/assign', 'ClientController@assign');
     Route::post('/assign', 'ClientController@assignClient')->name('assignClient');
 
+    Route::post('/','ClientController@returnFix')->name('returnFix');
+    Route::post('/actual','ClientController@deactivate')->name('deactivate');
+
+});
+
+/*
+ *                      	Report
+ * =========================================================
+ *      				Read Only Operations
+ * ---------------------------------------------------------
+ *  Model: Account, SolarPanel, ActivityLog,
+ *	Beneficiary, Payout, SolarPanelType,
+ *	AdministrativeLocation
+ * ---------------------------------------------------------
+ *	Addtional info:
+ * *********************************************************
+ */
+
+Route::prefix('report')->group(function(){
+	Route::get('/view','ReportController@index');
+
 });
 
 /*

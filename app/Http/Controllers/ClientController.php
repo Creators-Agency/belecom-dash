@@ -518,6 +518,25 @@ class ClientController extends Controller
         
     }
 
+    public function returnFix(Request $request)
+    {
+        return $request;
+        try {
+            solarPanel::where('solarPanelSerialNumber', $request->solar)
+                    ->update([
+                        'status' => 3
+                    ]);
+        } catch (\Throwable $th) {
+            alert()->error('System countered errors during operation, try or contact system admin!','Oops something wrong!');
+            return Redirect::back();
+        }
+    }
+
+    public function deactivate(Request $request)
+    {
+        return $request;
+    }
+
     public function ActivityLogs($actionName,$modelName,$modelPrimaryKey)
     {
         /*

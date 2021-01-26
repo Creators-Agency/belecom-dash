@@ -24,6 +24,7 @@ class CreatePayoutsTable extends Migration
             $table->integer('loanStatus')->default(0)->comment="0: still in paying process, 1: payment is done";
             $table->String('transactionID');
             $table->String('status');
+            $table->String('accountStatus')->default(0)->comment="0: activate, 1: Account is deactivated";
             $table->String('balance');
             $table->timestamps();
         });

@@ -10,7 +10,7 @@ use App\Models\Payout;
 use App\Models\Session;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
-
+use phpDocumentor\Reflection\Types\Null_;
 
 class USSDController extends Controller {
     /**
@@ -93,6 +93,17 @@ class USSDController extends Controller {
              * Menu Phase of the app.
              */
             case '2':
+                /**
+                 * user can't pay if solar is under maintenance 
+                 * check solar status
+                 */
+                $solarStatus = $this->query_db('solar_panels',['solarPanelSerialNumber',$values[1]],NULL,NULL,NULL);
+                if ($solarStatus->status == 3) {
+                    $content  = "Ntago mushobora kwishura\n";
+                    $content .= "Umurasire wanyu uracyari gukorwa.\n";
+                    $content .= "Murakoze!";
+                    $this->stop($content, $sessionId);
+                }
                 /**
                  * check if serial number entered Match any Record from user Accounts.
                  */
@@ -232,7 +243,7 @@ class USSDController extends Controller {
                      * Ending session because this serial number doesn't exist
                      * or it hasn't assigned yet to anyone.
                     **/
-                    $content  = "Nimero mushyizemo ntibaruye.\n";
+                    $content  = "Nimero mushyizemo ntibaho.\n";
                     $content .= "Gana ibiro bikwegereye bya Belecom bagufashe.\n";
                     $content .= "Murakoze!";
                     $this->stop($content, $sessionId);

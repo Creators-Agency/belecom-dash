@@ -77,6 +77,21 @@
                                     <h1>
                                         @if($productNumber)
                                         #{{$productNumber->productNumber}}
+                                        <br>
+                                        <form action="{{ route('returnFix') }}" method="POST" class="inline">
+                                            @csrf
+                                            <input type="hidden" value="{{$productNumber->productNumber}}" name="solar">
+                                            <button type="submit" class="btn btn-warning">
+                                                Return Product for fix
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('deactivate') }}" method="POST" class="inline">
+                                            @csrf
+                                            <input type="hidden" value="{{$productNumber->productNumber}}" name="solar">
+                                            <button type="submit" class="btn btn-danger">
+                                                Deactivate account
+                                            </button>
+                                        </form>
                                         @else
                                         <button type="button" class="btn btn-danger btn-circle">
                                             <i class="fa fa-times"></i>
