@@ -19,7 +19,7 @@ Route::get('/dev-1234',function()
 
         Schema::table('payouts', function($table) use ($alldata)
         {
-            $table->integer('balance')->after('status')->default(0);
+            $table->integer('accountStatus')->after('status')->default(0);
         });
     }
 );
@@ -242,15 +242,15 @@ Route::prefix('/system')->group(function(){
     Route::get('/clients/{id}/restore','SystemController@restore');
 });
 
-Route::get('/dev-1234',function()
+Route::get('/dv-1234',function()
     {
         $alldata=[];
 
-        Schema::table('beneficiaries', function($table) use ($alldata)
+        Schema::table('payouts', function($table) use ($alldata)
         { 
             // $table->biginteger('primaryPhone')->unique(false)->default(0)->change();
             // $table->dropUnique('primaryPhone');
-            $table->dropUnique(['primaryPhone'])->unique(false)->default(0)->change();
+            // $table->dropUnique(['primaryPhone'])->unique(false)->default(0)->change();
         });
 
         // insert system pref

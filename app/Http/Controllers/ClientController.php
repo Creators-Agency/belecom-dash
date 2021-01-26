@@ -339,7 +339,8 @@ class ClientController extends Controller
                     // get user
                     $user = Beneficiary::where('identification', $request->clientIdentification)->first();
                     $phoneNu ='0'.$user->primaryPhone;
-                $this->sendBulk($phoneNu,$serialNumber->solarPanelSerialNumber, $user->lastname);
+                    $message = $user->lastname.' Tuguhaye Ikaze mubafatabuguzi ba Belecom, inomero iranga umurasire ni:'.$serialNumber->solarPanelSerialNumber.', Kanda *652*'.$serialNumber->solarPanelSerialNumber.'# wishure, Murakoze!';
+                $this->sendBulk($phoneNu,$message);
                 /*----------updating activity log--------------*/
                 $Get_account = Account::orderBy('id','DESC')->first();
                 $this->ActivityLogs('Creating new','Account',$Get_account->id);
@@ -520,12 +521,23 @@ class ClientController extends Controller
 
     public function returnFix(Request $request)
     {
-        return $request;
+        // return $request;
+        /**
+         * return solar panel for fix
+         */
         try {
-            solarPanel::where('solarPanelSerialNumber', $request->solar)
-                    ->update([
-                        'status' => 3
-                    ]);
+            // solarPanel::where('solarPanelSerialNumber', $request->solar)
+            //         ->update([
+            //             'status' => 3
+            //         ]);
+            $client = DB::table('accounts')
+                    ->join('beneficiaries','beneficiaries.identification','accounts.beneficiary')
+                    ->where('productNumber',$request->solar)->first();
+                    $message = 'Ubusabe bwo gusubiza umurasire ufite numero: '.$client->productNumber.' bwagenze neza \n uzamenyeshwa igihe uzaba umaze gukorwa, \n Murakoze';
+            $this->sendBulk($client->primaryPhone,$message);
+            alert()->success('Solar Panel has reported back to belecom','Success');
+            return Redirect('/client/actual');
+
         } catch (\Throwable $th) {
             alert()->error('System countered errors during operation, try or contact system admin!','Oops something wrong!');
             return Redirect::back();
@@ -534,7 +546,31 @@ class ClientController extends Controller
 
     public function deactivate(Request $request)
     {
-        return $request;
+        try {
+            /**
+             * remove product from deactivated accounts
+             */
+            Account::where('productNumber',$request->solar)
+                    ->update([
+                                'productNumber' => NULL
+                            ]);
+            Payout::where('solarSerialNumber', $request->solar)->where('accountStatus',0)
+                    ->update([
+                        'accountStatus' => 1
+                    ]);
+            $client = DB::table('accounts')
+            ->join('beneficiaries','beneficiaries.identification','accounts.beneficiary')
+            ->where('productNumber',$request->solar)->first();
+            
+            $message = 'Usubije burundu umurasire ufite numero: '.$request->solar.'\n murakoze gukoresha service za belecom.';
+            $this->sendBulk($client->primaryPhone,$message);
+            alert()->success('Solar Panel has reported back to belecom','Success');
+            return Redirect('/client/actual');
+        } catch (\Throwable $th) {
+            alert()->error('System countered errors during operation, try or contact system admin!','Oops something wrong!');
+            return Redirect::back();
+        }
+        
     }
 
     public function ActivityLogs($actionName,$modelName,$modelPrimaryKey)
@@ -560,7 +596,7 @@ class ClientController extends Controller
         }
     }
 
-    public function sendBulk($number, $solarPanel, $names)
+    public function sendBulk($number, $message)
     {
         	$client = new Client([
     		'base_uri'=>'https://www.intouchsms.co.rw',
@@ -572,7 +608,7 @@ class ClientController extends Controller
 		        'password' => '123Muhirwa',
 		        'sender' => 'Belecom ltd',
 		        'recipients' => $number,
-		        'message' => $names.' Tuguhaye Ikaze mubafatabuguzi ba Belecom, inomero iranga umurasire ni:'.$solarPanel.', Kanda *652*'.$solarPanel.'# wishure, Murakoze!',
+		        'message' => $message,
 		    ]
 		]);
 		

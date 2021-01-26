@@ -139,7 +139,7 @@ class USSDController extends Controller {
                         /**
                          * Check if entered Serial number exist in payout table.
                          */
-                        $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[1]], ['status', '1'], NULL, ['id','DESC']);
+                        $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[1]], ['status', '1'], ['accountStatus', '0'], ['id','DESC']);
                         if(!empty($check_payout) && $check_payout->balance  < 1) {
                             $content  = "Nta deni mufite\n";
                             $content .= "Murakoze!";
