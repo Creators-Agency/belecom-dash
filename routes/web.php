@@ -17,9 +17,15 @@ Route::get('/dev-1234',function()
     {
         $alldata=[];
 
-        Schema::table('payouts', function($table) use ($alldata)
+        Schema::table('solar_panels', function($table) use ($alldata)
         {
-            $table->integer('accountStatus')->after('status')->default(0);
+            /**
+             * payouts
+             * solar_panels
+             */
+
+            // $table->integer('accountStatus')->after('status')->default(0);
+            $table->integer('moreInfo')->after('status')->default(0);
         });
     }
 );
@@ -81,6 +87,7 @@ Route::prefix('stock')->group(function(){
 
 Route::prefix('client')->group(function(){
 	Route::get('/','ClientController@index');
+	Route::get('/update/contract/date','ClientController@index');
 	Route::get('/actual/fixed','ClientController@actual');
 	Route::get('/perspective','ClientController@perspective');
 	Route::get('/actual','ClientController@actual');
@@ -97,6 +104,8 @@ Route::prefix('client')->group(function(){
     Route::post('/','ClientController@returnFix')->name('returnFix');
     Route::post('/actual','ClientController@deactivate')->name('deactivate');
     Route::post('/actual/fixed','ClientController@fixed')->name('fixed');
+    Route::post('/update/contract/date','ClientController@updateDate')->name('updateDate');
+    
 
 });
 
@@ -115,6 +124,7 @@ Route::prefix('client')->group(function(){
 
 Route::prefix('report')->group(function(){
 	Route::get('/view','ReportController@index');
+	Route::get('/actual','ReportController@actual');
 
 });
 

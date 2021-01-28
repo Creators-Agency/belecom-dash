@@ -315,7 +315,8 @@ class ClientController extends Controller
                 /* changing solar status*/
                  solarPanel::where('solarPanelSerialNumber', $serialNumber->solarPanelSerialNumber)
                     ->update([
-                        'status' => 1
+                        'status' => 1,
+                        'moreInfo' => 0
                     ]);
 
                 if ($request->loansPeriod != 36) {
@@ -438,6 +439,7 @@ class ClientController extends Controller
                     'employmentStatus'=>$request->employmentStatus,
                     'referredby'=>$refer,
                 ]);
+            $this->ActivityLogs('editing customer', 'Beneficiary',$request->id);
             alert()->success('User has been updated','Success!');
             return Redirect::back();
         } catch (\Throwable $th) {
@@ -450,7 +452,39 @@ class ClientController extends Controller
 
     public function viewClient($id, $dob)
     {
-        $userData = DB::table('beneficiaries')
+
+        $userData_perspective = DB::table('beneficiaries')
+                    ->select(
+                        'beneficiaries.firstname',
+                        'beneficiaries.lastname',
+                        'beneficiaries.identification',
+                        'beneficiaries.gender',
+                        'beneficiaries.DOB',
+                        'beneficiaries.primaryPhone',
+                        'beneficiaries.secondaryPhone',
+                        'beneficiaries.educationLevel',
+                        'beneficiaries.incomeSource',
+                        'beneficiaries.sourceOfEnergy',
+                        'beneficiaries.location',
+                        'beneficiaries.village',
+                        'beneficiaries.quarterName',
+                        'beneficiaries.houseNumber',
+                        'beneficiaries.buildingMaterial',
+                        'beneficiaries.familyMember',
+                        'beneficiaries.membersInSchool',
+                        'beneficiaries.U18Male',
+                        'beneficiaries.U17Male',
+                        'beneficiaries.U18Female',
+                        'beneficiaries.U17Female',
+                        'beneficiaries.employmentStatus',
+                        'beneficiaries.referredby',
+                        'beneficiaries.isActive',
+                        'beneficiaries.created_at',
+                    )
+                    ->where('identification',$id)
+                    ->first();
+        
+        $userData_actual = DB::table('beneficiaries')
                     ->join('payouts','payouts.clientID','beneficiaries.identification')
                     ->select(
                         'payouts.balance',
@@ -477,10 +511,16 @@ class ClientController extends Controller
                         'beneficiaries.U17Female',
                         'beneficiaries.employmentStatus',
                         'beneficiaries.referredby',
+                        'beneficiaries.isActive',
                         'beneficiaries.created_at',
                     )
                     ->where('identification',$id)
                     ->first();
+        if(!Empty($userData_actual)){
+            $userData = $userData_actual;
+        }else {
+            $userData = $userData_perspective;
+        }
         $payment = Payout::where('clientID',$id)->where('status', 1)->sum('payment');
         $activated = Account::where('beneficiary',$id)->first();
         if (empty($userData)) {
@@ -510,6 +550,7 @@ class ClientController extends Controller
                 ->update([
                     'isActive' => '0'
                 ]);
+            $this->ActivityLogs('Delete user','Beneficiary',$id);
             alert()->success('User has been deleted','Success!')->persistent('Close');
             return Redirect('/client');
         } catch (\Throwable $th) {
@@ -528,13 +569,14 @@ class ClientController extends Controller
         try {
             solarPanel::where('solarPanelSerialNumber', $request->solar)
                     ->update([
-                        'status' => 3
+                        'moreInfo' => 2
                     ]);
             $client = DB::table('accounts')
                     ->join('beneficiaries','beneficiaries.identification','accounts.beneficiary')
                     ->where('productNumber',$request->solar)->first();
                     $message = 'Ubusabe bwo gusubiza umurasire ufite numero: '.$client->productNumber.' bwagenze neza \n uzamenyeshwa igihe uzaba umaze gukorwa, \n Murakoze';
-            $this->sendBulk($client->primaryPhone,$message);
+            // $this->sendBulk($client->primaryPhone,$message);
+            $this->ActivityLogs('report damaged solar','solarPanel','huuu');
             alert()->success('Solar Panel has reported back to belecom','Success');
             return Redirect('/client/actual');
 
@@ -553,13 +595,15 @@ class ClientController extends Controller
         try {
             solarPanel::where('solarPanelSerialNumber', $request->solar)
                     ->update([
-                        'status' => 1
+                        'moreInfo' => 0
                     ]);
             $client = DB::table('accounts')
                     ->join('beneficiaries','beneficiaries.identification','accounts.beneficiary')
                     ->where('productNumber',$request->solar)->first();
                     $message = 'Usubijwe umurasire ufite numero: '.$client->productNumber.'\n Murakoze';
-            $this->sendBulk($client->primaryPhone,$message);
+            // return $client->productNumber;
+                    // $this->sendBulk($client->primaryPhone,$message);
+            $this->ActivityLogs('give back fixed panel','solarPanel','kkkkk');
             alert()->success('Solar Panel has reported back to customer','Success');
             return Redirect('/client/actual');
 
@@ -583,12 +627,21 @@ class ClientController extends Controller
                     ->update([
                         'accountStatus' => 1
                     ]);
+            SolarPanel::where('solarPanelSerialNumber',$request->solar)
+                        ->update([
+                            'status' => 0,
+                            'moreInfo' => 1
+                        ]);
             $client = DB::table('accounts')
             ->join('beneficiaries','beneficiaries.identification','accounts.beneficiary')
             ->where('productNumber',$request->solar)->first();
-            
+            Beneficiary::where('identification', $client->identification)
+                    ->update([
+                        'isActive' => 3
+                    ]);
             $message = 'Usubije burundu umurasire ufite numero: '.$request->solar.'\n murakoze gukoresha service za belecom.';
             $this->sendBulk($client->primaryPhone,$message);
+            $this->ActivityLogs('deactivating a user', 'beneficiar,Solarpanel,Payout,Account',$client->identification);
             alert()->success('Solar Panel has reported back to belecom','Success');
             return Redirect('/client/actual');
         } catch (\Throwable $th) {
@@ -596,6 +649,25 @@ class ClientController extends Controller
             return Redirect::back();
         }
         
+    }
+
+    public function updateDate(Request $request)
+    {
+        $rules = array (
+            'date' => 'required'
+        );
+        // return $request;
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            alert()->error('Date input is required', 'Something Wrong!');
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
+        Beneficiary::where('identification', $request->client)
+                    ->update([
+                        'created_at' => $request->date
+                    ]);
+        alert()->error('date Updated', 'Done!');
+        return Redirect::back();
     }
 
     public function ActivityLogs($actionName,$modelName,$modelPrimaryKey)

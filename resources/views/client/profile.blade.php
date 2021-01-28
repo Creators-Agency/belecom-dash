@@ -66,8 +66,11 @@ $location = \App\Models\AdministrativeLocation::where('id', $userData->location)
                                     <h7 class="text-center text-cyan">Product Number</h7>
                                     <?php
 
+                                        if ($userData->isActive == 3) {
                                         $productNumber = \App\Models\Account::where('beneficiary',$userData->identification)->first();
                                         $solarPanel = \App\Models\SolarPanel::where('solarPanelSerialNumber',$productNumber->productNumber)->first();
+
+                                        
                                         if ($productNumber->loanPeriod != 36) {
                                             $toPayMonth = $productNumber->loan/$productNumber->loanPeriod;
                                             $totalAmount = $toPayMonth *36;
@@ -77,13 +80,13 @@ $location = \App\Models\AdministrativeLocation::where('id', $userData->location)
                                             $paid = $totalAmount-$productNumber->loan;
                                             $perc = ($paid * 100)/$totalAmount;
                                         }
+                                        }
                                     ?>
                                     <h1>
-                                        @if($productNumber)
+                                        @if(!Empty($productNumber))
                                         #{{$productNumber->productNumber}}
-                                        {{$solarPanel->status}}
                                         <br>
-                                        @if($solarPanel->status == 3)
+                                        @if($solarPanel->moreInfo == 2)
                                         <form action="{{ route('fixed') }}" method="POST" class="inline">
                                             @csrf
                                             <input type="hidden" value="{{$productNumber->productNumber}}" name="solar">
@@ -114,7 +117,7 @@ $location = \App\Models\AdministrativeLocation::where('id', $userData->location)
                                         @endif
                                     </h1>
                                     <h7 class="text-center text-cyan">Amount to be paid</h7>
-                                    <h2>@if($productNumber != NULL)
+                                    <h2>@if(!Empty($productNumber))
                                         {{number_format($totalAmount)}} Frw
                                         @else
                                         <button type="button" class="btn btn-danger btn-circle">
@@ -137,7 +140,9 @@ $location = \App\Models\AdministrativeLocation::where('id', $userData->location)
                                         </div>
                                         <div class="col-md-6 col-sm-12">
                                             <h4 class="font-medium m-b-0 text-danger">Due <br>
+                                                @if(!Empty($productNumber))
                                                 {{number_format($totalAmount-$paymentDone)}} Frw
+                                                @endif
                                             </h4>
                                         </div>
                                     </div>
@@ -152,34 +157,65 @@ $location = \App\Models\AdministrativeLocation::where('id', $userData->location)
                                 <br>
                                 <p class="text-muted">
                                     <br>
-                                <p>{{$userData->created_at}}</p>
+                                <p>
+                                    @if($userData->created_at == '0000-00-00 00:00:00')
+                                <form action="{{route('updateDate')}}" method="POST">
+                                    @csrf
+                                    <input type="date" name="date" class="form-control" placeholder="set contract date">
+                                    <input type="hidden" name="client" class="form-control"
+                                        value="{{$userData->identification}}">
+                                    <br>
+                                    <button type="submit" class="btn btn-success">Update</button>
+                                </form>
+                                @else
+                                {{$userData->created_at}}
                                 <br>
                                 <button type="button" class="btn btn-success btn-circle ">
                                     <i class="fa fa-check"></i>
                                 </button>
+                                @endif
+
                                 </p>
                             </div>
                             <div class="col-md-4 col-xs-6 b-r"> <strong>Product Activated</strong>
                                 <br>
                                 <p class="text-muted">
                                     <br>
-                                <p>{{$activatedDate->created_at}}</p>
-                                <br>
-                                <button type="button" class="btn btn-success btn-circle">
-                                    <i class="fa fa-check"></i>
-                                </button>
+                                <p>
+                                    @if(!Empty($productNumber))
+                                    {{$activatedDate->created_at}}
+                                    <br>
+                                    <button type="button" class="btn btn-success btn-circle">
+                                        <i class="fa fa-check"></i>
+                                    </button>
+                                    @else
+                                    <br>
+                                    <button type="button" class="btn btn-warning btn-circle">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                    @endif
                                 </p>
                             </div>
                             <div class="col-md-4 col-xs-6 b-r"> <strong>Payment status</strong>
                                 <br>
                                 <p class="text-muted">
                                     <br>
-                                <p>on going</p>
-                                <br>
-                                <button type="button" class="btn btn-success btn-circle">
-                                    <i class="fa fa-check"></i>
-                                </button>
+                                <p>
+                                    @if(!Empty($productNumber))
+                                    on going
+                                    <br>
+                                    <button type="button" class="btn btn-warning btn-circle">
+                                        <i class="fa fa-check"></i>
+                                    </button>
+                                    @else
+                                    Not product
+                                    <br>
+                                    <button type="button" class="btn btn-danger btn-circle">
+                                        <i class="fa fa-check"></i>
+                                    </button>
+                                    @endif
                                 </p>
+
                             </div>
                         </div>
                         <!-- Column -->

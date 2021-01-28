@@ -18,7 +18,7 @@ class CreateActivityLogsTable extends Migration
             $table->integer('userID')->nullable();
             $table->String('actionName')->nullable();
             $table->String('modelName')->nullable();
-            $table->integer('modelPrimaryKey')->nullable();
+            $table->biginteger('modelPrimaryKey')->nullable();
             $table->timestamps();
         });
     }

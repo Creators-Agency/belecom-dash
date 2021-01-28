@@ -15,7 +15,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-3 col-xs-6 b-r">
-                                <a href="" class="btn btn-success">actual clients</a>
+                                <a href="/report/actual" class="btn btn-success">actual clients</a>
                             </div>
                             <div class="col-md-3 col-xs-6 ">
                                 <a href="" class="btn btn-success">perspective clients</a>
