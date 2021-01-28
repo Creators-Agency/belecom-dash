@@ -17,15 +17,15 @@ Route::get('/dev-1234',function()
     {
         $alldata=[];
 
-        Schema::table('solar_panels', function($table) use ($alldata)
+        Schema::table('payouts', function($table) use ($alldata)
         {
             /**
              * payouts
              * solar_panels
              */
 
-            // $table->integer('accountStatus')->after('status')->default(0);
-            $table->integer('moreInfo')->after('status')->default(0);
+            $table->integer('accountStatus')->after('status')->default(0);
+            // $table->integer('moreInfo')->after('status')->default(0);
         });
     }
 );
