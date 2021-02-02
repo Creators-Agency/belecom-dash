@@ -263,18 +263,15 @@ class ClientController extends Controller
         // return $request;
         if($request->price == 0){
             alert()->success('this session has expired retry again!','Oops');
-            return 'this session has expired retry again!';
-                return Redirect('/client/perspective');
+            return Redirect('/client/perspective');
         }
         if($request->loansPeriod >'36' ){
             alert()->success('Time period should not exceed 36 months','Oops');
-            return 'Time period should not exceed 36 months';
-                return Redirect('/client/perspective');
+            return Redirect('/client/perspective');
         }
         if($request->loansPeriod < 1){
             alert()->success('Minimum time Period is one month!','Oops');
-            return 'Minimum time Period is one month!';
-                return Redirect('/client/perspective');
+            return Redirect('/client/perspective');
         }
         /*------------getting solar using type selected----------------*/
         $serialNumber = SolarPanel::where('solarPanelType',$request->solarPanelType)
@@ -345,7 +342,6 @@ class ClientController extends Controller
                 /*----------updating activity log--------------*/
                 $Get_account = Account::orderBy('id','DESC')->first();
                 $this->ActivityLogs('Creating new','Account',$Get_account->id);
-                return 'here';
                 alert()->success('yes','done');
                 return Redirect('/client');
 
