@@ -94,7 +94,7 @@ class USSDController extends Controller {
              */
             case '2':
                 /**
-                 * user can't pay if solar is under maintenance 
+                 * user can't pay if solar is under maintenance
                  * check solar status
                  */
                 $solarStatus = $this->query_db('solar_panels',['solarPanelSerialNumber',$values[1]],NULL,NULL,NULL);
@@ -226,7 +226,7 @@ class USSDController extends Controller {
                         }
                     } else if($values[2] == "2") {
                         $info = $this->query_db('payouts', ['solarSerialNumber', $values[1]],['status', 0], NULL, ['id', 'DESC']);
-                        
+
                         $message = $info->clientNames.' muheruka kwishura '.$info->payment.' kwitariki '.$info->created_at;
                         $this->BulkSms($phoneNumber,$message);
 
@@ -371,36 +371,31 @@ class USSDController extends Controller {
     /*------------------- callBack ------------------*/
 
     public function paymentCallBack(Request $request) {
-        // return $request;
         /* if transaction is successfuly */
-        if($request->status === 'SUCCESS') {
-            try {
-                return $get = Payout::where('transactionID', $request->transactionId)->first();
-                if(isset($get) == 1) {
-                    Payout::where('transactionID', $request->transactionId)
-                    ->update([
-                        'status' => 1
-                    ]);
-                    $myObj = new \stdClass();
-                    $myObj->message = 'Transaction succeeded!';
-                    $myObj->success = 'true';
-                    $myObj->request_id = $request->transactionId;
-                    $myJSON = json_encode($myObj);
-                    $com = Beneficiary::where('identification', $get->clientID)->first();
-                    $phone = '0'.$com->primaryPhone;
-                    $message = $com->firstname." turakumenyesha ko igikorwa cyo kwishura cyagenze neza \n umubare uranga ubwishu .$request->transactionId.\n Murakoze!";
-                    // $this->BulkSms($phone,$message);
-                }
-            } catch (\Throwable $th) {
-                throw $th;
+        if($request->status == "SUCCESS") {
+            $get = Payout::where('transactionID', $request->transactionId)->first();
+            if(isset($get)) {
+                Payout::where('transactionID', $request->transactionId)->update(['status' => 1]);
+                $myObj = new \stdClass();
+                $myObj->message = 'Transaction succeeded!';
+                $myObj->success = 'true';
+                $myObj->request_id = $request->transactionId;
+                $myJSON = json_encode($myObj);
+                $com = Beneficiary::where('identification', $get->clientID)->first();
+                $phone = '0'.$com->primaryPhone;
+                $message = $com->firstname." turakumenyesha ko igikorwa cyo kwishura cyagenze neza \n umubare uranga ubwishu .$request->transactionId.\n Murakoze!";
+                $this->BulkSms($phone, $message);
             }
         } else {
-            return $get = Payout::where('transactionID', $request->transactionId)->first();
-            $com = Beneficiary::where('identification', $get->clientID)->first();
-            $phone = '0'.$com->primaryPhone;
-            $message = 'Mukiriya mwiza kwishura ntibyagenze neza!';
-            $this->BulkSms($phone,$message);
+            $get = Payout::where('transactionID', $request->transactionId)->first();
+            if(isset($get)) {
+                $com = Beneficiary::where('identification', $get->clientID)->first();
+                $phone = '0'.$com->primaryPhone;
+                $message = 'Mukiriya mwiza kwishura ntibyagenze neza!';
+                $this->BulkSms($phone,$message);
+            }
         }
+
         return true;
     }
 }
