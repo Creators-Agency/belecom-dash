@@ -23,4 +23,43 @@ class ReportController extends Controller
             'clients' => $data,
         ]);
     }
+    public function perspective()
+    {
+        $data = DB::table('beneficiaries')
+                ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
+                ->where('beneficiaries.isActive',1)
+                ->where('administrative_locations.status',1)
+                ->get();
+        return view('report.clients',[
+            'clients' => $data,
+        ]);
+    }
+
+    public function paid()
+    {
+        $data = DB::table('beneficiaries')
+                ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
+                ->join('payouts','payouts.clientID', '=','beneficiaries.identification')
+                ->where('beneficiaries.isActive',3)
+                ->where('payouts.loanStatus',1)
+                ->where('administrative_locations.status',1)
+                ->get();
+        return view('report.clients',[
+            'clients' => $data,
+        ]);
+    }
+
+    public function amountDue()
+    {
+        $date = date('m-Y');
+        $data = DB::table('payouts')
+                    ->join('beneficiaries','payouts.clientID', '=','beneficiaries.identification')
+                    ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
+                    ->where('payouts.monthYear','<',$date)
+                    ->groupBy('beneficiaries.identification')
+                    ->get();
+        return view('report.clients',[
+            'clients' => $data,
+        ]);
+    }
 }

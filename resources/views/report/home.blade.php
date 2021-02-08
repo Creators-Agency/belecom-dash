@@ -18,13 +18,14 @@
                                 <a href="/report/actual" class="btn btn-success">actual clients</a>
                             </div>
                             <div class="col-md-3 col-xs-6 ">
-                                <a href="" class="btn btn-success">perspective clients</a>
+                                <a href="/report/perspective" class="btn btn-success">perspective clients</a>
                             </div>
                             <div class="col-md-3 col-xs-6 b-r">
-                                <a href="" class="btn btn-success">List of Fully Paid clients</a>
+                                <a href="/report/clients/payment/done" class="btn btn-success">List of Fully Paid
+                                    clients</a>
                             </div>
                             <div class="col-md-3 col-xs-6 b-r">
-                                <a href="" class="btn btn-success">Clients with amount due</a>
+                                <a href="/report/clients/amount/due" class="btn btn-success">Clients with amount due</a>
                             </div>
                         </div>
                         <hr>

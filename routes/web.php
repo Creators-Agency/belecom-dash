@@ -125,6 +125,9 @@ Route::prefix('client')->group(function(){
 Route::prefix('report')->group(function(){
 	Route::get('/view','ReportController@index');
 	Route::get('/actual','ReportController@actual');
+	Route::get('/perspective','ReportController@perspective');
+	Route::get('/clients/payment/done','ReportController@paid');
+	Route::get('/clients/amount/due','ReportController@amountDue');
 
 });
 

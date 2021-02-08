@@ -69,7 +69,6 @@ $location = \App\Models\AdministrativeLocation::where('id', $userData->location)
                                         if ($userData->isActive == 3) {
                                         $productNumber = \App\Models\Account::where('beneficiary',$userData->identification)->first();
                                         $solarPanel = \App\Models\SolarPanel::where('solarPanelSerialNumber',$productNumber->productNumber)->first();
-
                                         
                                         if ($productNumber->loanPeriod != 36) {
                                             $toPayMonth = $productNumber->loan/$productNumber->loanPeriod;
@@ -77,7 +76,8 @@ $location = \App\Models\AdministrativeLocation::where('id', $userData->location)
                                             $paid = $totalAmount-$productNumber->loan;
                                             $perc = ($paid * 100)/$totalAmount;
                                         }else{
-                                            $paid = $totalAmount-$productNumber->loan;
+                                            $totalAmount = $productNumber->loan ;
+                                            $paid = $totalAmount- $paymentDone;
                                             $perc = ($paid * 100)/$totalAmount;
                                         }
                                         }

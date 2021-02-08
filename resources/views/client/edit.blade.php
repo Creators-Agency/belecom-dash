@@ -252,7 +252,7 @@
                                     <input type="text" class="form-control" id="RefereeNumber"
                                         placeholder="Referee phone" name="refereeNumber" />
                                     <div class="invalid-tooltip">
-                                        Please provide a valid state.
+                                        Please provide a valid.
                                     </div>
                                 </div>
                             </div>
@@ -272,10 +272,10 @@
                         <div class="form-row" id="Other-info">
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="Education">Highest Education Level</label>
+                                    <label for="Education">Education Level</label>
                                     <select class="custom-select" name="education" id="Education">
                                         <option value="">
-                                            Select Educational Level
+                                            Educational Level
                                         </option>
                                         <option value="1">None</option>
                                         <option value="2">Primary School</option>
@@ -297,8 +297,11 @@
                                         <option value="">
                                             Choose Employment Status
                                         </option>
-                                        <option value="0">Unemployed</option>
-                                        <option value="1">Has Job</option>
+                                        <option value="">Choose Employment Status</option>
+                                        <option value="1">Contractor</option>
+                                        <option value="2">Part time</option>
+                                        <option value="3">Self employed</option>
+                                        <option value="4">Un-employed</option>
                                     </select>
                                     <div class="invalid-tooltip">
                                         You must select valid Location
@@ -338,9 +341,9 @@
 
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="NumberOfPeopleSchool">Number of People in School</label>
+                                    <label for="NumberOfPeopleSchool">Number of Family Member</label>
                                     <input type="number" name="numberOfPeopleSchool" class="form-control"
-                                        id="NumberOfPeopleSchool" placeholder="Number Of People in School" />
+                                        id="NumberOfPeopleSchool" placeholder="Number of Family Member" />
                                     <div class="invalid-tooltip">
                                         This field shouldn't be empty
                                     </div>
@@ -360,7 +363,7 @@
 
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="MinorF">Number of Female U/17</label>
+                                    <label for="MinorF">Number of Female Under 17</label>
                                     <input type="number" name="minorF" class="form-control" id="MinorF"
                                         placeholder="Number of Female U/17" />
                                     <div class="invalid-tooltip">
@@ -371,7 +374,7 @@
 
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="MajorF">Number of Female not U/18</label>
+                                    <label for="MajorF">Number of Female Above 18</label>
                                     <input type="text" name="majorF" class="form-control" id="MajorF"
                                         placeholder="Number of Female Above 18" />
                                     <div class="invalid-tooltip">
@@ -382,7 +385,7 @@
 
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="MinorM">Male U/17</label>
+                                    <label for="MinorM">Number of Male Under 17</label>
                                     <input type="text" name="minorM" class="form-control" id="MinorM"
                                         placeholder="Number of male Under 17" />
                                     <div class="invalid-tooltip">
@@ -393,9 +396,9 @@
 
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="MajorM">Male not U/17</label>
+                                    <label for="MajorM">Number of Male above 17</label>
                                     <input type="text" name="majorM" class="form-control" id="MajorM"
-                                        placeholder="Male above 18" />
+                                        placeholder="Number of Male above 18" />
                                     <div class="invalid-tooltip">
                                         This field shouldn't be empty
                                     </div>

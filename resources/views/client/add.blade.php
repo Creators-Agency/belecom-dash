@@ -235,7 +235,7 @@
                         <div class="form-row" id="Other-info">
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="Education">Highest Education Level</label>
+                                    <label for="Education">Education Level</label>
                                     <select class="custom-select" name="education" id="Education">
                                         <option value="">Select Educational Level</option>
                                         <option value="1">No Education</option>
@@ -253,7 +253,10 @@
                                     <label for="EmploymentStatus">Employment Status</label>
                                     <select class="custom-select" name="employmentStatus" id="EmploymentStatus">
                                         <option value="">Choose Employment Status</option>
-                                        <option value="1">one</option>
+                                        <option value="1">Contractor</option>
+                                        <option value="2">Part time</option>
+                                        <option value="3">Self employed</option>
+                                        <option value="4">Un-employed</option>
                                     </select>
                                     <div class="invalid-tooltip">You must select valid Location</div>
                                 </div>
@@ -261,9 +264,9 @@
 
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="sourceOfIncome">Source Of Income</label>
+                                    <label for="sourceOfIncome">Profession</label>
                                     <input type="text" name="sourceOfIncome" class="form-control" id="SourceOfIncome"
-                                        placeholder="source Of Income">
+                                        placeholder="Profession">
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
@@ -273,9 +276,8 @@
                                     <select class="custom-select" name="sourceOfEnergy" id="SourceOfEnergy">
                                         <option value="">Choose Of Energy</option>
                                         <option value="1">Solar Energy</option>
-                                        <option value="2">Electric Energy</option>
+                                        <option value="2">Chacoal</option>
                                         <option value="3">Biogas Energy</option>
-                                        <option value="4">Wind Energy</option>
                                     </select>
                                     <div class="invalid-tooltip">You must select valid Location</div>
                                 </div>
@@ -283,34 +285,34 @@
 
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="NumberOfPeopleSchool">Number of People in School</label>
+                                    <label for="NumberOfPeopleSchool">Number of Family Member</label>
                                     <input type="number" name="numberOfPeopleSchool" class="form-control"
-                                        id="NumberOfPeopleSchool" placeholder="Number Of People in School">
+                                        id="NumberOfPeopleSchool" placeholder="Number of Family Member">
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
 
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="MemberInSchool">Member In School</label>
+                                    <label for="MemberInSchool">Family Member In School</label>
                                     <input type="number" name="memberInSchool" class="form-control" id="MemberInSchool"
-                                        placeholder="Member In School">
+                                        placeholder="Family Member In School">
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
 
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="MinorF">Number of Female U/17</label>
+                                    <label for="MinorF">Number of Female Under 17</label>
                                     <input type="number" name="minorF" class="form-control" id="MinorF"
-                                        placeholder="Number of Female U/17">
+                                        placeholder="Number of Female Under 17">
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
 
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="MajorF">Number of Female not U/18</label>
+                                    <label for="MajorF">Number of Female Above 18</label>
                                     <input type="text" name="majorF" class="form-control" id="MajorF"
                                         placeholder="Number of Female Above 18">
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
@@ -319,7 +321,7 @@
 
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="MinorM">Male U/17</label>
+                                    <label for="MinorM">Number of Male Under 17</label>
                                     <input type="text" name="minorM" class="form-control" id="MinorM"
                                         placeholder="Number of male Under 17">
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
@@ -328,9 +330,9 @@
 
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
-                                    <label for="MajorM">Male not U/17</label>
+                                    <label for="MajorM">Number of Male Above 18</label>
                                     <input type="text" name="majorM" class="form-control" id="MajorM"
-                                        placeholder="Male above 18">
+                                        placeholder="Number of Male above 18">
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>
