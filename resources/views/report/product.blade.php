@@ -29,10 +29,10 @@ try {
                             <table id="file_export" class="table table-striped table-bordered display">
                                 <thead>
                                     <tr>
+                                        <th>Product Number</th>
                                         <th>Identification</th>
                                         <th>First Name</th>
                                         <th>Last Name</th>
-                                        <th>Gender</th>
                                         <th>Location</th>
                                         <th>Phone</th>
                                         <th class="text-center">Action</th>
@@ -41,10 +41,10 @@ try {
                                 <tbody>
                                     @foreach($clients as $client)
                                     <tr>
+                                        <td>{{ ($client->solarPanelSerialNumber) }}</td>
                                         <td>{{ ($client->identification) }}</td>
                                         <td>{{ ($client->firstname) }}</td>
                                         <td>{{ ($client->lastname) }}</td>
-                                        <td>{{ ($client->gender == 1 ? 'Male':'Female') }}</td>
                                         <td>{{ ($client->locationName) }}</td>
                                         <td>{{ ($client->primaryPhone) }}</td>
                                         <td class="text-center">

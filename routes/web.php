@@ -128,6 +128,8 @@ Route::prefix('report')->group(function(){
 	Route::get('/perspective','ReportController@perspective');
 	Route::get('/clients/payment/done','ReportController@paid');
 	Route::get('/clients/amount/due','ReportController@amountDue');
+	Route::get('/faulty/product','ReportController@faulty');
+	Route::get('/returned/product','ReportController@returned');
 
 });
 

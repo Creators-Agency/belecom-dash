@@ -8,7 +8,10 @@ class ReportController extends Controller
 {
     public function index()
     {
-        return view('report.home');
+        return view('report.home',[
+            'pageTitle' =>'Add clients'
+        ]);
+        
     }
 
     public function actual()
@@ -21,6 +24,8 @@ class ReportController extends Controller
                 ->get();
         return view('report.clients',[
             'clients' => $data,
+            'pageTitle' =>'Add clients'
+
         ]);
     }
     public function perspective()
@@ -32,6 +37,7 @@ class ReportController extends Controller
                 ->get();
         return view('report.clients',[
             'clients' => $data,
+            'pageTitle' =>'Add clients'
         ]);
     }
 
@@ -46,6 +52,8 @@ class ReportController extends Controller
                 ->get();
         return view('report.clients',[
             'clients' => $data,
+            'pageTitle' =>'Add clients'
+
         ]);
     }
 
@@ -60,6 +68,38 @@ class ReportController extends Controller
                     ->get();
         return view('report.clients',[
             'clients' => $data,
+            'pageTitle' =>'Add clients'
+
+        ]);
+    }
+
+    public function faulty()
+    {
+        $data = DB::table('solar_panels')
+                        ->join('accounts','accounts.productNumber', '=','solar_panels.solarPanelSerialNumber')
+                        ->join('beneficiaries','accounts.beneficiary', '=','beneficiaries.identification')
+                        ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
+                        ->where('solar_panels.status',1)
+                        ->where('solar_panels.moreInfo',2)
+                        ->get();
+        return view('report.product',[
+            'clients' => $data,
+            'pageTitle' =>'Add clients'
+
+        ]);
+    }
+    public function returned()
+    {
+        $data = DB::table('solar_panels')
+                        ->join('accounts','accounts.productNumber', '=','solar_panels.solarPanelSerialNumber')
+                        ->join('beneficiaries','accounts.beneficiary', '=','beneficiaries.identification')
+                        ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
+                        ->where('solar_panels.status',1)
+                        ->where('solar_panels.moreInfo',1)
+                        ->get();
+        return view('report.product',[
+            'clients' => $data,
+            'pageTitle' =>'Returned Clients'
         ]);
     }
 }

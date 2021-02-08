@@ -1,4 +1,15 @@
 @extends('layouts/wrapper')
+@section('meta')
+<title>
+    <?php 
+try {
+    echo $pageTitle;
+} catch (\Throwable $th) {
+    echo 'Belecom';
+}?>
+
+</title>
+@endsection
 @section('content')
 <div class="page-wrapper">
     <div class="page-breadcrumb">

@@ -2,7 +2,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>BELECOM</title>
+
+@yield('meta')
 
 <link href="{{ URL::asset('assets/images/logo.jpg') }}" rel="icon" type="image/jpg" sizes="16x16" />
 <link href="{{ URL::asset('assets/libs/chartist/dist/chartist.min.css') }}" rel="stylesheet" />

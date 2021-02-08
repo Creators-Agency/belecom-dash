@@ -1,4 +1,15 @@
 @extends('layouts/wrapper')
+@section('meta')
+<title>
+    <?php 
+try {
+    echo $pageTitle;
+} catch (\Throwable $th) {
+    echo 'Belecom';
+}?>
+
+</title>
+@endsection
 @section('content')
 <div class="page-wrapper">
     <div class="page-breadcrumb">
@@ -33,7 +44,7 @@
                             <div class="form-group col-md-6">
                                 <div class="col-md-12 mb-3">
                                     <label for="TotalPrice">Loans Period</label>
-                                    <input type="number"  class="form-control" name="loansPeriod" placeholder="0"
+                                    <input type="number" class="form-control" name="loansPeriod" placeholder="0"
                                         required>
                                     <div class="invalid-tooltip">
                                         Please provide a valid data.

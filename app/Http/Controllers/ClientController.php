@@ -56,7 +56,8 @@ class ClientController extends Controller
                         ->get();
         return view('client.add',[
             'clients' => $Get_clients,
-            'locations' => $get_location
+            'locations' => $get_location,
+            'pageTitle' =>'Add clients'
         ]);
     }
 
@@ -67,7 +68,9 @@ class ClientController extends Controller
                         ->where('beneficiaries.isActive',3)
                         ->get();
         return view('client.actual',[
-            'clients' => $get_actual
+            'clients' => $get_actual,
+            // 'pageTitle' =>'Actuals clients'
+
         ]);
     }
 
@@ -90,7 +93,9 @@ class ClientController extends Controller
                         ->where('administrative_locations.status',1)
                         ->get();
         return view('client.perspective',[
-            'clients' => $Get_clients
+            'clients' => $Get_clients,
+            'pageTitle' =>'Perspective clients'
+
         ]);
     }
 
@@ -248,7 +253,8 @@ class ClientController extends Controller
         return view('client.assign',[
             'client' => $client,
             'SolarTypes' => $solarType,
-            'btn' => $btn
+            'btn' => $btn,
+            'pageTitle' =>'Assign Client clients'
         ]);
     }
 
