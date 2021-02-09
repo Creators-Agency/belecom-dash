@@ -190,7 +190,7 @@ class USSDController extends Controller {
                                 $this->stop($content, $sessionId);
                             }
                             $content  = "Mugiye kwishyura: ".$payment_fee." Rwf.\n";
-                            $content .= "Kanda *182*7*1# Mwemeze ubwishyu mukoresheje MTN MoMo.\n";
+                            $content .= "Kanda *182*7# Mwemeze ubwishyu mukoresheje MTN MoMo.\n";
                             $content .= "Murakoze!";
                             $this->payment_api($phoneNumber, $payment_fee, $transactionID);
                             $this->stop($content, $sessionId);
