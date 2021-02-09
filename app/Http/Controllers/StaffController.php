@@ -54,6 +54,7 @@ class StaffController extends Controller
      */
     public function staffSave(Request $request)
     {
+        // return $request;
         $rules = array (
             'firstName' => 'required',
             'lastName' => 'required',
@@ -68,10 +69,12 @@ class StaffController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
+            // return 'yes';
             alert()->error('Oops', 'Something Wrong!');
             return Redirect::back()->withErrors($validator)->withInput();
         }
         if($request->password !== $request->copassword){
+            // return 'yes';
             alert()->error('Oops', 'Password Issues');
             return Redirect::back()->withInput();
         }
@@ -102,6 +105,8 @@ class StaffController extends Controller
                 return Redirect::back()->withInput();
             }
         }
+        alert()->error('user exist!', 'Oops');
+        return Redirect::back()->withInput();
     }
 
     /**
