@@ -112,7 +112,8 @@ class USSDController extends Controller {
                     $content  = "Ikaze kuri Belecom, ".$check->clientNames."\n";
                     $content .= "Emeza:\n";
                     $content .= "1: Kwishyura ifatabuguzi ry'ukwezi.\n";
-                    $content .= "2: Kubona ubutumwa bw'ibyakozwe.\n";
+                    $content .= "2: Kwishyura ibirarane\n";
+                    $content .= "3: Kubona ubutumwa bw'ibyakozwe.\n";
                     $this->proceed($content, $sessionId);
                 } else {
                     /**
@@ -224,7 +225,11 @@ class USSDController extends Controller {
                             $content .= "Murakoze!";
                             $this->stop($content, $sessionId);
                         }
-                    } else if($values[2] == "2") {
+                    }elseif ($values[2] == "2") {
+                        $content  = "iyi service ntirigukora wongere ugerageze nyuma yamasaha 24\n";
+                        $content .= "Murakoze!";
+                        $this->stop($content, $sessionId);
+                    }else if($values[2] == "3") {
                         $info = $this->query_db('payouts', ['solarSerialNumber', $values[1]],['status', 0], NULL, ['id', 'DESC']);
 
                         $message = $info->clientNames.' muheruka kwishura '.$info->payment.' kwitariki '.$info->created_at;
@@ -387,6 +392,9 @@ class USSDController extends Controller {
                 $this->BulkSms($phone, $message);
             }
         } else {
+            /**
+             * message 
+             */
             $get = Payout::where('transactionID', $request->transactionId)->first();
             if(isset($get)) {
                 $com = Beneficiary::where('identification', $get->clientID)->first();
