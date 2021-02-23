@@ -153,7 +153,7 @@ class USSDController extends Controller {
                         /**
                          * ask client to input amount of money
                          */
-                        $content.= $check->clientNames."  Shyiramo umubare wamafaranga";
+                        $content= $check->clientNames."  Shyiramo umubare wamafaranga";
                         $this->proceed($content, $sessionId);
                         
                         if (!empty($values[3])) {
