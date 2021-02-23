@@ -153,7 +153,7 @@ class USSDController extends Controller {
                         /**
                          * ask client to input amount of money
                          */
-                        $content  = $check->clientNames."  Shyiramo umubare wamafaranga";
+                        $content.= $check->clientNames."  Shyiramo umubare wamafaranga";
                         $this->proceed($content, $sessionId);
                         
                         if (!empty($values[3])) {
@@ -330,11 +330,10 @@ class USSDController extends Controller {
                                 $this->stop($content, $sessionId);
                             }
 
-                        }else{
-                            $content  = "Amafaranga ntagomba kuba ubusa\n";
-                            $content .= "Murakoze!";
-                            $this->stop($content, $sessionId);
                         }
+                        $content  = "Amafaranga ntagomba kuba ubusa\n";
+                        $content .= "Murakoze!";
+                        $this->stop($content, $sessionId);
                         
                     }elseif ($values[2] == "2") {
                         $content  = "iyi service ntirigukora wongere ugerageze nyuma yamasaha 24\n";
