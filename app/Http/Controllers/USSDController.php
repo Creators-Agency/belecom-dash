@@ -331,7 +331,7 @@ class USSDController extends Controller {
                             }
 
                         }
-                        $content  = "Amafaranga ntagomba kuba ubusa\n";
+                        $content  = "Amafaranga ntagomba kuba ubusa\n".$values[3];
                         $content .= "Murakoze!";
                         $this->stop($content, $sessionId);
                         
