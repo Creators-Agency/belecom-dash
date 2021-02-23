@@ -137,94 +137,100 @@ class USSDController extends Controller {
                 $check = $this->query_db('accounts', ['productNumber', $values[1]], ['isActive', 1], NULL, NULL);
                 if (!empty($check)) {
                     if($values[2] == "1") {
-                        /**
-                         * Check if entered Serial number exist in payout table.
-                         */
-                        $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[1]], ['status', '1'], ['accountStatus', '0'], ['id','DESC']);
-                        if(!empty($check_payout) && $check_payout->balance  < 1) {
-                            $content  = "Nta deni mufite\n";
-                            $content .= "Murakoze!";
-                            $this->stop($content, $sessionId);
-                        }
-
-                        if (!empty($check_payout)) {
-                            $transactionID = sha1(md5(time())).'-'.rand(102,0);
-                            $payment_fee = $check_payout->payment;
-                            $new = date('m-Y', strtotime(strtotime($check_payout->monthYear).' +1 month'));
-                            $new_payout = new Payout();
-                            $new_payout->solarSerialNumber = $values[1];
-                            $new_payout->clientNames = $check_payout->clientNames;
-                            $new_payout->clientID = $check_payout->clientID;
-                            $new_payout->clientPhone = $phoneNumber;
-                            $new_payout->monthYear = $new;
-
-                            $new_payout->transactionID = $transactionID;
-                            $new_payout->status = 0;
-
-
+                        $content  = $check->clientNames."\n Shyiramo umubare wamafaranga";
+                        $this->proceed($content, $sessionId);
+                        if (!empty($values[3])) {
                             /**
-                             * Check if amount left in balance are payable or add them on last payment.
+                             * Check if entered Serial number exist in payout table.
                              */
-                            if((($check_payout->balance - $payment_fee) < $payment_fee) && ($check_payout->balance - $payment_fee)>0) {
-                                $payment_fee = $payment_fee + ($check_payout->balance - $payment_fee);
-                                $new_payout->payment = $payment_fee;
-                                $new_payout->balance = 0;
-                            } else {
-                                $new_payout->payment = $check_payout->payment;
-                                $new_payout->balance = $check_payout->balance - $payment_fee;
+                            $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[1]], ['status', '1'], ['accountStatus', '0'], ['id','DESC']);
+                            if(!empty($check_payout) && $check_payout->balance  < 1) {
+                                $content  = "Nta deni mufite\n";
+                                $content .= "Murakoze!";
+                                $this->stop($content, $sessionId);
                             }
-                            /**
-                             * TODO:
-                             * =========================================================
-                             * Insert a new record with existing month + 1
-                             * solarSerialNumber, clientNames, clientID
-                             * clientPhone, monthYear, payment, transactionID, status
-                             * =========================================================
-                             */
-                            if($new_payout->save()) {
+
+                            if (!empty($check_payout)) {
+                                $transactionID = sha1(md5(time())).'-'.rand(102,0);
+                                $payment_fee = $check_payout->payment;
+                                $new = date('m-Y', strtotime(strtotime($check_payout->monthYear).' +1 month'));
+                                $new_payout = new Payout();
+                                $new_payout->solarSerialNumber = $values[1];
+                                $new_payout->clientNames = $check_payout->clientNames;
+                                $new_payout->clientID = $check_payout->clientID;
+                                $new_payout->clientPhone = $phoneNumber;
+                                $new_payout->monthYear = $new;
+
+                                $new_payout->transactionID = $transactionID;
+                                $new_payout->status = 0;
+
+
+                                /**
+                                 * Check if amount left in balance are payable or add them on last payment.
+                                 */
+                                if((($check_payout->balance - $payment_fee) < $payment_fee) && ($check_payout->balance - $payment_fee)>0) {
+                                    $payment_fee = $payment_fee + ($check_payout->balance - $payment_fee);
+                                    $new_payout->payment = $payment_fee;
+                                    $new_payout->balance = 0;
+                                } else {
+                                    $new_payout->payment = $check_payout->payment;
+                                    $new_payout->balance = $check_payout->balance - $payment_fee;
+                                }
+                                /**
+                                 * TODO:
+                                 * =========================================================
+                                 * Insert a new record with existing month + 1
+                                 * solarSerialNumber, clientNames, clientID
+                                 * clientPhone, monthYear, payment, transactionID, status
+                                 * =========================================================
+                                 */
+                                if($new_payout->save()) {
+                                    $this->payment_api($phoneNumber, $payment_fee, $transactionID);
+                                    $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
+                                } else {
+                                    $content  = "Ibyo musabye ntibikunze.\n";
+                                    $content .= "Mwihangane mwogere mukanya.\n";
+                                    $content .= "Murakoze!";
+                                    $this->stop($content, $sessionId);
+                                }
+                                $content  = "Mugiye kwishyura: ".$payment_fee." Rwf.\n";
+                                $content .= "Kanda *182*7# Mwemeze ubwishyu mukoresheje MTN MoMo.\n";
+                                $content .= "Murakoze!";
                                 $this->payment_api($phoneNumber, $payment_fee, $transactionID);
-                                $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
+                                $this->stop($content, $sessionId);
                             } else {
-                                $content  = "Ibyo musabye ntibikunze.\n";
-                                $content .= "Mwihangane mwogere mukanya.\n";
+                                /**
+                                 * Insert New Record if we can't find any payment.
+                                 */
+                                $transactionID = sha1(md5(time())).'-'.rand(102,0);
+                                $new_payout = new Payout();
+                                $new_payout->solarSerialNumber = $check->productNumber;
+                                $new_payout->clientNames = $check->clientNames;
+                                $new_payout->clientID = $check->beneficiary;
+                                $new_payout->clientPhone = $phoneNumber;
+                                $new_payout->monthYear = date("m-Y");
+                                $new_payout->payment = $check->loan/$check->loanPeriod;
+                                $new_payout->transactionID = $transactionID;
+                                $new_payout->status = 0;
+                                $new_payout->balance = $check->loan - ($check->loan/$check->loanPeriod);
+                                $pay = round($check->loan/$check->loanPeriod, 0);
+                                if($new_payout->save()) {
+                                    $this->payment_api($phoneNumber,$check->loan/$check->loanPeriod,$transactionID);
+                                    $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
+                                } else {
+                                    $content  = "Ibyo musabye ntibikunze.\n";
+                                    $content .= "Mwihangane mwogere mukanya.\n";
+                                    $content .= "Murakoze!";
+                                    $this->stop($content, $sessionId);
+                                }
+                                $content  = "Mugiye kwishyura: ".$pay." Rwf.\n";
+                                $content .= "kanda *187*1# Mwemeze ubwishyu\n";
                                 $content .= "Murakoze!";
                                 $this->stop($content, $sessionId);
                             }
-                            $content  = "Mugiye kwishyura: ".$payment_fee." Rwf.\n";
-                            $content .= "Kanda *182*7# Mwemeze ubwishyu mukoresheje MTN MoMo.\n";
-                            $content .= "Murakoze!";
-                            $this->payment_api($phoneNumber, $payment_fee, $transactionID);
-                            $this->stop($content, $sessionId);
-                        } else {
-                            /**
-                             * Insert New Record if we can't find any payment.
-                             */
-                            $transactionID = sha1(md5(time())).'-'.rand(102,0);
-                            $new_payout = new Payout();
-                            $new_payout->solarSerialNumber = $check->productNumber;
-                            $new_payout->clientNames = $check->clientNames;
-                            $new_payout->clientID = $check->beneficiary;
-                            $new_payout->clientPhone = $phoneNumber;
-                            $new_payout->monthYear = date("m-Y");
-                            $new_payout->payment = $check->loan/$check->loanPeriod;
-                            $new_payout->transactionID = $transactionID;
-                            $new_payout->status = 0;
-                            $new_payout->balance = $check->loan - ($check->loan/$check->loanPeriod);
-                            $pay = round($check->loan/$check->loanPeriod, 0);
-                            if($new_payout->save()) {
-                                $this->payment_api($phoneNumber,$check->loan/$check->loanPeriod,$transactionID);
-                                $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
-                            } else {
-                                $content  = "Ibyo musabye ntibikunze.\n";
-                                $content .= "Mwihangane mwogere mukanya.\n";
-                                $content .= "Murakoze!";
-                                $this->stop($content, $sessionId);
-                            }
-                            $content  = "Mugiye kwishyura: ".$pay." Rwf.\n";
-                            $content .= "kanda *187*1# Mwemeze ubwishyu\n";
-                            $content .= "Murakoze!";
-                            $this->stop($content, $sessionId);
+
                         }
+                        
                     }elseif ($values[2] == "2") {
                         $content  = "iyi service ntirigukora wongere ugerageze nyuma yamasaha 24\n";
                         $content .= "Murakoze!";
