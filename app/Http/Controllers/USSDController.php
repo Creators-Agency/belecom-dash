@@ -162,8 +162,8 @@ class USSDController extends Controller {
                                  * check if recent transaction has paid the expected
                                  * monthly amount
                                  */
-                                if ($check->payout < ($check->loan/$check->loanPeriod)) {
-                                    $payment_fee = $values[3] + $check->payout;
+                                if ($check_payout->payout < ($check->loan/$check->loanPeriod)) {
+                                    $payment_fee = $values[3] + $check_payout->payout;
                                 }else{
                                     $payment_fee = $values[3];
                                 }
@@ -172,9 +172,9 @@ class USSDController extends Controller {
                                  * check if amount inputed is not much more than client's balance
                                  */
 
-                                if ($check->balance < $payment_fee) {
+                                if ($check_payout->balance < $payment_fee) {
                                     $content  = "Mushizemo amafaranga menshi kurenza ayo mugomba \n";
-                                    $content  = "Kwishura ariyo ".$check->balance."\n";
+                                    $content  = "Kwishura ariyo ".$check_payout->balance."\n";
                                     $content .= "Murakoze!";
                                     $this->stop($content, $sessionId);
                                 }
@@ -266,14 +266,24 @@ class USSDController extends Controller {
                                     while($payment_fee>0){
                                         $new_payout = new Payout();
                                         $period++;
-                                        $new = date('m-Y', strtotime(strtotime($check_payout->monthYear).' +'.$period.' month'));
-                                        $new_payout->solarSerialNumber = $values[1];
-                                        $new_payout->clientNames = $check_payout->clientNames;
-                                        $new_payout->clientID = $check_payout->clientID;
+                                        $new = date('m-Y'.' +'.$period.' month');
+                                        $new_payout->solarSerialNumber = $check->productNumber;
+                                        $new_payout->clientNames = $check->clientNames;
+                                        $new_payout->clientID = $check->beneficiary;
                                         $new_payout->clientPhone = $phoneNumber;
                                         $new_payout->monthYear = $new;
                                         $new_payout->transactionID = $transactionID;
                                         $new_payout->status = 0;
+                                        /**
+                                         * check if payment fees is greater than monthly 
+                                         *  -if yes we will keep inserting expected monthly amount
+                                         *  -else we will keep the fee amount it hold 
+                                         */
+                                        if ($payment_fee >($check->loan/$check->loanPeriod)) {
+                                            $new_payout->payment = $check->loan/$check->loanPeriod;
+                                        }else{
+                                            $new_payout->payment =$payment_fee;
+                                        }
                                         $payment_fee = $payment_fee - $check->loan/$check->loanPeriod;
                                         $new_payout->balance = $check_payout->balance - $check->loan/$check->loanPeriod;
                                         if($new_payout->save()) {
