@@ -156,7 +156,7 @@ class USSDController extends Controller {
                         $content= $check->clientNames."  Shyiramo umubare wamafaranga";
                         $this->proceed($content, $sessionId);
                         
-                        if (!empty($values[3]!="0")) {
+                        if (!empty($values[3])) {
                             if (!empty($check_payout)) {
                                 $transactionID = sha1(md5(time())).rand(102,0);
                                 /**
@@ -331,7 +331,7 @@ class USSDController extends Controller {
                             }
 
                         }
-                        $content  = "Amafaranga ntagomba kuba ubusa\n".$values[3];
+                        $content  = "Amafaranga ntagomba kuba ubusa\n";
                         $content .= "Murakoze!";
                         $this->stop($content, $sessionId);
                         
