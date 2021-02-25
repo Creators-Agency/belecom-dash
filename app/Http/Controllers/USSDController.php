@@ -330,11 +330,12 @@ class USSDController extends Controller {
                                 $this->stop($content, $sessionId);
                             }
 
-                        }else{
-                            $content  = "Amafaranga ntagomba kuba ubusa\n";
-                            $content .= "Murakoze!";
-                            $this->stop($content, $sessionId);
                         }
+                        // else{
+                        //     $content  = "Amafaranga ntagomba kuba ubusa\n";
+                        //     $content .= "Murakoze!";
+                        //     $this->stop($content, $sessionId);
+                        // }
                         
                     }elseif ($values[2] == "2") {
                         $content  = "iyi service ntirigukora wongere ugerageze nyuma yamasaha 24\n";
