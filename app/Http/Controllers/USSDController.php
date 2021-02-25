@@ -202,7 +202,7 @@ class USSDController extends Controller {
                     $this->stop($content, $sessionId);
                 }
                 if (!empty($values[3])) {
-                        $this->stop($check_payout, $sessionId);
+                        // $this->stop($check_payout, $sessionId);
                     // if (!empty($check_payout)) {
                     //     $this->stop($values[3], $sessionId);
                     //     $transactionID = sha1(md5(time())).rand(102,0);
