@@ -203,7 +203,7 @@ class USSDController extends Controller {
                 }
                 if (!empty($values[3])) {
                     if (!empty($check_payout)) {
-                        $this->stop($values[3], $sessionId);
+                        // $this->stop($values[3], $sessionId);
                         $transactionID = sha1(md5(time())).rand(102,0);
                         /**
                          * check if recent transaction has paid the expected
