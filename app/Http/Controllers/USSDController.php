@@ -186,6 +186,7 @@ class USSDController extends Controller {
                 }
                 break;
             case '4':
+                $check = $this->query_db('accounts', ['productNumber', $values[1]], ['isActive', 1], NULL, NULL);
                 /**
                  * Check if entered Serial number exist in payout table.
                  */
