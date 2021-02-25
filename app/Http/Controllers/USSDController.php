@@ -209,8 +209,8 @@ class USSDController extends Controller {
                          * check if recent transaction has paid the expected
                          * monthly amount
                          */
-                        if ($check_payout->payout < ($check->loan/$check->loanPeriod)) {
-                            $payment_fee = $values[3] + $check_payout->payout;
+                        if ($check_payout->payment < ($check->loan/$check->loanPeriod)) {
+                            $payment_fee = $values[3] + $check_payout->payment;
                         }else{
                             $payment_fee = $values[3];
                         }
