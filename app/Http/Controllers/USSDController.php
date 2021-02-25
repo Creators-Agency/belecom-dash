@@ -221,7 +221,7 @@ class USSDController extends Controller {
 
                         if ($check_payout->balance < $payment_fee) {
                             $content  = "Mushizemo amafaranga menshi kurenza ayo mugomba \n";
-                            $content  = "Kwishura ariyo ".$check_payout->balance."\n";
+                            $content .= "Kwishura ariyo ".$check_payout->balance."\n";
                             $content .= "Murakoze!";
                             $this->stop($content, $sessionId);
                         break;
