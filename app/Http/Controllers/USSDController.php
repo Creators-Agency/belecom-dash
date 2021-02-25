@@ -224,6 +224,7 @@ class USSDController extends Controller {
                             $content  = "Kwishura ariyo ".$check_payout->balance."\n";
                             $content .= "Murakoze!";
                             $this->stop($content, $sessionId);
+                        break;
                         }
 
                         /**
