@@ -138,24 +138,23 @@ class USSDController extends Controller {
                 $check = $this->query_db('accounts', ['productNumber', $values[1]], ['isActive', 1], NULL, NULL);
                 if (!empty($check)) {
                     if($values[2] == "1") {
-                        /**
-                         * Check if entered Serial number exist in payout table.
-                         */
-                        $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[1]], ['status', '1'], ['accountStatus', '0'], ['id','DESC']);
-                        /**
-                         * check if clients has no amount due
-                         */
-                        if(!empty($check_payout) && $check_payout->balance  < 1) {
-                            $content  = "Nta deni mufite\n";
-                            $content .= "Murakoze!";
-                            $this->stop($content, $sessionId);
-                        }
+                        // /**
+                        //  * Check if entered Serial number exist in payout table.
+                        //  */
+                        // $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[1]], ['status', '1'], ['accountStatus', '0'], ['id','DESC']);
+                        // /**
+                        //  * check if clients has no amount due
+                        //  */
+                        // if(!empty($check_payout) && $check_payout->balance  < 1) {
+                        //     $content  = "Nta deni mufite\n";
+                        //     $content .= "Murakoze!";
+                        //     $this->stop($content, $sessionId);
+                        // }
                         /**
                          * ask client to input amount of money
                          */
                         $content= $check->clientNames."  Shyiramo umubare wamafaranga";
                         $this->proceed($content, $sessionId);
-                        
                         
                     }elseif ($values[2] == "2") {
                         $content  = "iyi service ntirigukora wongere ugerageze nyuma yamasaha 24\n";
@@ -186,10 +185,20 @@ class USSDController extends Controller {
                     $this->stop($content, $sessionId);
                 }
                 break;
-            case '4': 
-                $check = $this->query_db('accounts', ['productNumber', $values[1]], ['isActive', 1], NULL, NULL);
+            case '4':
+                /**
+                 * Check if entered Serial number exist in payout table.
+                 */
+                $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[1]], ['status', '1'], ['accountStatus', '0'], ['id','DESC']);
+                /**
+                 * check if clients has no amount due
+                 */
+                if(!empty($check_payout) && $check_payout->balance  < 1) {
+                    $content  = "Nta deni mufite\n";
+                    $content .= "Murakoze!";
+                    $this->stop($content, $sessionId);
+                }
                 if (!empty($values[3])) {
-                    $check_payout = $this->query_db('payouts', ['solarSerialNumber', $values[1]], ['status', '1'], ['accountStatus', '0'], ['id','DESC']);
                     if (!empty($check_payout)) {
                         $transactionID = sha1(md5(time())).rand(102,0);
                         /**
@@ -369,7 +378,9 @@ class USSDController extends Controller {
                     $content .= "Murakoze!";
                     $this->stop($content, $sessionId);
                 }
+
                 break;
+
             /**
              * Default Phase of the app
              */
