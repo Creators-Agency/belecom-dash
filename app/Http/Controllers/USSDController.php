@@ -219,7 +219,7 @@ class USSDController extends Controller {
                          * check if amount inputed is not much more than client's balance
                          */
 
-                        if ($check_payout->balance < $payment_fee) {
+                        if ($check_payout->balance < $values[3]) {
                             $content  = "Mushizemo amafaranga menshi kurenza ayo mugomba \n";
                             $content .= "Kwishura ariyo ".$check_payout->balance."\n";
                             $content .= "Murakoze!";
@@ -238,8 +238,12 @@ class USSDController extends Controller {
                          * 
                          */
                         $new = 0;
-                        $period = 0;
+                        $period = 1;
                         while($payment_fee>0){
+                            /**
+                             * these data we are going to fetch  will help us to calculate every new balance 
+                             */
+                            $calculating =$this->query_db('payouts', ['solarSerialNumber', $values[1]], ['status', '1'], ['accountStatus', '0'], ['id','DESC']); 
                             $new_payout = new Payout();
                             $period++;
                             $new = date('m-Y', strtotime(strtotime($check_payout->monthYear).' +'.$period.' month'));
@@ -264,7 +268,7 @@ class USSDController extends Controller {
                              * removing expected monthly amount from inputed amount
                              */
                             $payment_fee = $payment_fee - $check->loan/$check->loanPeriod;
-                            $new_payout->balance = $check_payout->balance - $check->loan/$check->loanPeriod;
+                            $new_payout->balance = $calculating->balance - $check->loan/$check->loanPeriod;
 
                             // /**
                             //  * Check if amount left in balance are payable or add them on last payment.
@@ -296,6 +300,13 @@ class USSDController extends Controller {
                                 $this->stop($content, $sessionId);
                             }
                             break;
+                        }
+                        /**
+                         * if recent transaction it's amount was less than monthly amount
+                         * after adding new payouts it will update it to monthly amount
+                         */
+                        if ($check_payout->payment < ($check->loan/$check->loanPeriod)) {
+                            Payout::where('transactionID', $check_payout->transactionId)->orderBy('id','DESC')->update(['payment' => $check->loan/$check->loanPeriod]);
                         }
                         $content  = "Mugiye kwishyura: ".$values[3]." Rwf.\n";
                         $content .= "Kanda *182*7# Mwemeze ubwishyu mukoresheje MTN MoMo.\n";
@@ -333,7 +344,7 @@ class USSDController extends Controller {
                                     $new_payout->payment =$payment_fee;
                                 }
                                 $payment_fee = $payment_fee - $check->loan/$check->loanPeriod;
-                                $new_payout->balance = $check_payout->balance - $check->loan/$check->loanPeriod;
+                                $new_payout->balance = $check->loan - ($check->loan/$check->loanPeriod);
                                 if($new_payout->save()) {
                                     $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
                                 } else {
@@ -376,7 +387,6 @@ class USSDController extends Controller {
                         $content .= "Murakoze!";
                         $this->stop($content, $sessionId);
                     }
-
                 }
                 else{
                     $content  = "Amafaranga ntagomba kuba ubusa\n";
@@ -508,6 +518,12 @@ class USSDController extends Controller {
 
     public function paymentCallBack(Request $request) {
         /* if transaction is successfuly */
+        // if( $_POST["status"]=="SUCCESS" )
+try {
+    //code...
+} catch (\Throwable $th) {
+    //throw $th;
+}
         if($request->status == "SUCCESS") {
             $get = Payout::where('transactionID', $request->transactionId)->first();
             if(isset($get)) {
