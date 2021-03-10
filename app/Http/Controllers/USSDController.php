@@ -306,7 +306,7 @@ class USSDController extends Controller {
                          * after adding new payouts it will update it to monthly amount
                          */
                         if ($check_payout->payment < ($check->loan/$check->loanPeriod)) {
-                            Payout::where('transactionID', $check_payout->transactionId)->orderBy('id','DESC')->update(['payment' => $check->loan/$check->loanPeriod]);
+                            Payout::where('transactionID', $check_payout->transactionID)->orderBy('id','DESC')->update(['payment' => $check->loan/$check->loanPeriod]);
                         }
                         $content  = "Mugiye kwishyura: ".$values[3]." Rwf.\n";
                         $content .= "Kanda *182*7# Mwemeze ubwishyu mukoresheje MTN MoMo.\n";
