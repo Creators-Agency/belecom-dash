@@ -24,7 +24,7 @@ try {
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title mb-5 pb-2">Register Client</h4>
-                    <form class="needs-validation" method="POST" action="{{ route('UpdateClient') }}" novalidate>
+                    <form class="needs-validation" method="POST" action='{{ route("UpdateClient") }}' novalidate>
                         @csrf
                         <div class="form-row">
                             <div class="form-group col-md-6">

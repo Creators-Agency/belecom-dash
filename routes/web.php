@@ -86,6 +86,7 @@ Route::prefix('stock')->group(function(){
  */
 
 Route::prefix('client')->group(function(){
+    Route::get('/returnfix','ClientController@index');
 	Route::get('/','ClientController@index');
 	Route::get('/update/contract/date','ClientController@index');
 	Route::get('/actual/fixed','ClientController@actual');
@@ -101,7 +102,7 @@ Route::prefix('client')->group(function(){
     Route::get('/{id}/assign', 'ClientController@assign');
     Route::post('/assign', 'ClientController@assignClient')->name('assignClient');
 
-    Route::post('/','ClientController@returnFix')->name('returnFix');
+    Route::post('/returnfix','ClientController@returnFix')->name('returnFix');
     Route::post('/actual','ClientController@deactivate')->name('deactivate');
     Route::post('/actual/fixed','ClientController@fixed')->name('fixed');
     Route::post('/update/contract/date','ClientController@updateDate')->name('updateDate');

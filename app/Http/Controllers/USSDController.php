@@ -209,11 +209,12 @@ class USSDController extends Controller {
                          * check if recent transaction has paid the expected
                          * monthly amount
                          */
-                        if ($check_payout->payment < ($check->loan/$check->loanPeriod)) {
-                            $payment_fee = $values[3] + $check_payout->payment;
-                        }else{
-                            $payment_fee = $values[3];
-                        }
+                        
+                        // if ($check_payout->payment < ($check->loan/$check->loanPeriod)) {
+                        //     $payment_fee = $values[3] + $check_payout->payment;
+                        // }else{
+                        //     $payment_fee = $values[3];
+                        // }
 
                         /**
                          * check if amount inputed is not much more than client's balance
@@ -236,145 +237,165 @@ class USSDController extends Controller {
                          * variable called period will increase 1 which means one month
                          * and the rest of money will be created as new payment for next month
                          * 
-                         */
-                        $new = 0;
-                        $period = 1;
-                        while($payment_fee>0){
-                            /**
-                             * these data we are going to fetch  will help us to calculate every new balance 
-                             */
-                            $calculating =$this->query_db('payouts', ['solarSerialNumber', $values[1]], ['status', '1'], ['accountStatus', '0'], ['id','DESC']); 
-                            $new_payout = new Payout();
-                            $period++;
-                            $new = date('m-Y', strtotime(strtotime($check_payout->monthYear).' +'.$period.' month'));
-                            $new_payout->solarSerialNumber = $values[1];
-                            $new_payout->clientNames = $check_payout->clientNames;
-                            $new_payout->clientID = $check_payout->clientID;
-                            $new_payout->clientPhone = $phoneNumber;
-                            $new_payout->monthYear = $new;
-                            $new_payout->transactionID = $transactionID;
-                            $new_payout->status = 0;
-                            /**
-                             * check if payment fees is greater than monthly 
-                             *  -if yes we will keep inserting expected monthly amount
-                             *  -else we will keep the fee amount it hold 
-                             */
-                            if ($payment_fee >($check->loan/$check->loanPeriod)) {
-                                $new_payout->payment = $check->loan/$check->loanPeriod;
-                            }else{
-                                $new_payout->payment =$payment_fee;
-                            }
-                            /**
-                             * removing expected monthly amount from inputed amount
-                             */
-                            $payment_fee = $payment_fee - $check->loan/$check->loanPeriod;
-                            $new_payout->balance = $calculating->balance - $check->loan/$check->loanPeriod;
+                         */ 
+                        // $new = 0;
+                        // $period = 1;
+                        // while($payment_fee>0){
+                        //     /**
+                        //      * these data we are going to fetch  will help us to calculate every new balance 
+                        //      */
+                        //     $calculating =$this->query_db('payouts', ['solarSerialNumber', $values[1]], ['status', '1'], ['accountStatus', '0'], ['id','DESC']); 
+                        //     $new_payout = new Payout();
+                        //     $period++;
+                        //     $new = date('m-Y', strtotime(strtotime($check_payout->monthYear).' +'.$period.' month'));
+                        //     $new_payout->solarSerialNumber = $values[1];
+                        //     $new_payout->clientNames = $check_payout->clientNames;
+                        //     $new_payout->clientID = $check_payout->clientID;
+                        //     $new_payout->clientPhone = $phoneNumber;
+                        //     $new_payout->monthYear = $new;
+                        //     $new_payout->transactionID = $transactionID;
+                        //     $new_payout->status = 0;
+                        //     /**
+                        //      * check if payment fees is greater than monthly 
+                        //      *  -if yes we will keep inserting expected monthly amount
+                        //      *  -else we will keep the fee amount it hold 
+                        //      */
+                        //     if ($payment_fee >($check->loan/$check->loanPeriod)) {
+                        //         $new_payout->payment = $check->loan/$check->loanPeriod;
+                        //     }else{
+                        //         $new_payout->payment =$payment_fee;
+                        //     }
+                        //     /**
+                        //      * removing expected monthly amount from inputed amount
+                        //      */
+                        //     $payment_fee = $payment_fee - $check->loan/$check->loanPeriod;
+                        //     $new_payout->balance = $calculating->balance - $check->loan/$check->loanPeriod;
 
-                            // /**
-                            //  * Check if amount left in balance are payable or add them on last payment.
-                            //  */
-                            // if((($check_payout->balance - $payment_fee) < $payment_fee) && ($check_payout->balance - $payment_fee)>0) {
-                            //     $payment_fee = $payment_fee + ($check_payout->balance - $payment_fee);
-                            //     $new_payout->payment = $payment_fee;
-                            //     $new_payout->balance = 0;
-                            // } else {
-                            //     $new_payout->payment = $check_payout->payment;
-                            //     $new_payout->balance = $check_payout->balance - $payment_fee;
-                            // }
+                        //     // /**
+                        //     //  * Check if amount left in balance are payable or add them on last payment.
+                        //     //  */
+                        //     // if((($check_payout->balance - $payment_fee) < $payment_fee) && ($check_payout->balance - $payment_fee)>0) {
+                        //     //     $payment_fee = $payment_fee + ($check_payout->balance - $payment_fee);
+                        //     //     $new_payout->payment = $payment_fee;
+                        //     //     $new_payout->balance = 0;
+                        //     // } else {
+                        //     //     $new_payout->payment = $check_payout->payment;
+                        //     //     $new_payout->balance = $check_payout->balance - $payment_fee;
+                        //     // }
 
-                            /**
-                             * TODO:
-                             * =========================================================
-                             * Insert a new record with existing month + 1
-                             * solarSerialNumber, clientNames, clientID
-                             * clientPhone, monthYear, payment, transactionID, status
-                             * =========================================================
-                             */
-                            if($new_payout->save()) {
-                                $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
-                            } else {
-                                Payout::where('transactionID', $transactionID)->update(['status' => 10]);
-                                $content  = "Ibyo musabye ntibikunze.\n";
-                                $content .= "Mwihangane mwogere mukanya.\n";
-                                $content .= "Murakoze!";
-                                $this->stop($content, $sessionId);
-                            }
-                            break;
-                        }
-                        /**
-                         * if recent transaction it's amount was less than monthly amount
-                         * after adding new payouts it will update it to monthly amount
-                         */
-                        if ($check_payout->payment < ($check->loan/$check->loanPeriod)) {
-                            Payout::where('transactionID', $check_payout->transactionID)->orderBy('id','DESC')->update(['payment' => $check->loan/$check->loanPeriod]);
-                        }
-                        $content  = "Mugiye kwishyura: ".$values[3]." Rwf.\n";
-                        $content .= "Kanda *182*7# Mwemeze ubwishyu mukoresheje MTN MoMo.\n";
-                        $content .= "Murakoze!";
-                        $this->payment_api($phoneNumber, $values[3], $transactionID);
-                        $this->stop($content, $sessionId);
-                    } else {
-                        /**
-                         * Insert New Record if we can't find any payment.
-                         */
-                        $transactionID = sha1(md5(time())).rand(102,0);
-                        if($values[3] >($check->loan/$check->loanPeriod)){
-                            $payment_fee = $values[3];
-                            $new = 0;
-                            $period = 0;
-                            while($payment_fee>0){
-                                $new_payout = new Payout();
-                                $period++;
-                                $new = date('m-Y'.' +'.$period.' month');
-                                $new_payout->solarSerialNumber = $check->productNumber;
-                                $new_payout->clientNames = $check->clientNames;
-                                $new_payout->clientID = $check->beneficiary;
-                                $new_payout->clientPhone = $phoneNumber;
-                                $new_payout->monthYear = $new;
-                                $new_payout->transactionID = $transactionID;
-                                $new_payout->status = 0;
-                                /**
-                                 * check if payment fees is greater than monthly 
-                                 *  -if yes we will keep inserting expected monthly amount
-                                 *  -else we will keep the fee amount it hold 
-                                 */
-                                if ($payment_fee >($check->loan/$check->loanPeriod)) {
-                                    $new_payout->payment = $check->loan/$check->loanPeriod;
-                                }else{
-                                    $new_payout->payment =$payment_fee;
-                                }
-                                $payment_fee = $payment_fee - $check->loan/$check->loanPeriod;
-                                $new_payout->balance = $check->loan - ($check->loan/$check->loanPeriod);
-                                if($new_payout->save()) {
-                                    $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
-                                } else {
-                                    Payout::where('transactionID', $transactionID)->update(['status' => 10]);
-                                    $content  = "Ibyo musabye ntibikunze.\n";
-                                    $content .= "Mwihangane mwogere mukanya.\n";
-                                    $content .= "Murakoze!";
-                                    $this->stop($content, $sessionId);
-                                }
-                                break;
-                            }
+                        //     /**
+                        //      * TODO:
+                        //      * =========================================================
+                        //      * Insert a new record with existing month + 1
+                        //      * solarSerialNumber, clientNames, clientID
+                        //      * clientPhone, monthYear, payment, transactionID, status
+                        //      * =========================================================
+                        //      */
+                        //     if($new_payout->save()) {
+                        //         $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
+                        //     } else {
+                        //         Payout::where('transactionID', $transactionID)->update(['status' => 10]);
+                        //         $content  = "Ibyo musabye ntibikunze.\n";
+                        //         $content .= "Mwihangane mwogere mukanya.\n";
+                        //         $content .= "Murakoze!";
+                        //         $this->stop($content, $sessionId);
+                        //     }
+                        //     break;
+                        // }
+                        $new = date('d-m-Y');
+                        $new_payout = new Payout();
+                        $new_payout->solarSerialNumber = $values[1];
+                        $new_payout->clientNames = $check_payout->clientNames;
+                        $new_payout->clientID = $check_payout->clientID;
+                        $new_payout->clientPhone = $phoneNumber;
+                        $new_payout->monthYear = $new;
+                        $new_payout->transactionID = $transactionID;
+                        $new_payout->status = 0;
+                        $new_payout->balance = $check_payout->balance - $values[3];
+                        if($new_payout->save()) {
+                            $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
                             $content  = "Mugiye kwishyura: ".$values[3]." Rwf.\n";
                             $content .= "Kanda *182*7# Mwemeze ubwishyu mukoresheje MTN MoMo.\n";
                             $content .= "Murakoze!";
                             $this->payment_api($phoneNumber, $values[3], $transactionID);
                             $this->stop($content, $sessionId);
+                        } else {
+                            Payout::where('transactionID', $transactionID)->update(['status' => 10]);
+                            $content  = "Ibyo musabye ntibikunze.\n";
+                            $content .= "Mwihangane mwogere mukanya.\n";
+                            $content .= "Murakoze!";
+                            $this->stop($content, $sessionId);
                         }
+                        /**
+                         * if recent transaction it's amount was less than monthly amount
+                         * after adding new payouts it will update it to monthly amount
+                         */
+                        // if ($check_payout->payment < ($check->loan/$check->loanPeriod)) {
+                        //     Payout::where('transactionID', $check_payout->transactionID)->orderBy('id','DESC')->update(['payment' => $check->loan/$check->loanPeriod]);
+                        // }
+                        
+                    } else {
+                        /**
+                         * Insert New Record if we can't find any payment.
+                         */
+                        $transactionID = sha1(md5(time())).rand(102,0);
+                        // if($values[3] >($check->loan/$check->loanPeriod)){
+                        //     $payment_fee = $values[3];
+                        //     $new = 0;
+                        //     $period = 0;
+                        //     while($payment_fee>0){
+                        //         $new_payout = new Payout();
+                        //         $period++;
+                        //         $new = date('m-Y'.' +'.$period.' month');
+                        //         $new_payout->solarSerialNumber = $check->productNumber;
+                        //         $new_payout->clientNames = $check->clientNames;
+                        //         $new_payout->clientID = $check->beneficiary;
+                        //         $new_payout->clientPhone = $phoneNumber;
+                        //         $new_payout->monthYear = $new;
+                        //         $new_payout->transactionID = $transactionID;
+                        //         $new_payout->status = 0;
+                        //         /**
+                        //          * check if payment fees is greater than monthly 
+                        //          *  -if yes we will keep inserting expected monthly amount
+                        //          *  -else we will keep the fee amount it hold 
+                        //          */
+                        //         if ($payment_fee >($check->loan/$check->loanPeriod)) {
+                        //             $new_payout->payment = $check->loan/$check->loanPeriod;
+                        //         }else{
+                        //             $new_payout->payment =$payment_fee;
+                        //         }
+                        //         $payment_fee = $payment_fee - $check->loan/$check->loanPeriod;
+                        //         $new_payout->balance = $check->loan - ($check->loan/$check->loanPeriod);
+                        //         if($new_payout->save()) {
+                        //             $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
+                        //         } else {
+                        //             Payout::where('transactionID', $transactionID)->update(['status' => 10]);
+                        //             $content  = "Ibyo musabye ntibikunze.\n";
+                        //             $content .= "Mwihangane mwogere mukanya.\n";
+                        //             $content .= "Murakoze!";
+                        //             $this->stop($content, $sessionId);
+                        //         }
+                        //         break;
+                        //     }
+                        //     $content  = "Mugiye kwishyura: ".$values[3]." Rwf.\n";
+                        //     $content .= "Kanda *182*7# Mwemeze ubwishyu mukoresheje MTN MoMo.\n";
+                        //     $content .= "Murakoze!";
+                        //     $this->payment_api($phoneNumber, $values[3], $transactionID);
+                        //     $this->stop($content, $sessionId);
+                        // }
                         $new_payout = new Payout();
                         $new_payout->solarSerialNumber = $check->productNumber;
                         $new_payout->clientNames = $check->clientNames;
                         $new_payout->clientID = $check->beneficiary;
                         $new_payout->clientPhone = $phoneNumber;
-                        $new_payout->monthYear = date("m-Y");
-                        $new_payout->payment = $check->loan/$check->loanPeriod;
+                        $new_payout->monthYear = date("d-m-Y");
+                        $new_payout->payment = $values[3];
                         $new_payout->transactionID = $transactionID;
                         $new_payout->status = 0;
-                        $new_payout->balance = $check->loan - ($check->loan/$check->loanPeriod);
-                        $pay = round($check->loan/$check->loanPeriod, 0);
+                        $new_payout->balance = $check->loan - $values[3];
+                        // $pay = round($check->loan/$check->loanPeriod, 0);
                         if($new_payout->save()) {
-                            $this->payment_api($phoneNumber,$check->loan/$check->loanPeriod,$transactionID);
+                            $this->payment_api($phoneNumber,$values[3],$transactionID);
                             $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
                         } else {
                             $content  = "Ibyo musabye ntibikunze.\n";
@@ -382,7 +403,7 @@ class USSDController extends Controller {
                             $content .= "Murakoze!";
                             $this->stop($content, $sessionId);
                         }
-                        $content  = "Mugiye kwishyura: ".$pay." Rwf.\n";
+                        $content  = "Mugiye kwishyura: ".$values[3]." Rwf.\n";
                         $content .= "kanda *187*1# Mwemeze ubwishyu\n";
                         $content .= "Murakoze!";
                         $this->stop($content, $sessionId);
