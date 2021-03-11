@@ -311,6 +311,7 @@ class USSDController extends Controller {
                         $new_payout->monthYear = $new;
                         $new_payout->transactionID = $transactionID;
                         $new_payout->status = 0;
+                        $new_payout->payment = $values[3];
                         $new_payout->balance = $check_payout->balance - $values[3];
                         if($new_payout->save()) {
                             $this->ActivityLogs('Paying Loan','Solarpanel',$check->productNumber);
@@ -320,7 +321,7 @@ class USSDController extends Controller {
                             $this->payment_api($phoneNumber, $values[3], $transactionID);
                             $this->stop($content, $sessionId);
                         } else {
-                            Payout::where('transactionID', $transactionID)->update(['status' => 10]);
+                            // Payout::where('transactionID', $transactionID)->update(['status' => 10]);
                             $content  = "Ibyo musabye ntibikunze.\n";
                             $content .= "Mwihangane mwogere mukanya.\n";
                             $content .= "Murakoze!";
