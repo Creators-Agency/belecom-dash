@@ -20,9 +20,9 @@ class WelcomController extends Controller
 	{
         $check_user = User::Where('type', 1)
                         ->count();
-        if ($check_user != 0) {
-            return redirect('/');
-        }
+        // if ($check_user != 0) {
+        //     return redirect('/');
+        // }
 		return view('auth.register');
     }
     
