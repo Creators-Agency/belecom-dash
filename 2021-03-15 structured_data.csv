@@ -1,8 +1,8 @@
-;firstname;lastname;identification;gender;DOB;primaryPhone;secondaryPhone;educationLevel;incomeSource;sourceOfEnergy;location;village;quarterName;houseNumber;buildingMaterial;familyMember;membersInSchool;U18Male;U17Male;U18Female;U17Female;employmentStatus;referredby;isActive;doneBy;created_at;updated_at
-0;GAHIMBAZA;Rachel;49212H00930;0;0;784926238;;;;;1;3;2;48;;3;;;;;;1;;1;;;
-1;ZUBERIYA;Nyirakamana;49212H05273;0;0;783930048;;;;;1;3;2;57;;4;;;;;;1;;1;;;
-2;MUSHIRARUNGU;Nyiragatete;49200012034;0;0;785034460;;;;;1;1;1;71;;2;;;;;;1;;1;;;
-3;SIFA;Esther;49200016855;0;0;784043965;;;;;1;3;1;57;;0;;;;;;1;;1;;;
+firstname;lastname;identification;gender;DOB;primaryPhone;secondaryPhone;educationLevel;incomeSource;sourceOfEnergy;location;village;quarterName;houseNumber;buildingMaterial;familyMember;membersInSchool;U18Male;U17Male;U18Female;U17Female;employmentStatus;referredby;isActive;doneBy;created_at;updated_at
+GAHIMBAZA;Rachel;49212H00930;0;0;784926238;;;;;1;3;2;48;;3;;;;;;1;;1;;;
+ZUBERIYA;Nyirakamana;49212H05273;0;0;783930048;;;;;1;3;2;57;;4;;;;;;1;;1;;;
+MUSHIRARUNGU;Nyiragatete;49200012034;0;0;785034460;;;;;1;1;1;71;;2;;;;;;1;;1;;;
+SIFA;Esther;49200016855;0;0;784043965;;;;;1;3;1;57;;0;;;;;;1;;1;;;
 4;MUKAKABERA;Esther;49212H02934;0;0;782833562;;;;;1;3;2;58;;1;;;;;;1;;1;;;
 5;BAMURANGE;Nikuze;49212H02133;0;0;786691179;;;;;1;3;2;45;;2;;;;;;1;;1;;;
 6;UWERA;Nyirabasare;49200003412;0;0;781982972;;;;;1;2;1;61;;4;;;;;;1;;1;;;
