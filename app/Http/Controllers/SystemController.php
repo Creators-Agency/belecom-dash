@@ -34,14 +34,14 @@ class SystemController extends Controller
 
     }
     // DB::table('beneficiaries')->insert($customerArr);
-    // try {
+    try {
         DB::table('beneficiaries')->insert($customerArr);
         alert()->success('user importing returned with success','Success!');
         return Redirect::back(); 
-        // } catch (\Throwable $th) {
-        //     alert()->error('unable to import data from file','Error!');
-        //     return Redirect::back();
-        // }
+        } catch (\Throwable $th) {
+            alert()->error('unable to import data from file','Error!');
+            return Redirect::back();
+        }
         
     }
     public function csvToArray($filename = '', $delimiter = ';')
