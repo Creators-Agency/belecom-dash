@@ -39,8 +39,8 @@ class SystemController extends Controller
         alert()->success('user importing returned with success','Success!');
         return Redirect::back(); 
         } catch (\Throwable $th) {
-        //     alert()->error('unable to import data from file','Error!');
-        //     return Redirect::back();
+            alert()->error('unable to import data from file','Error!');
+            return Redirect::back();
         }
         
     }
