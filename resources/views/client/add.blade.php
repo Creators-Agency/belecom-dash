@@ -58,7 +58,7 @@ try {
                                 <div class="col-md-12 mb-3">
                                     <label for="Age">DOB</label>
                                     <input type="date" name="age" class="form-control" id="Age" value="{{ old('age') }}"
-                                        placeholder="Birth date" required>
+                                        placeholder="Birth date">
                                     <div class="invalid-tooltip">This field shouldn't be empty</div>
                                 </div>
                             </div>

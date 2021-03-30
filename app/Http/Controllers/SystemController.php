@@ -38,11 +38,9 @@ class SystemController extends Controller
         DB::table('beneficiaries')->insert($customerArr);
         alert()->success('user importing returned with success','Success!');
         return Redirect::back(); 
-        } catch (\Throwable $th) {
-            {}
-            // echo'error';
-        //     alert()->error('unable to import data from file','Error!');
-        //     return Redirect::back();
+        } catch (\Exception $th) {
+            alert()->error('unable to import data from file','Error!');
+            return Redirect::back();
         }
         
     }
