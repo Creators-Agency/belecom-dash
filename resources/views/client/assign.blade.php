@@ -51,7 +51,17 @@ try {
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-8">
+                                <div class="col-md-12 mb-3">
+                                    <label for="PaidPrice">Paid Amount(s)</label>
+                                    <input type="number" class="form-control" id="PaidPrice" name="paidPrice"
+                                        placeholder="0 Frw" required>
+                                    <div class="invalid-tooltip">
+                                        Please provide a valid data.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
                                 <div class="col-md-12 mb-3">
                                     <label for="TotalPrice">Total Price</label>
                                     <input type="text" disabled class="form-control" id="TotalPrice" placeholder="0"

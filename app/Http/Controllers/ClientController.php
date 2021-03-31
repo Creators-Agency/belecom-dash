@@ -291,8 +291,8 @@ class ClientController extends Controller
         if ($request->loansPeriod != 36) {
             // calculate amount paid if he/she already paying with old-fashioned way
             $monthPaid = 36 - $request->loansPeriod;
-            $amountPaid = ($request->price * $monthPaid)/36;
-            $amountLeft = $request->price - $amountPaid;
+            // $amountPaid = ($request->price * $monthPaid)/36;
+            $amountLeft = $request->price - $request->paidPrice;
         } else {
             $amountLeft = $request->price;
         }
@@ -324,7 +324,7 @@ class ClientController extends Controller
 
                 if ($request->loansPeriod != 36) {
                     // insert month he already paid using old fashioned way
-                    for($i = 1; $i<=$monthPaid; $i++){
+                    // for($i = 1; $i<=$monthPaid; $i++){
                         $transactionID = sha1(md5(time())).'-'.rand(102,0);
                         $new_payout = new Payout();
                         $new_payout->solarSerialNumber = $serialNumber->solarPanelSerialNumber;
@@ -332,12 +332,12 @@ class ClientController extends Controller
                         $new_payout->clientID = $request->clientIdentification;
                         $new_payout->clientPhone = $getClients->primaryPhone;
                         $new_payout->monthYear = date("m-Y");
-                        $new_payout->payment = $amountLeft/$request->loansPeriod;
+                        $new_payout->payment = $request->paidPrice;
                         $new_payout->transactionID = $transactionID;
                         $new_payout->status = 1;
-                        $new_payout->balance = round($amountLeft - ($amountLeft/$request->loansPeriod),0);
+                        $new_payout->balance = round($request->price - $request->paidPrice,0);
                         $new_payout->save();
-                    }
+                    // }
                 }
                 /*---------- sending message -----*/
                     // get user
