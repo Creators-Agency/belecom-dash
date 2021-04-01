@@ -48,15 +48,15 @@ try {
                                         <td>{{ ($client->locationName) }}</td>
                                         <td>{{ ($client->primaryPhone) }}</td>
                                         <td class="text-center">
-                                            <a href="{{ URL::to('/client/'.$client->identification.'-'.md5($client->clientID).'/view/') }}"
+                                            <a href="{{ URL::to('/client/'.$client->identification.'-'.md5($client->id).'/view/') }}"
                                                 class="btn btn-primary">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                             <a
-                                                href="{{ URL::to('/client/'.$client->identification.'-'.md5($client->clientID).'/edit') }}">
+                                                href="{{ URL::to('/client/'.$client->identification.'-'.md5($client->id).'/edit') }}">
                                                 <i class="fas fa-edit text-primary p-2"></i>
                                             </a>
-                                            <a href="{{ URL::to('/client/'.$client->clientID.'/delete') }}">
+                                            <a href="{{ URL::to('/client/'.$client->id.'/delete') }}">
                                                 <i class="fas fa-trash text-danger p-2"></i>
                                             </a>
 
