@@ -69,7 +69,7 @@ class ClientController extends Controller
                         ->get();
         return view('client.actual',[
             'clients' => $get_actual,
-            // 'pageTitle' =>'Actuals clients'
+            'pageTitle' =>'Actuals clients'
 
         ]);
     }
@@ -457,6 +457,7 @@ class ClientController extends Controller
 
         $userData_perspective = DB::table('beneficiaries')
                     ->select(
+                        'beneficiaries.id as clientID',
                         'beneficiaries.firstname',
                         'beneficiaries.lastname',
                         'beneficiaries.identification',
@@ -490,6 +491,7 @@ class ClientController extends Controller
                     ->join('payouts','payouts.clientID','beneficiaries.identification')
                     ->select(
                         'payouts.balance',
+                        'beneficiaries.id as clientID',
                         'beneficiaries.firstname',
                         'beneficiaries.lastname',
                         'beneficiaries.identification',
