@@ -87,7 +87,7 @@ class SystemController extends Controller
                             'administrative_locations.id as locationID',
                             'administrative_locations.locationName',
                             )
-                        ->where('beneficiaries.isActive', 1)
+                        ->where('beneficiaries.isActive', 0)
                         ->where('administrative_locations.status',1)
                         ->get();
         return view('system.clients',[
