@@ -19,8 +19,10 @@
                                 <thead>
                                     <tr>
                                         <th>Clients Name</th>
-                                        <th>transactionID</th>
+                                        <th>Transaction ID</th>
+                                        <th>Transaction Amount</th>
                                         <th>Phone Number</th>
+                                        <th>Date</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -29,7 +31,9 @@
                                     <tr>
                                         <td>{{ ($payment->clientNames) }}</td>
                                         <td>{{ ($payment->transactionID) }}</td>
+                                        <td>{{ ($payment->payment) }}</td>
                                         <td>{{ ($payment->clientPhone) }}</td>
+                                        <td>{{ ($payment->created_at) }}</td>
                                         <td>{{ ($payment->status == 1 ? 'success':'fail') }}</td>
                                     </tr>
                                     @endforeach
@@ -37,8 +41,10 @@
                                 <tfoot>
                                     <tr>
                                         <th>Clients Name</th>
-                                        <th>transactionID</th>
+                                        <th>Transaction ID</th>
+                                        <th>Transaction Amount</th>
                                         <th>Phone Number</th>
+                                        <th>Date</th>
                                         <th>Status</th>
                                     </tr>
                                 </tfoot>

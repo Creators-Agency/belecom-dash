@@ -123,7 +123,7 @@ class ClientController extends Controller
             'firstName' => 'required',
             'lastName' => 'required',
             'identification' => 'required',
-            'age' => 'required',
+            // 'age' => 'required',
             'primaryNumber' => 'required',
             'location' => 'required',
             'villageName' => 'required',
