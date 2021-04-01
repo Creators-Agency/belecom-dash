@@ -375,7 +375,7 @@ class ClientController extends Controller
      *
      */
 
-    public function editClient($id, $dob)
+    public function editClient($id, $identification)
     {
         $Get_clients = Beneficiary::where('identification', $id)
                                     ->first();
@@ -452,7 +452,7 @@ class ClientController extends Controller
     }
 
 
-    public function viewClient($id, $dob)
+    public function viewClient($id, $identification)
     {
 
         $userData_perspective = DB::table('beneficiaries')

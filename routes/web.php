@@ -94,8 +94,8 @@ Route::prefix('client')->group(function(){
 	Route::get('/actual','ClientController@actual');
     Route::post('/create/client','ClientController@saveClient')->name('CreateClient');
 
-    Route::get('/{id}-{dob}/edit', 'ClientController@editClient');
-    Route::get('/{id}-{dob}/view', 'ClientController@viewClient');
+    Route::get('/{id}-{identification}/edit', 'ClientController@editClient');
+    Route::get('/{id}-{identification}/view', 'ClientController@viewClient');
     Route::post('/', 'ClientController@updateClient')->name('UpdateClient');
     Route::get('/{id}/delete', 'ClientController@deleteClient');
 
@@ -175,9 +175,9 @@ Route::prefix('/payment')->group(function(){
 Route::prefix('/staff')->group(function(){
     Route::get('/', 'StaffController@index');
     Route::get('register', 'StaffController@addStaff');
-    Route::get('/{id}-{dob}/edit', 'StaffController@editStaff');
-    Route::get('/{id}-{dob}/permission', 'StaffController@permissionStaff');
-    Route::get('/{id}-{dob}/delete', 'StaffController@deleteStaff');
+    Route::get('/{id}-{identification}/edit', 'StaffController@editStaff');
+    Route::get('/{id}-{identification}/permission', 'StaffController@permissionStaff');
+    Route::get('/{id}-{identification}/delete', 'StaffController@deleteStaff');
     Route::post('register', 'StaffController@staffSave')->name('Register');
 });
 

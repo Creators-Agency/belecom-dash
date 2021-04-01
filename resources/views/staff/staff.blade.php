@@ -32,14 +32,17 @@
                                     <td>{{ ($staff->gender) }}</td>
                                     <td>{{ ($staff->phone) }}</td>
                                     <td class="text-center">
-                                        <a href="{{ URL::to('/staff/'.$staff->nationalID.'-'.strtotime($staff->DOB).'/permission') }}" class="btn btn-primary">Permission</a>
-                                        <a href="{{ URL::to('/staff/'.$staff->nationalID.'-'.strtotime($staff->DOB).'/edit') }}">
+                                        <a href="{{ URL::to('/staff/'.$staff->nationalID.'-'.strtotime($staff->id).'/permission') }}"
+                                            class="btn btn-primary">Permission</a>
+                                        <a
+                                            href="{{ URL::to('/staff/'.$staff->nationalID.'-'.strtotime($staff->id).'/edit') }}">
                                             <i class="fas fa-edit text-primary p-2"></i>
                                         </a>
-                                        <a href="{{ URL::to('/staff/'.$staff->nationalID.'-'.strtotime($staff->DOB).'/delete') }}">
+                                        <a
+                                            href="{{ URL::to('/staff/'.$staff->nationalID.'-'.strtotime($staff->id).'/delete') }}">
                                             <i class="fas fa-trash text-danger p-2"></i>
                                         </a>
-                                        
+
                                     </td>
                                 </tr>
                                 @endforeach
