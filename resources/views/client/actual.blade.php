@@ -44,7 +44,7 @@ try {
                                         <td>{{ ($client->identification) }}</td>
                                         <td>{{ ($client->firstname) }}</td>
                                         <td>{{ ($client->lastname) }}</td>
-                                        <td>{{ ($client->gender ) }}</td>
+                                        <td>{{ ($client->gender == 0 ? 'Female':'Male') }}</td>
                                         <td>{{ ($client->locationName) }}</td>
                                         <td>{{ ($client->primaryPhone) }}</td>
                                         <td class="text-center">
