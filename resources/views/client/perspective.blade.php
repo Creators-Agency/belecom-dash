@@ -46,9 +46,9 @@ try {
                                         <td>{{ ($client->lastname) }}</td>
                                         <td>
                                             @if($client->gender == 1)
-                                            Male
-                                            @else
                                             Female
+                                            @else
+                                            Male
                                             @endif
                                         </td>
                                         <td>{{ ($client->locationName) }}</td>

@@ -164,7 +164,7 @@ class USSDController extends Controller {
                         $info = $this->query_db('payouts', ['solarSerialNumber', $values[1]],['status', 0], NULL, ['id', 'DESC']);
 
                         $message = $info->clientNames.' muheruka kwishura '.$info->payment.' kwitariki '.$info->created_at;
-                        $this->BulkSms($phoneNumber,$message);
+                        // $this->BulkSms($phoneNumber,$message);
 
                         $content  = "Turaboherereza ubutumwa bugufi bukubiyemo incamake ku bwishyu bwose mwakoze.\n";
                         $content .= "Murakoze!";
@@ -558,7 +558,7 @@ try {
                 $com = Beneficiary::where('identification', $get->clientID)->first();
                 $phone = '0'.$com->primaryPhone;
                 $message = $com->firstname." turakumenyesha ko igikorwa cyo kwishura cyagenze neza \n umubare uranga ubwishu'.$request->transactionId.\n Murakoze!";
-                $this->BulkSms($phone, $message);
+                // $this->BulkSms($phone, $message);
             }
         } else {
             /**
@@ -569,7 +569,7 @@ try {
                 $com = Beneficiary::where('identification', $get->clientID)->first();
                 $phone = '0'.$com->primaryPhone;
                 $message = 'Mukiriya mwiza kwishura ntibyagenze neza!';
-                $this->BulkSms($phone,$message);
+                // $this->BulkSms($phone,$message);
             }
         }
 

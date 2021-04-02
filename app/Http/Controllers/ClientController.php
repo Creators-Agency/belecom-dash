@@ -356,7 +356,7 @@ class ClientController extends Controller
                     $user = Beneficiary::where('identification', $request->clientIdentification)->first();
                     $phoneNu ='0'.$user->primaryPhone;
                     $message = $user->lastname.' Tuguhaye Ikaze mubafatabuguzi ba Belecom, inomero iranga umurasire ni:'.$serialNumber->solarPanelSerialNumber.', Kanda *652*'.$serialNumber->solarPanelSerialNumber.'# wishure, Murakoze!';
-                $this->sendBulk($phoneNu,$message);
+                // $this->sendBulk($phoneNu,$message);
                 /*----------updating activity log--------------*/
                 $Get_account = Account::orderBy('id','DESC')->first();
                 $this->ActivityLogs('Creating new','Account',$Get_account->id);
@@ -656,7 +656,7 @@ class ClientController extends Controller
                         'isActive' => 3
                     ]);
             $message = 'Usubije burundu umurasire ufite numero: '.$request->solar.'\n murakoze gukoresha service za belecom.';
-            $this->sendBulk($client->primaryPhone,$message);
+            // $this->sendBulk($client->primaryPhone,$message);
             $this->ActivityLogs('deactivating a user', 'beneficiar,Solarpanel,Payout,Account',$client->identification);
             alert()->success('Solar Panel has reported back to belecom','Success');
             return Redirect('/client/actual');
