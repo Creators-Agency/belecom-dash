@@ -45,11 +45,7 @@ try {
                                         <td>{{ ($client->firstname) }}</td>
                                         <td>{{ ($client->lastname) }}</td>
                                         <td>
-                                            @if($client->gender == 1)
-                                            Female
-                                            @else
-                                            Male
-                                            @endif
+                                            {{($client->gender)}}
                                         </td>
                                         <td>{{ ($client->locationName) }}</td>
                                         <td>{{ ($client->primaryPhone) }}</td>
