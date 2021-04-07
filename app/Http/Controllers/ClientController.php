@@ -299,7 +299,7 @@ class ClientController extends Controller
         $account->loanPeriod = $request->loansPeriod;
         $account->beneficiary = $request->clientIdentification;
         $account->productNumber = $serialNumber->solarPanelSerialNumber;
-        $account->clientNames = $request->firstname;
+        $account->clientNames = $request->firstname.' '.$request->lastname;
         if ($request->loansPeriod != 36) {
             // calculate amount paid if he/she already paying with old-fashioned way
             $monthPaid = 36 - $request->loansPeriod;

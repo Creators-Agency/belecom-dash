@@ -73,6 +73,7 @@ try {
                             </div>
                             <input type="hidden" name="clientIdentification" value="{{ ($client->identification) }}">
                             <input type="hidden" name="firstname" value="{{ ($client->firstname) }}">
+                            <input type="hidden" name="lastname" value="{{ ($client->lastname) }}">
                             <input type="hidden" id="Price" name="price" value="0">
                         </div>
                         <div class="form-row">
