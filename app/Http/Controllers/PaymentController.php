@@ -118,6 +118,18 @@ class PaymentController extends Controller
         $Payout = DB::table('payouts')
                     ->join('beneficiaries','payouts.clientID','beneficiaries.identification')
                     ->join('administrative_locations','administrative_locations.id','beneficiaries.location')
+                    ->select(
+                        'beneficiaries.firstname',
+                        'beneficiaries.lastname',
+                        'beneficiaries.quarterName',
+                        'beneficiaries.village',
+                        'payouts.transactionID',
+                        'payouts.payment',
+                        'payouts.clientPhone',
+                        'payouts.status',
+                        'payouts.created_at',
+                        'administrative_locations.locationName'
+                    )
                     ->get();
         return view('payment.checkpayment',[
             'payments' => $Payout
