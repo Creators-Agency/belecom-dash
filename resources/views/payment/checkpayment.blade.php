@@ -22,6 +22,9 @@
                                         <th>Transaction ID</th>
                                         <th>Transaction Amount</th>
                                         <th>Phone Number</th>
+                                        <th>location</th>
+                                        <th>Village</th>
+                                        <th>Quarter</th>
                                         <th>Date</th>
                                         <th>Status</th>
                                     </tr>
@@ -29,10 +32,13 @@
                                 <tbody>
                                     @foreach($payments as $payment)
                                     <tr>
-                                        <td>{{ ($payment->clientNames) }}</td>
+                                        <td>{{ ($payment->firstname.' '.$payment->lastname) }}</td>
                                         <td>{{ ($payment->transactionID) }}</td>
                                         <td>{{ ($payment->payment) }}</td>
                                         <td>{{ ($payment->clientPhone) }}</td>
+                                        <td>{{ ($payment->locationName) }}</td>
+                                        <td>{{ ($payment->village) }}</td>
+                                        <td>{{ ($payment->quarterName) }}</td>
                                         <td>{{ ($payment->created_at) }}</td>
                                         <td>{{ ($payment->status == 1 ? 'success':'fail') }}</td>
                                     </tr>
@@ -44,6 +50,9 @@
                                         <th>Transaction ID</th>
                                         <th>Transaction Amount</th>
                                         <th>Phone Number</th>
+                                        <th>Location</th>
+                                        <th>Village</th>
+                                        <th>Quarter</th>
                                         <th>Date</th>
                                         <th>Status</th>
                                     </tr>

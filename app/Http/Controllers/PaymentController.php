@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Redirect;
 use Validator;
 use SweetAlert;
+use DB;
 use App\Models\Charge;
 use App\Models\Payout;
 use App\Models\ActivityLog;
@@ -114,7 +115,10 @@ class PaymentController extends Controller
 
     public function checkPayment()
     {
-        $Payout = Payout::get();
+        $Payout = DB::table('payouts')
+                    ->join('beneficiaries','payouts.clientID','beneficiaries.identification')
+                    ->join('administrative_locations','administrative_locations.id','beneficiaries.location')
+                    ->get();
         return view('payment.checkpayment',[
             'payments' => $Payout
         ]);
