@@ -61,7 +61,7 @@ class HomeController extends Controller {
     	 */
 
     	$get_latest_sales = Payout::where('status', 1)
-								->where('created_at','>=', $latestDate)
+								// ->where('created_at','>=', $latestDate)
     							->sum('payment');
 
     	/*

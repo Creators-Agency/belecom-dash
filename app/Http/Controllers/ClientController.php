@@ -576,6 +576,32 @@ class ClientController extends Controller
         
     }
 
+    public function restoreClient($id)
+    {
+        try {
+            alert()->success('User has been restored','Success!')->persistent('are you sure?')->autoclose(3500);
+            $client=Account::where('beneficiary',$id)->get();
+            if (!empty($client)) {
+                Beneficiary::where('id', $id)
+                    ->update([
+                        'isActive' => '3'
+                    ]);
+            }else{
+                Beneficiary::where('id', $id)
+                    ->update([
+                        'isActive' => '1'
+                    ]);
+            }
+            $this->ActivityLogs('restoring user','Beneficiary',$id);
+            alert()->success('User has been restored','Success!')->persistent('Close');
+            return Redirect('/client');
+        } catch (\Throwable $th) {
+            alert()->error('System countered errors during operation, try or contact system admin!','Oops something wrong!');
+            return Redirect::back();
+        }
+        
+    }
+
     public function returnFix(Request $request)
     {
         // return $request;

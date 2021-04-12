@@ -98,6 +98,7 @@ Route::prefix('client')->group(function(){
     Route::get('/{id}-{identification}/view', 'ClientController@viewClient');
     Route::post('/', 'ClientController@updateClient')->name('UpdateClient');
     Route::get('/{id}/delete', 'ClientController@deleteClient');
+    Route::get('/{id}/restore', 'ClientController@restoreClient');
 
     Route::get('/{id}/assign', 'ClientController@assign');
     Route::post('/assign', 'ClientController@assignClient')->name('assignClient');

@@ -41,8 +41,9 @@
                                                 href="{{ URL::to('/client/'.$client->identification.'-'.strtotime($client->DOB).'/edit') }}">
                                                 <i class="fas fa-edit text-primary p-2"></i>
                                             </a>
-                                            <a href="{{ URL::to('/client/'.$client->clientID.'/delete') }}">
-                                                <i class="fas fa-trash text-danger p-2"></i>
+                                            <a href="{{ URL::to('/client/'.$client->clientID.'/restore') }}">
+                                                <!-- <i class="fas fa-trash-restore text-warning p-2"></i> -->
+                                                <i class="fas fa-trash text-warning p-2"></i>
                                             </a>
 
                                         </td>
