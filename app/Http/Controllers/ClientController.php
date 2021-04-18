@@ -743,7 +743,7 @@ class ClientController extends Controller
     	]); 
 		$result = $client->request('POST','api/sendsms/.json', [
 		    'form_params' => [
-		        'username' => 'Wilson',
+		        'username' => 'Muhirwa',
 		        'password' => '123Muhirwa',
 		        'sender' => 'Belecom ltd',
 		        'recipients' => $number,
