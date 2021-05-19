@@ -541,11 +541,11 @@ class USSDController extends Controller {
     public function paymentCallBack(Request $request) {
         /* if transaction is successfuly */
         // if( $_POST["status"]=="SUCCESS" )
-try {
-    //code...
-} catch (\Throwable $th) {
-    //throw $th;
-}
+        try {
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
         if($request->status == "SUCCESS") {
             $get = Payout::where('transactionID', $request->transactionId)->first();
             if(isset($get)) {

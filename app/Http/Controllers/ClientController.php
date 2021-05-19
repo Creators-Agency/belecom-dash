@@ -368,12 +368,13 @@ class ClientController extends Controller
                 alert()->error('Something went Wrong!','Oops!!');
                 return Redirect()->back()->withErrors($validator)->withInput();
             }
-        }else{
-            /*-------------Catch error if account exist-----------------*/
-            return 'Account exist! Oops!!';
-            alert()->warning('Account exist!','Oops!!');
-            return Redirect('/client');
         }
+        // else{
+        //     /*-------------Catch error if account exist-----------------*/
+        //     // return 'Account exist! Oops!!';
+        //     alert()->warning('Account exist!','Oops!!');
+        //     return Redirect('/client');
+        // }
     }
 
 
