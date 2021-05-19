@@ -64,7 +64,7 @@ class ClientController extends Controller
     public function actual()
     {
         // return Account::get();
-        $get_actual = DB::table('beneficiaries')
+        return $get_actual = DB::table('beneficiaries')
                         ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
                         ->select(
                             'beneficiaries.id',
