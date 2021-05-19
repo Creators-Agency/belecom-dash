@@ -431,6 +431,7 @@ class ClientController extends Controller
             $refer = 0;
         }
         try {
+            $data=Beneficiary::where('id', $request->id)->first();
             Beneficiary::where('id', $request->id)
                 ->update([
                     'firstname'=>$request->firstName,
@@ -456,6 +457,9 @@ class ClientController extends Controller
                     'U17Female' =>$request->minorF,
                     'employmentStatus'=>$request->employmentStatus,
                     'referredby'=>$refer,
+                ]);
+                Account::where('beneficiary', $data->identification)->update([
+                    'beneficiary' =>$request->identification,
                 ]);
             $this->ActivityLogs('editing customer', 'Beneficiary',$request->id);
             alert()->success('User has been updated','Success!');
