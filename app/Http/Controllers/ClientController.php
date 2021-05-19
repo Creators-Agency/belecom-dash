@@ -278,7 +278,7 @@ class ClientController extends Controller
      */
     public function assignClient(Request $request)
     {
-        // return $request;
+        return $request;
         if($request->price == 0){
             alert()->success('this session has expired retry again!','Oops');
             return Redirect('/client/perspective');
@@ -315,7 +315,7 @@ class ClientController extends Controller
         $chec_account = Account::where('beneficiary', $request->clientIdentification)
                     ->orWhere('productNumber', $serialNumber->solarPanelSerialNumber)
                     ->count();
-        // if ($chec_account == 0) {
+        if ($chec_account == 0) {
 
             /*---------------- save and check if succed ------------*/
             if ($account->save()) {
@@ -368,13 +368,13 @@ class ClientController extends Controller
                 alert()->error('Something went Wrong!','Oops!!');
                 return Redirect()->back()->withErrors($validator)->withInput();
             }
-        // }
-        // else{
-        //     /*-------------Catch error if account exist-----------------*/
-        //     // return 'Account exist! Oops!!';
-        //     alert()->warning('Account exist!','Oops!!');
-        //     return Redirect('/client');
-        // }
+        }
+        else{
+            /*-------------Catch error if account exist-----------------*/
+            // return 'Account exist! Oops!!';
+            alert()->warning('Account exist!','Oops!!');
+            return Redirect('/client');
+        }
     }
 
 
