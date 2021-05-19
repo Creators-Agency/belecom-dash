@@ -67,6 +67,7 @@ class ClientController extends Controller
         return $get_actual = DB::table('beneficiaries')
                         ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
                         ->select(
+                            'beneficiaries.updated_at',
                             'beneficiaries.id',
                             'beneficiaries.identification',
                             'beneficiaries.firstname',
