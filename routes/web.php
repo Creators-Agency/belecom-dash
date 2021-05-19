@@ -265,10 +265,10 @@ Route::get('/dv-1234',function()
     {
         $alldata=[];
 
-        Schema::table('payouts', function($table) use ($alldata)
+        Schema::table('accounts', function($table) use ($alldata)
         { 
             // $table->biginteger('primaryPhone')->unique(false)->default(0)->change();
-            // $table->dropUnique('primaryPhone');
+            $table->dropUnique('clientNames');
             // $table->dropUnique(['primaryPhone'])->unique(false)->default(0)->change();
         });
 
