@@ -66,8 +66,6 @@ class ClientController extends Controller
         $get_actual = DB::table('beneficiaries')
                         ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
                         ->select(
-                            'beneficiaries.updated_at',
-                            'beneficiaries.created_at',
                             'beneficiaries.id',
                             'beneficiaries.identification',
                             'beneficiaries.firstname',
@@ -280,7 +278,6 @@ class ClientController extends Controller
      */
     public function assignClient(Request $request)
     {
-        
         // return $request;
         if($request->price == 0){
             alert()->success('this session has expired retry again!','Oops');
@@ -371,10 +368,8 @@ class ClientController extends Controller
                 alert()->error('Something went Wrong!','Oops!!');
                 return Redirect()->back()->withErrors($validator)->withInput();
             }
-        }
-        else{
+        }else{
             /*-------------Catch error if account exist-----------------*/
-            // return 'Account exist! Oops!!';
             alert()->warning('Account exist!','Oops!!');
             return Redirect('/client');
         }
