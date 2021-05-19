@@ -63,11 +63,11 @@ class ClientController extends Controller
 
     public function actual()
     {
-        return Account::get();
+        // return Account::get();
         $get_actual = DB::table('beneficiaries')
                         ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
                         ->select(
-                            'beneficiaries.id',
+                            'beneficiaries.id as clientID',
                             'beneficiaries.identification',
                             'beneficiaries.firstname',
                             'beneficiaries.lastname',
@@ -77,8 +77,8 @@ class ClientController extends Controller
                             'administrative_locations.id as locationID',
                             'administrative_locations.locationName',
                             )
-                        ->where('beneficiaries.isActive',3)
-                        ->where('administrative_locations.status',1)
+                        // ->where('beneficiaries.isActive',3)
+                        // ->where('administrative_locations.status',1)
                         ->get();
         return view('client.actual',[
             'clients' => $get_actual,
