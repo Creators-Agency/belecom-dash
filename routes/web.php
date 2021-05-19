@@ -13,22 +13,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/dev-1234',function()
-    {
-        $alldata=[];
+// Route::get('/dev-1234',function()
+//     {
+//         $alldata=[];
 
-        Schema::table('payouts', function($table) use ($alldata)
-        {
-            /**
-             * payouts
-             * solar_panels
-             */
+//         Schema::table('payouts', function($table) use ($alldata)
+//         {
+//             /**
+//              * payouts
+//              * solar_panels
+//              */
 
-            $table->integer('accountStatus')->after('status')->default(0);
-            // $table->integer('moreInfo')->after('status')->default(0);
-        });
-    }
-);
+//             $table->integer('accountStatus')->after('status')->default(0);
+//             // $table->integer('moreInfo')->after('status')->default(0);
+//         });
+//     }
+// );
 
 Route::get('/', 'HomeController@home');
 Route::get('/backdoor','WelcomController@register');
@@ -268,8 +268,8 @@ Route::get('/dv-1234',function()
         Schema::table('accounts', function($table) use ($alldata)
         { 
             // $table->biginteger('primaryPhone')->unique(false)->default(0)->change();
-            $table->dropUnique('clientNames');
-            // $table->dropUnique(['primaryPhone'])->unique(false)->default(0)->change();
+            // $table->dropUnique('clientNames');
+            $table->dropUnique(['clientNames'])->unique(false)->change();
         });
 
         // insert system pref

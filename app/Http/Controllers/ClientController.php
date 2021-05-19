@@ -281,7 +281,7 @@ class ClientController extends Controller
     public function assignClient(Request $request)
     {
         
-        return $request;
+        // return $request;
         if($request->price == 0){
             alert()->success('this session has expired retry again!','Oops');
             return Redirect('/client/perspective');
