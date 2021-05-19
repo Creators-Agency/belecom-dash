@@ -68,6 +68,7 @@ class ClientController extends Controller
                         ->join('administrative_locations','beneficiaries.location', '=','administrative_locations.id')
                         ->select(
                             'beneficiaries.updated_at',
+                            'beneficiaries.created_at',
                             'beneficiaries.id',
                             'beneficiaries.identification',
                             'beneficiaries.firstname',
