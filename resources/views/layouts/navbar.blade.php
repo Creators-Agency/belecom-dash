@@ -141,6 +141,12 @@
                     <span class="hide-menu"> Clients </span>
                 </a>
             </li>
+            <li class="sidebar-item">
+                <a href="{{ URL::to('/system/clients/special') }}" class="sidebar-link">
+                    <i class="mdi mdi-format-align-left"></i>
+                    <span class="hide-menu"> special </span>
+                </a>
+            </li>
         </ul>
     </li>
 </ul>

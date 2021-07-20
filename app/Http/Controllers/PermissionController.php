@@ -54,40 +54,40 @@ class PermissionController extends Controller
         /**
          * check if user exist in the table 
          */
-        $data = UserPermission::where('userID',$request->user)->where('permissionID',$request->permID)->first();
-        if(empty($data) ){
+        $data = UserPermission::where('userID', $request->user)->where('permissionID', $request->permID)->first();
+        if (empty($data)) {
             $new = new UserPermission();
             $new->userID = $request->user;
             $new->permissionID = $request->permID;
-            $new->create = $request->create == 'on' ? 1:0;
-            $new->read = $request->read == 'on' ? 1:0;
-            $new->update = $request->update == 'on' ? 1:0;
-            $new->delete = $request->delete == 'on' ? 1:0;
+            $new->create = $request->create == 'on' ? 1 : 0;
+            $new->read = $request->read == 'on' ? 1 : 0;
+            $new->update = $request->update == 'on' ? 1 : 0;
+            $new->delete = $request->delete == 'on' ? 1 : 0;
             $new->isActive = 1;
-            if($new->save()){
+            if ($new->save()) {
                 alert()->success('Permission added Successful', 'Done');
                 return Redirect('/staff');
-            }else{
+            } else {
                 alert()->error('Unable to set permission', 'Oops');
                 return Redirect::back();
             }
-        }else{
-            $update = UserPermission::where('userID',$request->user)->where('permissionID',$request->permID)
+        } else {
+            $update = UserPermission::where('userID', $request->user)->where('permissionID', $request->permID)
                 ->update([
                     'userID' => $request->user,
                     'permissionID' => $request->permID,
-                    'create' => $request->create == 'on' ? 1:0,
-                    'read' => $request->read == 'on' ? 1:0,
-                    'update' => $request->update == 'on' ? 1:0,
-                    'delete' => $request->delete == 'on' ? 1:0,
+                    'create' => $request->create == 'on' ? 1 : 0,
+                    'read' => $request->read == 'on' ? 1 : 0,
+                    'update' => $request->update == 'on' ? 1 : 0,
+                    'delete' => $request->delete == 'on' ? 1 : 0,
                 ]);
-                if($update){
-                    alert()->success('Permission updated Successful', 'Done');
-                    return Redirect('/staff');
-                }else{
-                    alert()->error('Unable to update permission', 'Oops');
-                    return Redirect::back();
-                }
+            if ($update) {
+                alert()->success('Permission updated Successful', 'Done');
+                return Redirect('/staff');
+            } else {
+                alert()->error('Unable to update permission', 'Oops');
+                return Redirect::back();
+            }
         }
     }
 
@@ -96,40 +96,40 @@ class PermissionController extends Controller
         /**
          * check if user exist in the table 
          */
-        $data = UserPermission::where('userID',$request->user)->where('permissionID',$request->permID)->first();
-        if(empty($data) ){
+        $data = UserPermission::where('userID', $request->user)->where('permissionID', $request->permID)->first();
+        if (empty($data)) {
             $new = new UserPermission();
             $new->userID = $request->user;
             $new->permissionID = $request->permID;
-            $new->create = $request->create == 'on' ? 1:0;
-            $new->read = $request->read == 'on' ? 1:0;
-            $new->update = $request->update == 'on' ? 1:0;
-            $new->delete = $request->delete == 'on' ? 1:0;
+            $new->create = $request->create == 'on' ? 1 : 0;
+            $new->read = $request->read == 'on' ? 1 : 0;
+            $new->update = $request->update == 'on' ? 1 : 0;
+            $new->delete = $request->delete == 'on' ? 1 : 0;
             $new->isActive = 1;
-            if($new->save()){
+            if ($new->save()) {
                 alert()->success('Permission added Successful', 'Done');
                 return Redirect('/staff');
-            }else{
+            } else {
                 alert()->error('Unable to set permission', 'Oops');
                 return Redirect::back();
             }
-        }else{
-            $update = UserPermission::where('userID',$request->user)->where('permissionID',$request->permID)
+        } else {
+            $update = UserPermission::where('userID', $request->user)->where('permissionID', $request->permID)
                 ->update([
                     'userID' => $request->user,
                     'permissionID' => $request->permID,
-                    'create' => $request->create == 'on' ? 1:0,
-                    'read' => $request->read == 'on' ? 1:0,
-                    'update' => $request->update == 'on' ? 1:0,
-                    'delete' => $request->delete == 'on' ? 1:0,
+                    'create' => $request->create == 'on' ? 1 : 0,
+                    'read' => $request->read == 'on' ? 1 : 0,
+                    'update' => $request->update == 'on' ? 1 : 0,
+                    'delete' => $request->delete == 'on' ? 1 : 0,
                 ]);
-                if($update){
-                    alert()->success('Permission updated Successful', 'Done');
-                    return Redirect('/staff');
-                }else{
-                    alert()->error('Unable to update permission', 'Oops');
-                    return Redirect::back();
-                }
+            if ($update) {
+                alert()->success('Permission updated Successful', 'Done');
+                return Redirect('/staff');
+            } else {
+                alert()->error('Unable to update permission', 'Oops');
+                return Redirect::back();
+            }
         }
     }
 
@@ -138,40 +138,40 @@ class PermissionController extends Controller
         /**
          * check if user exist in the table 
          */
-        $data = UserPermission::where('userID',$request->user)->where('permissionID',$request->permID)->first();
-        if(empty($data) ){
+        $data = UserPermission::where('userID', $request->user)->where('permissionID', $request->permID)->first();
+        if (empty($data)) {
             $new = new UserPermission();
             $new->userID = $request->user;
             $new->permissionID = $request->permID;
-            $new->create = $request->create == 'on' ? 1:0;
-            $new->read = $request->read == 'on' ? 1:0;
-            $new->update = $request->update == 'on' ? 1:0;
-            $new->delete = $request->delete == 'on' ? 1:0;
+            $new->create = $request->create == 'on' ? 1 : 0;
+            $new->read = $request->read == 'on' ? 1 : 0;
+            $new->update = $request->update == 'on' ? 1 : 0;
+            $new->delete = $request->delete == 'on' ? 1 : 0;
             $new->isActive = 1;
-            if($new->save()){
+            if ($new->save()) {
                 alert()->success('Permission added Successful', 'Done');
                 return Redirect('/staff');
-            }else{
+            } else {
                 alert()->error('Unable to set permission', 'Oops');
                 return Redirect::back();
             }
-        }else{
-            $update = UserPermission::where('userID',$request->user)->where('permissionID',$request->permID)
+        } else {
+            $update = UserPermission::where('userID', $request->user)->where('permissionID', $request->permID)
                 ->update([
                     'userID' => $request->user,
                     'permissionID' => $request->permID,
-                    'create' => $request->create == 'on' ? 1:0,
-                    'read' => $request->read == 'on' ? 1:0,
-                    'update' => $request->update == 'on' ? 1:0,
-                    'delete' => $request->delete == 'on' ? 1:0,
+                    'create' => $request->create == 'on' ? 1 : 0,
+                    'read' => $request->read == 'on' ? 1 : 0,
+                    'update' => $request->update == 'on' ? 1 : 0,
+                    'delete' => $request->delete == 'on' ? 1 : 0,
                 ]);
-                if($update){
-                    alert()->success('Permission updated Successful', 'Done');
-                    return Redirect('/staff');
-                }else{
-                    alert()->error('Unable to update permission', 'Oops');
-                    return Redirect::back();
-                }
+            if ($update) {
+                alert()->success('Permission updated Successful', 'Done');
+                return Redirect('/staff');
+            } else {
+                alert()->error('Unable to update permission', 'Oops');
+                return Redirect::back();
+            }
         }
     }
 
@@ -180,40 +180,40 @@ class PermissionController extends Controller
         /**
          * check if user exist in the table 
          */
-        $data = UserPermission::where('userID',$request->user)->where('permissionID',$request->permID)->first();
-        if(empty($data) ){
+        $data = UserPermission::where('userID', $request->user)->where('permissionID', $request->permID)->first();
+        if (empty($data)) {
             $new = new UserPermission();
             $new->userID = $request->user;
             $new->permissionID = $request->permID;
-            $new->create = $request->create == 'on' ? 1:0;
-            $new->read = $request->read == 'on' ? 1:0;
-            $new->update = $request->update == 'on' ? 1:0;
-            $new->delete = $request->delete == 'on' ? 1:0;
+            $new->create = $request->create == 'on' ? 1 : 0;
+            $new->read = $request->read == 'on' ? 1 : 0;
+            $new->update = $request->update == 'on' ? 1 : 0;
+            $new->delete = $request->delete == 'on' ? 1 : 0;
             $new->isActive = 1;
-            if($new->save()){
+            if ($new->save()) {
                 alert()->success('Permission added Successful', 'Done');
                 return Redirect('/staff');
-            }else{
+            } else {
                 alert()->error('Unable to set permission', 'Oops');
                 return Redirect::back();
             }
-        }else{
-            $update = UserPermission::where('userID',$request->user)->where('permissionID',$request->permID)
+        } else {
+            $update = UserPermission::where('userID', $request->user)->where('permissionID', $request->permID)
                 ->update([
                     'userID' => $request->user,
                     'permissionID' => $request->permID,
-                    'create' => $request->create == 'on' ? 1:0,
-                    'read' => $request->read == 'on' ? 1:0,
-                    'update' => $request->update == 'on' ? 1:0,
-                    'delete' => $request->delete == 'on' ? 1:0,
+                    'create' => $request->create == 'on' ? 1 : 0,
+                    'read' => $request->read == 'on' ? 1 : 0,
+                    'update' => $request->update == 'on' ? 1 : 0,
+                    'delete' => $request->delete == 'on' ? 1 : 0,
                 ]);
-                if($update){
-                    alert()->success('Permission updated Successful', 'Done');
-                    return Redirect('/staff');
-                }else{
-                    alert()->error('Unable to update permission', 'Oops');
-                    return Redirect::back();
-                }
+            if ($update) {
+                alert()->success('Permission updated Successful', 'Done');
+                return Redirect('/staff');
+            } else {
+                alert()->error('Unable to update permission', 'Oops');
+                return Redirect::back();
+            }
         }
     }
 
@@ -222,40 +222,40 @@ class PermissionController extends Controller
         /**
          * check if user exist in the table 
          */
-        $data = UserPermission::where('userID',$request->user)->where('permissionID',$request->permID)->first();
-        if(empty($data) ){
+        $data = UserPermission::where('userID', $request->user)->where('permissionID', $request->permID)->first();
+        if (empty($data)) {
             $new = new UserPermission();
             $new->userID = $request->user;
             $new->permissionID = $request->permID;
-            $new->create = $request->create == 'on' ? 1:0;
-            $new->read = $request->read == 'on' ? 1:0;
-            $new->update = $request->update == 'on' ? 1:0;
-            $new->delete = $request->delete == 'on' ? 1:0;
+            $new->create = $request->create == 'on' ? 1 : 0;
+            $new->read = $request->read == 'on' ? 1 : 0;
+            $new->update = $request->update == 'on' ? 1 : 0;
+            $new->delete = $request->delete == 'on' ? 1 : 0;
             $new->isActive = 1;
-            if($new->save()){
+            if ($new->save()) {
                 alert()->success('Permission added Successful', 'Done');
                 return Redirect::back();
-            }else{
+            } else {
                 alert()->error('Unable to set permission', 'Oops');
                 return Redirect::back();
             }
-        }else{
-            $update = UserPermission::where('userID',$request->user)->where('permissionID',$request->permID)
+        } else {
+            $update = UserPermission::where('userID', $request->user)->where('permissionID', $request->permID)
                 ->update([
                     'userID' => $request->user,
                     'permissionID' => $request->permID,
-                    'create' => $request->create == 'on' ? 1:0,
-                    'read' => $request->read == 'on' ? 1:0,
-                    'update' => $request->update == 'on' ? 1:0,
-                    'delete' => $request->delete == 'on' ? 1:0,
+                    'create' => $request->create == 'on' ? 1 : 0,
+                    'read' => $request->read == 'on' ? 1 : 0,
+                    'update' => $request->update == 'on' ? 1 : 0,
+                    'delete' => $request->delete == 'on' ? 1 : 0,
                 ]);
-                if($update){
-                    alert()->success('Permission updated Successful', 'Done');
-                    return Redirect('/staff');
-                }else{
-                    alert()->error('Unable to update permission', 'Oops');
-                    return Redirect::back();
-                }
+            if ($update) {
+                alert()->success('Permission updated Successful', 'Done');
+                return Redirect('/staff');
+            } else {
+                alert()->error('Unable to update permission', 'Oops');
+                return Redirect::back();
+            }
         }
     }
 
