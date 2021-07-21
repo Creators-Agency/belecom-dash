@@ -312,7 +312,6 @@ class ClientController extends Controller
         $chec_account = Account::where('beneficiary', $request->clientIdentification)
             ->orWhere('productNumber', $serialNumber->solarPanelSerialNumber)
             ->count();
-        $checkuser = Beneficiary::where('identification', $chec_account->beneficiary)->first();
         if ($chec_account == 0) {
 
             /*---------------- save and check if succed ------------*/
@@ -366,6 +365,8 @@ class ClientController extends Controller
                 return Redirect()->back()->withErrors($validator)->withInput();
             }
         } else {
+            $checkuser = Beneficiary::where('identification', $chec_account->beneficiary)->first();
+
             /*-------------Catch error if account exist-----------------*/
             alert()->warning('Account exist' . $checkuser->firstname . ' ' . $checkuser->firstname . ' !', 'Oops!!');
             return Redirect('/client');
